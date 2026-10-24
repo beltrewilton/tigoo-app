@@ -5,7 +5,7 @@ export PATH="$HOME/.elixir-install/installs/otp/27.1.2/bin:$PATH"
 export PATH="$HOME/.elixir-install/installs/elixir/1.17.2-otp-27/bin:$PATH"
 export MIX_ENV=prod
 
-APP_DIR="/opt/pos-app/server"
+APP_DIR="/opt/tigoo-app/server"
 NODE_NAME="posserver@138.197.112.92"
 
 cd "$APP_DIR"
