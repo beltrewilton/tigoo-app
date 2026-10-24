@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateOauthHandoffs do
+defmodule TigooServer.Repo.Migrations.CreateOauthHandoffs do
   use Ecto.Migration
 
   def change do

@@ -1,9 +1,9 @@
-defmodule PosServer.Retaily.ProductTrace do
+defmodule TigooServer.Retaily.ProductTrace do
   @moduledoc false
 
   use Ecto.Schema
   import Ecto.Changeset
-  alias PosServer.Retaily.BusinessTime
+  alias TigooServer.Retaily.BusinessTime
 
   @event_types ~w(sale inventory_adjustment purchase store_transfer_out store_transfer_in)
   @timestamps_opts [type: :naive_datetime, autogenerate: {BusinessTime, :local_now, []}]
@@ -21,10 +21,10 @@ defmodule PosServer.Retaily.ProductTrace do
     field :customer_id, :integer
     field :customer_name, :string
     field :metadata, :map, default: %{}
-    belongs_to :product, PosServer.Retaily.Product, type: :integer
-    belongs_to :store, PosServer.Retaily.Store, type: :integer
-    belongs_to :source_store, PosServer.Retaily.Store, type: :integer
-    belongs_to :destination_store, PosServer.Retaily.Store, type: :integer
+    belongs_to :product, TigooServer.Retaily.Product, type: :integer
+    belongs_to :store, TigooServer.Retaily.Store, type: :integer
+    belongs_to :source_store, TigooServer.Retaily.Store, type: :integer
+    belongs_to :destination_store, TigooServer.Retaily.Store, type: :integer
     timestamps(updated_at: false, type: :naive_datetime)
   end
 

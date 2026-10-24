@@ -1,9 +1,9 @@
-defmodule PosServer.Accounts.OAuthHandoff do
+defmodule TigooServer.Accounts.OAuthHandoff do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias PosServer.Accounts.User
+  alias TigooServer.Accounts.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
 

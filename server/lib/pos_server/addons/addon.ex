@@ -1,4 +1,4 @@
-defmodule PosServer.Addons.Addon do
+defmodule TigooServer.Addons.Addon do
   use Ecto.Schema
   import Ecto.Changeset
 

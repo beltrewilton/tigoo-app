@@ -1,7 +1,7 @@
-defmodule PosServer.InventoryEvents do
+defmodule TigooServer.InventoryEvents do
   @moduledoc false
 
-  @pubsub PosServer.PubSub
+  @pubsub TigooServer.PubSub
 
   def topic(tenant, store_id), do: "inventory:#{tenant}:#{store_id}"
 

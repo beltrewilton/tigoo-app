@@ -1,13 +1,13 @@
-defmodule PosServer.Retaily.Sql do
+defmodule TigooServer.Retaily.Sql do
   @moduledoc """
   Executes version-controlled SQL files against a Triplex tenant schema.
 
   SQL files live under `server/sql/retaily` and use `{{prefix}}` for the
   tenant schema identifier. Values always use PostgreSQL positional parameters
-  (`$1`, `$2`, ...) and are passed separately to `PosServer.Repo.query/3`.
+  (`$1`, `$2`, ...) and are passed separately to `TigooServer.Repo.query/3`.
   """
 
-  alias PosServer.{Repo, TenantContext}
+  alias TigooServer.{Repo, TenantContext}
 
   @sql_directory Path.expand("../../../sql/retaily", __DIR__)
   @max_page_size 100

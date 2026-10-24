@@ -1,14 +1,14 @@
-defmodule PosServer.Retaily.Orders do
+defmodule TigooServer.Retaily.Orders do
   @moduledoc false
 
   import Ecto.Query
 
   alias Ecto.Changeset
-  alias PosServer.{InventoryEvents, Repo}
-  alias PosServer.Accounts.Scope, as: AccessScope
-  alias PosServer.Retaily.OrderRequests.{Create, Receive}
+  alias TigooServer.{InventoryEvents, Repo}
+  alias TigooServer.Accounts.Scope, as: AccessScope
+  alias TigooServer.Retaily.OrderRequests.{Create, Receive}
 
-  alias PosServer.Retaily.{
+  alias TigooServer.Retaily.{
     Inventory,
     InventoryContext,
     BusinessTime,

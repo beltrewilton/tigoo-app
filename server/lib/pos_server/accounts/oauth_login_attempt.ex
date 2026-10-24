@@ -1,8 +1,8 @@
-defmodule PosServer.Accounts.OAuthLoginAttempt do
+defmodule TigooServer.Accounts.OAuthLoginAttempt do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias PosServer.Accounts.User
+  alias TigooServer.Accounts.User
 
   @primary_key {:id, :binary_id, autogenerate: false}
   schema "oauth_login_attempts" do

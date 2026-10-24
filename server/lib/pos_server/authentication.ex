@@ -1,14 +1,14 @@
-defmodule PosServer.Authentication do
+defmodule TigooServer.Authentication do
   @moduledoc "Unified login and bearer-token authentication for tenant admins and employees."
 
   import Ecto.Query
 
-  alias PosServer.Accounts.{OAuthHandoff, OAuthLoginAttempt, Scope, User}
-  alias PosServer.{Accounts, Password, Repo, Tenants}
-  alias PosServer.Retaily.Scope, as: EmployeeScope
-  alias PosServer.Retaily.BusinessTime
-  alias PosServer.Retaily.User, as: Employee
-  alias PosServer.Retaily.UserStore
+  alias TigooServer.Accounts.{OAuthHandoff, OAuthLoginAttempt, Scope, User}
+  alias TigooServer.{Accounts, Password, Repo, Tenants}
+  alias TigooServer.Retaily.Scope, as: EmployeeScope
+  alias TigooServer.Retaily.BusinessTime
+  alias TigooServer.Retaily.User, as: Employee
+  alias TigooServer.Retaily.UserStore
 
   @salt "api-session"
 
@@ -204,7 +204,7 @@ defmodule PosServer.Authentication do
 
   def authenticate(token) when is_binary(token) do
     with {:ok, payload} <-
-           Phoenix.Token.verify(PosServerWeb.Endpoint, @salt, token, max_age: 86_400),
+           Phoenix.Token.verify(TigooServerWeb.Endpoint, @salt, token, max_age: 86_400),
          {:ok, scope} <- scope_from_payload(payload) do
       {:ok, scope}
     else
@@ -316,7 +316,7 @@ defmodule PosServer.Authentication do
         prefix: tenant
       )
 
-    %PosServer.Accounts.Scope{
+    %TigooServer.Accounts.Scope{
       user: %{name: employee.username, tenant: tenant},
       tenant: tenant,
       actor: :employee,
@@ -330,7 +330,7 @@ defmodule PosServer.Authentication do
 
   defp issue(scope),
     do:
-      Phoenix.Token.sign(PosServerWeb.Endpoint, @salt, %{
+      Phoenix.Token.sign(TigooServerWeb.Endpoint, @salt, %{
         "actor" => Atom.to_string(scope.actor),
         "id" => scope.actor_id,
         "tenant" => scope.tenant

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateOauthLoginAttempts do
+defmodule TigooServer.Repo.Migrations.CreateOauthLoginAttempts do
   use Ecto.Migration
 
   def change do

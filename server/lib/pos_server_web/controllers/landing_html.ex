@@ -1,7 +1,7 @@
-defmodule PosServerWeb.LandingHTML do
-  use PosServerWeb, :html
+defmodule TigooServerWeb.LandingHTML do
+  use TigooServerWeb, :html
 
-  import PosServerWeb.Landing.Components
+  import TigooServerWeb.Landing.Components
 
   embed_templates "landing_html/*"
 end

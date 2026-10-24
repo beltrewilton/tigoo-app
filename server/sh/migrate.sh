@@ -44,8 +44,8 @@ fi
 TENANT_SCHEMA="$tenant_schema" mix run -e '
 tenant = System.fetch_env!("TENANT_SCHEMA")
 
-unless Triplex.exists?(tenant, PosServer.Repo) do
-  {:ok, _tenant} = Triplex.create(tenant, PosServer.Repo)
+unless Triplex.exists?(tenant, TigooServer.Repo) do
+  {:ok, _tenant} = Triplex.create(tenant, TigooServer.Repo)
 end
 '
 

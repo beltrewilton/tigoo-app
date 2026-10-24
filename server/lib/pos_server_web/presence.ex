@@ -1,5 +1,5 @@
-defmodule PosServerWeb.Presence do
+defmodule TigooServerWeb.Presence do
   use Phoenix.Presence,
-    otp_app: :pos_server,
-    pubsub_server: PosServer.PubSub
+    otp_app: :tigoo_server,
+    pubsub_server: TigooServer.PubSub
 end

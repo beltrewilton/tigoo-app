@@ -1,10 +1,10 @@
-defmodule PosServer.Retaily.SequenceSettings do
+defmodule TigooServer.Retaily.SequenceSettings do
   @moduledoc false
   import Ecto.Changeset
   import Ecto.Query
 
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Retaily.{Sequence, SequenceRotation}
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Retaily.{Sequence, SequenceRotation}
 
   @max_sequence 9_223_372_036_854_775_807
   @rotation_fields ~w(name code prefix fill current_seq consumer_estatimation_monthly_amount consumer_allowed_monthly_amount consumer_avg)

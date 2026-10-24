@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateUsersAuthTables do
+defmodule TigooServer.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

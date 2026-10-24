@@ -1,12 +1,12 @@
-defmodule PosServerWeb do
+defmodule TigooServerWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
 
   This can be used in your application as:
 
-      use PosServerWeb, :controller
-      use PosServerWeb, :html
+      use TigooServerWeb, :controller
+      use TigooServerWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -40,7 +40,7 @@ defmodule PosServerWeb do
     quote do
       use Phoenix.Controller, formats: [:html, :json]
 
-      use Gettext, backend: PosServerWeb.Gettext
+      use Gettext, backend: TigooServerWeb.Gettext
 
       import Plug.Conn
 
@@ -80,17 +80,17 @@ defmodule PosServerWeb do
   defp html_helpers do
     quote do
       # Translation
-      use Gettext, backend: PosServerWeb.Gettext
+      use Gettext, backend: TigooServerWeb.Gettext
 
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components
-      import PosServerWeb.CoreComponents
-      import PosServerWeb.Formatters, only: [money: 1, money_text: 1]
+      import TigooServerWeb.CoreComponents
+      import TigooServerWeb.Formatters, only: [money: 1, money_text: 1]
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS
-      alias PosServerWeb.Layouts
+      alias TigooServerWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -100,9 +100,9 @@ defmodule PosServerWeb do
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
-        endpoint: PosServerWeb.Endpoint,
-        router: PosServerWeb.Router,
-        statics: PosServerWeb.static_paths()
+        endpoint: TigooServerWeb.Endpoint,
+        router: TigooServerWeb.Router,
+        statics: TigooServerWeb.static_paths()
     end
   end
 

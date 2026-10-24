@@ -1,9 +1,9 @@
-defmodule PosServer.Accounts do
+defmodule TigooServer.Accounts do
   import Ecto.Query, only: [from: 2]
 
-  alias PosServer.Accounts.{Company, User, UserCompany, UserToken}
-  alias PosServer.{Repo, Tenants}
-  alias PosServer.Retaily.Store
+  alias TigooServer.Accounts.{Company, User, UserCompany, UserToken}
+  alias TigooServer.{Repo, Tenants}
+  alias TigooServer.Retaily.Store
 
   def list_users do
     from(user in User, order_by: [asc: user.name, asc: user.email])

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddBrandLogoToCompany do
+defmodule TigooServer.Repo.Migrations.AddBrandLogoToCompany do
   use Ecto.Migration
 
   def change do

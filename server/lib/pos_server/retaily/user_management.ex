@@ -1,12 +1,12 @@
-defmodule PosServer.Retaily.Users do
+defmodule TigooServer.Retaily.Users do
   @moduledoc false
 
   import Ecto.Query
 
-  alias PosServer.Repo
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.Scope, as: EmployeeScope
-  alias PosServer.Retaily.{ScopeList, Store, User, UserStore}
+  alias TigooServer.Repo
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.Scope, as: EmployeeScope
+  alias TigooServer.Retaily.{ScopeList, Store, User, UserStore}
 
   def list(scope), do: with(:ok <- authorize(scope, "user.view"), do: {:ok, users(scope.tenant)})
 

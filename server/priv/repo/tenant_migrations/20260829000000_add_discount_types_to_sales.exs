@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddDiscountTypesToSales do
+defmodule TigooServer.Repo.Migrations.AddDiscountTypesToSales do
   use Ecto.Migration
 
   def up do

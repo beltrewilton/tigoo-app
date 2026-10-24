@@ -11,8 +11,8 @@ bash sh/local_run.sh
 Paste the shared setup in every new IEx session, then execute cases 1, 3, 7, 8, 9, and 10 in order as needed. Do not run a case before `TenantContext.tenant!()` returns the selected tenant.
 
 ```elixir
-alias PosServer.{Repo, TenantContext}
-alias PosServer.Retaily.{Inventory, Sale, SaleLine, SalePaid, Sales, Sequence}
+alias TigooServer.{Repo, TenantContext}
+alias TigooServer.Retaily.{Inventory, Sale, SaleLine, SalePaid, Sales, Sequence}
 import Ecto.Query
 
 tenant = "your_tenant"

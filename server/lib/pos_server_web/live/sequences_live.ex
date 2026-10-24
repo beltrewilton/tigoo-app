@@ -1,11 +1,11 @@
-defmodule PosServerWeb.SequencesLive do
+defmodule TigooServerWeb.SequencesLive do
   @moduledoc false
-  use PosServerWeb, :live_view
-  import PosServerWeb.PosLayoutComponents
+  use TigooServerWeb, :live_view
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, SequenceSettings}
+  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, SequenceSettings}
 
   @kinds ~w(standard rotation)
 

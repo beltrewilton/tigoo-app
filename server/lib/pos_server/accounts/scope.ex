@@ -1,10 +1,10 @@
-defmodule PosServer.Accounts.Scope do
+defmodule TigooServer.Accounts.Scope do
   @moduledoc """
   Request authorization scope. Tenant-owned contexts receive this scope from
   the authentication plug instead of accepting a tenant from request params.
   """
 
-  alias PosServer.Accounts.User
+  alias TigooServer.Accounts.User
 
   defstruct user: nil,
             store_id: nil,

@@ -1,7 +1,7 @@
-defmodule PosServerWeb.CompanySettingsController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.CompanySettingsController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Retaily.CompanySettings
+  alias TigooServer.Retaily.CompanySettings
 
   def index(conn, _params),
     do: respond(conn, CompanySettings.overview(conn.assigns.current_scope))

@@ -1,10 +1,10 @@
-defmodule PosServer.Addons do
+defmodule TigooServer.Addons do
   @moduledoc "Persistent registry for installed add-ons."
 
   import Ecto.Query
 
-  alias PosServer.Addons.Addon
-  alias PosServer.Repo
+  alias TigooServer.Addons.Addon
+  alias TigooServer.Repo
 
   def enabled_for(tenant) when is_binary(tenant) do
     Repo.all(

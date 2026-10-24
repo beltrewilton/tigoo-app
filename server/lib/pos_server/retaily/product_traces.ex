@@ -1,18 +1,18 @@
-defmodule PosServer.Retaily.ProductTraces do
+defmodule TigooServer.Retaily.ProductTraces do
   @moduledoc false
 
   import Ecto.Query
   require Logger
 
-  alias PosServer.Repo
-  alias PosServer.TenantContext
-  alias PosServer.Retaily.{InventoryContext, ProductTrace, Store}
+  alias TigooServer.Repo
+  alias TigooServer.TenantContext
+  alias TigooServer.Retaily.{InventoryContext, ProductTrace, Store}
 
   # Audit writes deliberately run after the owning transaction. A failed trace is
   # logged but never changes the outcome of a sale or inventory operation.
   def dispatch(tenant, traces) when is_list(traces) do
     try do
-      Task.Supervisor.start_child(PosServer.TaskSupervisor, fn ->
+      Task.Supervisor.start_child(TigooServer.TaskSupervisor, fn ->
         TenantContext.put_tenant(tenant)
 
         Enum.each(traces, fn attrs ->

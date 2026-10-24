@@ -1,4 +1,4 @@
-defmodule PosServerWeb.Landing.Components do
+defmodule TigooServerWeb.Landing.Components do
   @moduledoc """
   Page-local building blocks for the root landing page.
 

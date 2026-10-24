@@ -1,9 +1,9 @@
-defmodule PosServerWeb.Plugs.FetchCurrentScope do
+defmodule TigooServerWeb.Plugs.FetchCurrentScope do
   @moduledoc "Loads the authenticated admin or employee from a bearer token."
 
   import Plug.Conn
 
-  alias PosServer.Authentication
+  alias TigooServer.Authentication
 
   def init(opts), do: opts
 

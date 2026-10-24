@@ -1,9 +1,9 @@
-defmodule PosServerWeb.SystemChannel do
-  use PosServerWeb, :channel
+defmodule TigooServerWeb.SystemChannel do
+  use TigooServerWeb, :channel
 
-  alias PosServer.{InventoryEvents, PrintRelay}
-  alias PosServer.Accounts.Scope
-  alias PosServerWeb.Presence
+  alias TigooServer.{InventoryEvents, PrintRelay}
+  alias TigooServer.Accounts.Scope
+  alias TigooServerWeb.Presence
 
   defguardp valid_print_request_id(request_id)
             when is_binary(request_id) and byte_size(request_id) in 1..128
@@ -132,7 +132,7 @@ defmodule PosServerWeb.SystemChannel do
         IO.warn("print relay result received from desktop session=#{inspect(relay.session_id)} request_id=#{inspect(request_id)} status=#{inspect(status)}")
 
         Phoenix.PubSub.broadcast(
-          PosServer.PubSub,
+          TigooServer.PubSub,
           PrintRelay.result_topic(socket.assigns.tenant, relay.store_id, request_id),
           {:print_result, Map.take(payload, ["request_id", "status", "message"])}
         )
@@ -156,12 +156,12 @@ defmodule PosServerWeb.SystemChannel do
       IO.warn("print relay queue request_id=#{inspect(request_id)} requester=#{inspect(relay.session_id)} target=#{inspect(target)}")
 
       Phoenix.PubSub.subscribe(
-        PosServer.PubSub,
+        TigooServer.PubSub,
         PrintRelay.result_topic(socket.assigns.tenant, relay.store_id, request_id)
       )
 
       Phoenix.PubSub.broadcast(
-        PosServer.PubSub,
+        TigooServer.PubSub,
         PrintRelay.desktop_topic(socket.assigns.tenant, relay.store_id, target),
         {:print_request, Map.put(payload, :request_id, request_id)}
       )
@@ -193,7 +193,7 @@ defmodule PosServerWeb.SystemChannel do
 
       if device == "desktop" do
         Phoenix.PubSub.subscribe(
-          PosServer.PubSub,
+          TigooServer.PubSub,
           PrintRelay.desktop_topic(socket.assigns.tenant, store_id, session_id)
         )
       end

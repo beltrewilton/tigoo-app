@@ -1,4 +1,4 @@
-defmodule PosServer.Retaily.Store do
+defmodule TigooServer.Retaily.Store do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -10,11 +10,11 @@ defmodule PosServer.Retaily.Store do
     field :logo, :string
     field :address, :string
 
-    has_many :inventory_entries, PosServer.Retaily.Inventory
-    has_many :inventory_heads, PosServer.Retaily.InventoryHead
-    has_many :received_product_orders, PosServer.Retaily.ProductOrder, foreign_key: :to_store_id
-    has_many :product_order_lines, PosServer.Retaily.ProductOrderLine, foreign_key: :to_store_id
-    many_to_many :users, PosServer.Retaily.User, join_through: PosServer.Retaily.UserStore
+    has_many :inventory_entries, TigooServer.Retaily.Inventory
+    has_many :inventory_heads, TigooServer.Retaily.InventoryHead
+    has_many :received_product_orders, TigooServer.Retaily.ProductOrder, foreign_key: :to_store_id
+    has_many :product_order_lines, TigooServer.Retaily.ProductOrderLine, foreign_key: :to_store_id
+    many_to_many :users, TigooServer.Retaily.User, join_through: TigooServer.Retaily.UserStore
   end
 
   def changeset(store, attrs) do
@@ -32,7 +32,7 @@ defmodule PosServer.Retaily.Store do
   end
 end
 
-defmodule PosServer.Retaily.Inventory do
+defmodule TigooServer.Retaily.Inventory do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -45,8 +45,8 @@ defmodule PosServer.Retaily.Inventory do
     field :last_update, :naive_datetime
     field :user_updated, :string
 
-    belongs_to :product, PosServer.Retaily.Product
-    belongs_to :store, PosServer.Retaily.Store
+    belongs_to :product, TigooServer.Retaily.Product
+    belongs_to :store, TigooServer.Retaily.Store
   end
 
   def changeset(inventory, attrs) do
@@ -63,7 +63,7 @@ defmodule PosServer.Retaily.Inventory do
   end
 end
 
-defmodule PosServer.Retaily.InventoryHead do
+defmodule TigooServer.Retaily.InventoryHead do
   use Ecto.Schema
 
   schema "app_inventory_head" do
@@ -73,11 +73,11 @@ defmodule PosServer.Retaily.InventoryHead do
     field :status, :integer, default: 0
     field :memo, :string
 
-    belongs_to :store, PosServer.Retaily.Store
+    belongs_to :store, TigooServer.Retaily.Store
   end
 end
 
-defmodule PosServer.Retaily.ProductOrder do
+defmodule TigooServer.Retaily.ProductOrder do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -93,9 +93,9 @@ defmodule PosServer.Retaily.ProductOrder do
     field :from_origin_id, :integer
     field :status, :string, default: "opened"
 
-    belongs_to :to_store, PosServer.Retaily.Store
-    has_many :lines, PosServer.Retaily.ProductOrderLine
-    has_many :bulk_order_lines, PosServer.Retaily.BulkOrderLine
+    belongs_to :to_store, TigooServer.Retaily.Store
+    has_many :lines, TigooServer.Retaily.ProductOrderLine
+    has_many :bulk_order_lines, TigooServer.Retaily.BulkOrderLine
   end
 
   def changeset(order, attrs) do
@@ -118,7 +118,7 @@ defmodule PosServer.Retaily.ProductOrder do
   end
 end
 
-defmodule PosServer.Retaily.ProductOrderLine do
+defmodule TigooServer.Retaily.ProductOrderLine do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -133,9 +133,9 @@ defmodule PosServer.Retaily.ProductOrderLine do
     field :receiver_last_update, :naive_datetime
     field :receiver_memo, :string
 
-    belongs_to :product, PosServer.Retaily.Product
-    belongs_to :to_store, PosServer.Retaily.Store
-    belongs_to :product_order, PosServer.Retaily.ProductOrder
+    belongs_to :product, TigooServer.Retaily.Product
+    belongs_to :to_store, TigooServer.Retaily.Store
+    belongs_to :product_order, TigooServer.Retaily.ProductOrder
   end
 
   def changeset(line, attrs) do
@@ -168,7 +168,7 @@ defmodule PosServer.Retaily.ProductOrderLine do
   end
 end
 
-defmodule PosServer.Retaily.BulkOrder do
+defmodule TigooServer.Retaily.BulkOrder do
   use Ecto.Schema
 
   schema "bulk_order" do
@@ -177,15 +177,15 @@ defmodule PosServer.Retaily.BulkOrder do
     field :date_create, :naive_datetime
     field :user_create, :string
 
-    has_many :lines, PosServer.Retaily.BulkOrderLine
+    has_many :lines, TigooServer.Retaily.BulkOrderLine
   end
 end
 
-defmodule PosServer.Retaily.BulkOrderLine do
+defmodule TigooServer.Retaily.BulkOrderLine do
   use Ecto.Schema
 
   schema "bulk_order_line" do
-    belongs_to :bulk_order, PosServer.Retaily.BulkOrder
-    belongs_to :product_order, PosServer.Retaily.ProductOrder
+    belongs_to :bulk_order, TigooServer.Retaily.BulkOrder
+    belongs_to :product_order, TigooServer.Retaily.ProductOrder
   end
 end

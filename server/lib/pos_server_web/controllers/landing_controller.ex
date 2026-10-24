@@ -1,7 +1,7 @@
-defmodule PosServerWeb.LandingController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.LandingController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Accounts
+  alias TigooServer.Accounts
 
   def index(conn, _params) do
     current_user =
@@ -11,7 +11,7 @@ defmodule PosServerWeb.LandingController do
       end
 
     conn
-    |> put_root_layout(html: {PosServerWeb.LandingLayouts, :root})
+    |> put_root_layout(html: {TigooServerWeb.LandingLayouts, :root})
     |> render(:index,
       current_user: current_user,
       profile_url: profile_url(current_user),
@@ -41,17 +41,17 @@ defmodule PosServerWeb.LandingController do
   def not_found(conn, _params) do
     conn
     |> put_resp_content_type("text/html")
-    |> send_resp(:not_found, PosServerWeb.ErrorHTML.not_found_page())
+    |> send_resp(:not_found, TigooServerWeb.ErrorHTML.not_found_page())
   end
 
   defp render_legal_page(conn, template, assigns) do
     conn
-    |> put_root_layout(html: {PosServerWeb.LandingLayouts, :root})
+    |> put_root_layout(html: {TigooServerWeb.LandingLayouts, :root})
     |> render(template, assigns)
   end
 
   defp profile_url(%{tenant: tenant}) when is_binary(tenant) and tenant != "" do
-    url = PosServerWeb.Endpoint.config(:url)
+    url = TigooServerWeb.Endpoint.config(:url)
     host = url |> Keyword.get(:host, "localhost") |> to_string()
     scheme = url |> Keyword.get(:scheme, "https") |> to_string()
 

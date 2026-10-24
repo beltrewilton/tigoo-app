@@ -1,4 +1,4 @@
-defmodule PosServer.Accounts.UserCompany do
+defmodule TigooServer.Accounts.UserCompany do
   use Ecto.Schema
 
   import Ecto.Changeset

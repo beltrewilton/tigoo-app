@@ -1,7 +1,7 @@
-defmodule PosServerWeb.TauriAuthController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.TauriAuthController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Authentication
+  alias TigooServer.Authentication
 
   def create_attempt(conn, %{"platform" => platform}) when platform in ["desktop", "mobile"] do
     case Authentication.create_tauri_login_attempt(platform) do

@@ -1,4 +1,4 @@
-defmodule PosServer.Retaily.SaleRequests.Line do
+defmodule TigooServer.Retaily.SaleRequests.Line do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -34,7 +34,7 @@ defmodule PosServer.Retaily.SaleRequests.Line do
   end
 end
 
-defmodule PosServer.Retaily.SaleRequests.Payment do
+defmodule TigooServer.Retaily.SaleRequests.Payment do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -54,12 +54,12 @@ defmodule PosServer.Retaily.SaleRequests.Payment do
   end
 end
 
-defmodule PosServer.Retaily.SaleRequests.Checkout do
+defmodule TigooServer.Retaily.SaleRequests.Checkout do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias PosServer.Retaily.SaleRequests.{Line, Payment}
+  alias TigooServer.Retaily.SaleRequests.{Line, Payment}
 
   @primary_key false
   embedded_schema do

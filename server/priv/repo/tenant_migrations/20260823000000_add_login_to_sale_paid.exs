@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddLoginToSalePaid do
+defmodule TigooServer.Repo.Migrations.AddLoginToSalePaid do
   use Ecto.Migration
 
   def change do

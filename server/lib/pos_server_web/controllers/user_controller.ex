@@ -1,6 +1,6 @@
-defmodule PosServerWeb.UserController do
-  use PosServerWeb, :controller
-  alias PosServer.Retaily.Users
+defmodule TigooServerWeb.UserController do
+  use TigooServerWeb, :controller
+  alias TigooServer.Retaily.Users
 
   def index(conn, _), do: respond(conn, Users.list(conn.assigns.current_scope))
   def options(conn, _), do: respond(conn, Users.options(conn.assigns.current_scope))

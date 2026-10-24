@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddDueDateToSale do
+defmodule TigooServer.Repo.Migrations.AddDueDateToSale do
   use Ecto.Migration
 
   def change do

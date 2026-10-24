@@ -1,4 +1,4 @@
-defmodule PosServer.Retaily.Product do
+defmodule TigooServer.Retaily.Product do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -15,9 +15,9 @@ defmodule PosServer.Retaily.Product do
     field :user_modified, :string
     field :archived, :string, default: "0"
 
-    has_many :inventory_entries, PosServer.Retaily.Inventory
-    has_many :pricing_entries, PosServer.Retaily.PricingList
-    has_many :order_lines, PosServer.Retaily.ProductOrderLine
+    has_many :inventory_entries, TigooServer.Retaily.Inventory
+    has_many :pricing_entries, TigooServer.Retaily.PricingList
+    has_many :order_lines, TigooServer.Retaily.ProductOrderLine
   end
 
   def changeset(product, attrs) do
@@ -40,7 +40,7 @@ defmodule PosServer.Retaily.Product do
   end
 end
 
-defmodule PosServer.Retaily.ProductBackup do
+defmodule TigooServer.Retaily.ProductBackup do
   use Ecto.Schema
 
   schema "product_bck" do
@@ -57,7 +57,7 @@ defmodule PosServer.Retaily.ProductBackup do
   end
 end
 
-defmodule PosServer.Retaily.Pricing do
+defmodule TigooServer.Retaily.Pricing do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -68,7 +68,7 @@ defmodule PosServer.Retaily.Pricing do
     field :price_key, :string
     field :status, :integer, default: 1
 
-    has_many :entries, PosServer.Retaily.PricingList
+    has_many :entries, TigooServer.Retaily.PricingList
   end
 
   def changeset(pricing, attrs) do
@@ -82,7 +82,7 @@ defmodule PosServer.Retaily.Pricing do
   end
 end
 
-defmodule PosServer.Retaily.PricingList do
+defmodule TigooServer.Retaily.PricingList do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -91,8 +91,8 @@ defmodule PosServer.Retaily.PricingList do
     field :user_modified, :string
     field :date_create, :naive_datetime
 
-    belongs_to :product, PosServer.Retaily.Product
-    belongs_to :pricing, PosServer.Retaily.Pricing
+    belongs_to :product, TigooServer.Retaily.Product
+    belongs_to :pricing, TigooServer.Retaily.Pricing
   end
 
   def changeset(entry, attrs) do
@@ -103,7 +103,7 @@ defmodule PosServer.Retaily.PricingList do
   end
 end
 
-defmodule PosServer.Retaily.Provider do
+defmodule TigooServer.Retaily.Provider do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -121,7 +121,7 @@ defmodule PosServer.Retaily.Provider do
   end
 end
 
-defmodule PosServer.Retaily.Delivery do
+defmodule TigooServer.Retaily.Delivery do
   use Ecto.Schema
 
   schema "delivery" do
@@ -130,11 +130,11 @@ defmodule PosServer.Retaily.Delivery do
   end
 end
 
-defmodule PosServer.Retaily.Client do
+defmodule TigooServer.Retaily.Client do
   use Ecto.Schema
 
   import Ecto.Changeset
-  alias PosServer.Retaily.BusinessTime
+  alias TigooServer.Retaily.BusinessTime
 
   schema "client" do
     field :name, :string

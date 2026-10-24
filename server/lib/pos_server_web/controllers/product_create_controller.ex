@@ -1,11 +1,11 @@
-defmodule PosServerWeb.ProductCreateController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.ProductCreateController do
+  use TigooServerWeb, :controller
 
   import Ecto.Query
   alias Ecto.Changeset
-  alias PosServer.{InventoryEvents, Repo, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{BusinessTime, Inventory, InventoryContext, PricingList, Product, Sql, Store}
+  alias TigooServer.{InventoryEvents, Repo, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{BusinessTime, Inventory, InventoryContext, PricingList, Product, Sql, Store}
 
   def create(conn, attrs) do
     with {:ok, store_id} <- positive_integer(attrs["store_id"]),

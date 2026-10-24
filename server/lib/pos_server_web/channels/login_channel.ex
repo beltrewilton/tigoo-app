@@ -1,7 +1,7 @@
-defmodule PosServerWeb.LoginChannel do
-  use PosServerWeb, :channel
+defmodule TigooServerWeb.LoginChannel do
+  use TigooServerWeb, :channel
 
-  alias PosServer.Authentication
+  alias TigooServer.Authentication
 
   def join("login:" <> attempt_id, _payload, %{assigns: %{login_attempt_id: attempt_id}} = socket) do
     case Authentication.login_attempt_result(attempt_id) do

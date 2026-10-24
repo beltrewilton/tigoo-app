@@ -1,14 +1,14 @@
-defmodule PosServerWeb.UserSocket do
+defmodule TigooServerWeb.UserSocket do
   use Phoenix.Socket
 
-  channel "system:*", PosServerWeb.SystemChannel
-  channel "inventory:*", PosServerWeb.SystemChannel
-  channel "print-relay:*", PosServerWeb.SystemChannel
-  channel "login:*", PosServerWeb.LoginChannel
+  channel "system:*", TigooServerWeb.SystemChannel
+  channel "inventory:*", TigooServerWeb.SystemChannel
+  channel "print-relay:*", TigooServerWeb.SystemChannel
+  channel "login:*", TigooServerWeb.LoginChannel
 
   @impl true
   def connect(%{"token" => token}, socket, _connect_info) do
-    case PosServer.Authentication.authenticate(token) do
+    case TigooServer.Authentication.authenticate(token) do
       {:ok, scope} ->
         {:ok,
          assign(socket,
@@ -23,7 +23,7 @@ defmodule PosServerWeb.UserSocket do
   end
 
   def connect(%{"login_attempt_id" => id, "login_attempt_token" => token}, socket, _connect_info) do
-    case PosServer.Authentication.authenticate_tauri_login_attempt(id, token) do
+    case TigooServer.Authentication.authenticate_tauri_login_attempt(id, token) do
       {:ok, _attempt} -> {:ok, assign(socket, login_attempt_id: id)}
       {:error, _} -> :error
     end

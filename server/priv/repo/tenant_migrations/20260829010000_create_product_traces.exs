@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateProductTraces do
+defmodule TigooServer.Repo.Migrations.CreateProductTraces do
   use Ecto.Migration
 
   def change do

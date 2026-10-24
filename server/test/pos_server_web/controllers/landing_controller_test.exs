@@ -1,7 +1,7 @@
-defmodule PosServerWeb.LandingControllerTest do
-  use PosServerWeb.ConnCase
+defmodule TigooServerWeb.LandingControllerTest do
+  use TigooServerWeb.ConnCase
 
-  alias PosServer.Tenants
+  alias TigooServer.Tenants
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

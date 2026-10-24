@@ -7,23 +7,23 @@
 # General application configuration
 import Config
 
-config :pos_server,
-  ecto_repos: [PosServer.Repo],
+config :tigoo_server,
+  ecto_repos: [TigooServer.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 config :triplex,
-  repo: PosServer.Repo,
+  repo: TigooServer.Repo,
   reserved_tenants: ~w(www api admin app mail support status assets static docs auth login signup billing)
 
 # Configures the endpoint
-config :pos_server, PosServerWeb.Endpoint,
+config :tigoo_server, TigooServerWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: PosServerWeb.ErrorHTML, json: PosServerWeb.ErrorJSON],
+    formats: [html: TigooServerWeb.ErrorHTML, json: TigooServerWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: PosServer.PubSub,
+  pubsub_server: TigooServer.PubSub,
   live_view: [signing_salt: "4nSOswhS"]
 
 # Configures the mailer
@@ -33,7 +33,7 @@ config :pos_server, PosServerWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :pos_server, PosServer.Mailer, adapter: Swoosh.Adapters.Local
+config :tigoo_server, TigooServer.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configures Elixir's Logger
 config :logger, :default_formatter,

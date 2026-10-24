@@ -1,4 +1,4 @@
-alias PosServer.Repo
+alias TigooServer.Repo
 
 tenants = ["sales_seed_test", "sales_other_test"]
 

@@ -1,10 +1,10 @@
-defmodule PosServerWeb.UserLive do
-  use PosServerWeb, :live_view
+defmodule TigooServerWeb.UserLive do
+  use TigooServerWeb, :live_view
 
-  alias PosServer.Accounts
-  alias PosServer.Accounts.User
+  alias TigooServer.Accounts
+  alias TigooServer.Accounts.User
 
-  import PosServerWeb.DashboardComponents
+  import TigooServerWeb.DashboardComponents
   import Phoenix.Controller, only: [get_csrf_token: 0]
 
   @impl true
@@ -13,7 +13,7 @@ defmodule PosServerWeb.UserLive do
      socket
      |> assign(:users, Accounts.list_users())
      |> assign_user_form(Accounts.change_user(%User{}))
-     |> assign_company_form(Accounts.change_company(%PosServer.Accounts.Company{}))}
+     |> assign_company_form(Accounts.change_company(%TigooServer.Accounts.Company{}))}
   end
 
   @impl true

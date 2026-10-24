@@ -1,4 +1,4 @@
-# PosServer
+# TigooServer
 
 To start your Phoenix server:
 

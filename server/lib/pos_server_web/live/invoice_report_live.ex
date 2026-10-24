@@ -1,12 +1,12 @@
-defmodule PosServerWeb.InvoiceReportLive do
+defmodule TigooServerWeb.InvoiceReportLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, Sales, Sql}
+  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Sales, Sql}
 
   @sort_keys ~w(sequence client_name date_create due_date invoice_status amount due_balance login)
   @statuses ~w(open close cancelled)

@@ -1,9 +1,9 @@
-defmodule PosServerWeb.Plugs.ResolveTenant do
+defmodule TigooServerWeb.Plugs.ResolveTenant do
   @moduledoc "Resolves and validates the tenant subdomain for tenant-owned routes."
 
   import Plug.Conn
 
-  alias PosServer.{TenantContext, Tenants}
+  alias TigooServer.{TenantContext, Tenants}
 
   @message "This page requires your organization's unique web address. Please contact your administrator for the correct link."
 
@@ -50,7 +50,7 @@ defmodule PosServerWeb.Plugs.ResolveTenant do
       |> String.trim_trailing(".")
 
     base_host =
-      PosServerWeb.Endpoint.config(:url)
+      TigooServerWeb.Endpoint.config(:url)
       |> Keyword.get(:host, "localhost")
       |> to_string()
       |> String.downcase()
@@ -86,14 +86,14 @@ defmodule PosServerWeb.Plugs.ResolveTenant do
   defp informational(conn) do
     conn
     |> put_resp_content_type("text/html")
-    |> send_resp(:not_found, PosServerWeb.ErrorHTML.tenant_required_page(@message))
+    |> send_resp(:not_found, TigooServerWeb.ErrorHTML.tenant_required_page(@message))
     |> halt()
   end
 
   defp not_found(conn) do
     conn
     |> put_resp_content_type("text/html")
-    |> send_resp(:not_found, PosServerWeb.ErrorHTML.not_found_page())
+    |> send_resp(:not_found, TigooServerWeb.ErrorHTML.not_found_page())
     |> halt()
   end
 end

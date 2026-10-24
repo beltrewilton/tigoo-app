@@ -1,15 +1,15 @@
-defmodule PosServerWeb.AdminSessionControllerTest do
-  use PosServerWeb.ConnCase, async: false
+defmodule TigooServerWeb.AdminSessionControllerTest do
+  use TigooServerWeb.ConnCase, async: false
 
   setup do
-    previous_config = Application.get_env(:pos_server, :admin_auth)
-    Application.put_env(:pos_server, :admin_auth, username: "admin", password: "test-password")
+    previous_config = Application.get_env(:tigoo_server, :admin_auth)
+    Application.put_env(:tigoo_server, :admin_auth, username: "admin", password: "test-password")
 
     on_exit(fn ->
       if previous_config do
-        Application.put_env(:pos_server, :admin_auth, previous_config)
+        Application.put_env(:tigoo_server, :admin_auth, previous_config)
       else
-        Application.delete_env(:pos_server, :admin_auth)
+        Application.delete_env(:tigoo_server, :admin_auth)
       end
     end)
 

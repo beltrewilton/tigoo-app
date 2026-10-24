@@ -1,12 +1,12 @@
-defmodule PosServer.Retaily.InventoryContext do
+defmodule TigooServer.Retaily.InventoryContext do
   @moduledoc false
 
   import Ecto.Query
 
-  alias PosServer.Repo
-  alias PosServer.Accounts.Scope, as: AccessScope
-  alias PosServer.Retaily.{Inventory, PricingList, Product, Store, User, UserStore}
-  alias PosServer.Retaily.ProductTraces
+  alias TigooServer.Repo
+  alias TigooServer.Accounts.Scope, as: AccessScope
+  alias TigooServer.Retaily.{Inventory, PricingList, Product, Store, User, UserStore}
+  alias TigooServer.Retaily.ProductTraces
 
   def list(scope, store_id, inventory_filter \\ nil, opts \\ []) do
     with {:ok, tenant} <- authorize_store(scope, store_id) do
@@ -144,7 +144,7 @@ defmodule PosServer.Retaily.InventoryContext do
   defp cashier(_), do: {:error, :unauthorized}
 
   defp cashier_store?(%{admin?: true}, store_id, tenant) do
-    if Repo.exists?(from(store in PosServer.Retaily.Store, where: store.id == ^store_id),
+    if Repo.exists?(from(store in TigooServer.Retaily.Store, where: store.id == ^store_id),
          prefix: tenant
        ),
        do: :ok,

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.HardenSalesIntegrity do
+defmodule TigooServer.Repo.Migrations.HardenSalesIntegrity do
   use Ecto.Migration
 
   def up do

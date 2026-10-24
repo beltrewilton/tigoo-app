@@ -1,10 +1,10 @@
-defmodule PosServerWeb.AuthenticationControllerTest do
-  use PosServerWeb.ConnCase, async: false
+defmodule TigooServerWeb.AuthenticationControllerTest do
+  use TigooServerWeb.ConnCase, async: false
 
-  alias PosServer.{Accounts, Authentication, Password, Repo, Tenants}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.Scope, as: EmployeeScope
-  alias PosServer.Retaily.{Store, User, UserStore, Users}
+  alias TigooServer.{Accounts, Authentication, Password, Repo, Tenants}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.Scope, as: EmployeeScope
+  alias TigooServer.Retaily.{Store, User, UserStore, Users}
 
   @tenant "sales_seed_test"
 
@@ -60,7 +60,7 @@ defmodule PosServerWeb.AuthenticationControllerTest do
 
   test "rejects reserved tenant identifiers" do
     changeset =
-      Accounts.change_user(%PosServer.Accounts.User{}, %{
+      Accounts.change_user(%TigooServer.Accounts.User{}, %{
         "name" => "Reserved Tenant",
         "email" => "reserved@example.test",
         "tenant" => "admin",

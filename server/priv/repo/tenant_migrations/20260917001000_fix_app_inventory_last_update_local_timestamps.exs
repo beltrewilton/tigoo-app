@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.FixAppInventoryLastUpdateLocalTimestamps do
+defmodule TigooServer.Repo.Migrations.FixAppInventoryLastUpdateLocalTimestamps do
   use Ecto.Migration
 
   def up do

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddCancelledByToSale do
+defmodule TigooServer.Repo.Migrations.AddCancelledByToSale do
   use Ecto.Migration
 
   def change do

@@ -1,8 +1,8 @@
-defmodule PosServerWeb.PosUserComponents do
+defmodule TigooServerWeb.PosUserComponents do
   @moduledoc false
-  use PosServerWeb, :html
+  use TigooServerWeb, :html
 
-  alias PosServer.Accounts.Scope
+  alias TigooServer.Accounts.Scope
 
   attr :users, :list, required: true
   attr :filter, :string, required: true

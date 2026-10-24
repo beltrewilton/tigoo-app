@@ -1,4 +1,4 @@
-defmodule PosServerWeb.CoreComponents do
+defmodule TigooServerWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -27,7 +27,7 @@ defmodule PosServerWeb.CoreComponents do
 
   """
   use Phoenix.Component
-  use Gettext, backend: PosServerWeb.Gettext
+  use Gettext, backend: TigooServerWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
@@ -457,9 +457,9 @@ defmodule PosServerWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(PosServerWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(TigooServerWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(PosServerWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(TigooServerWeb.Gettext, "errors", msg, opts)
     end
   end
 

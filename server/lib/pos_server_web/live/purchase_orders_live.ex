@@ -1,12 +1,12 @@
-defmodule PosServerWeb.PurchaseOrdersLive do
+defmodule TigooServerWeb.PurchaseOrdersLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, InventoryEvents, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, Orders, ProductCatalog}
+  alias TigooServer.{Authentication, InventoryEvents, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Orders, ProductCatalog}
 
   @sort_keys ~w(id from_origin_id to_store_id status last_updated user_requester)
 

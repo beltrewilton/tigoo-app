@@ -1,9 +1,9 @@
-defmodule PosServerWeb.CustomerControllerTest do
-  use PosServerWeb.ConnCase, async: false
+defmodule TigooServerWeb.CustomerControllerTest do
+  use TigooServerWeb.ConnCase, async: false
 
-  alias PosServer.Accounts
-  alias PosServer.Repo
-  alias PosServer.Retaily.Client
+  alias TigooServer.Accounts
+  alias TigooServer.Repo
+  alias TigooServer.Retaily.Client
 
   @tenant "sales_seed_test"
   @prefix "sales_seed_test"

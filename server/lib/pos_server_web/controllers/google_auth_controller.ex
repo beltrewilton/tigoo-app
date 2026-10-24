@@ -1,8 +1,8 @@
-defmodule PosServerWeb.GoogleAuthController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.GoogleAuthController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.{Accounts, Authentication}
-  alias PosServer.Accounts.Scope
+  alias TigooServer.{Accounts, Authentication}
+  alias TigooServer.Accounts.Scope
 
   @google_authorize_url "https://accounts.google.com/o/oauth2/v2/auth"
   @google_token_url "https://oauth2.googleapis.com/token"
@@ -142,7 +142,7 @@ defmodule PosServerWeb.GoogleAuthController do
   defp verify_state(_conn, _state), do: {:error, :invalid_google_oauth_state}
 
   defp google_config! do
-    config = Application.get_env(:pos_server, :google_oauth, [])
+    config = Application.get_env(:tigoo_server, :google_oauth, [])
     client_id = Keyword.fetch!(config, :client_id)
     client_secret = Keyword.fetch!(config, :client_secret)
 
@@ -161,7 +161,7 @@ defmodule PosServerWeb.GoogleAuthController do
   defp google_redirect_uri(config) do
     case Keyword.get(config, :redirect_uri) do
       uri when is_binary(uri) and uri != "" -> uri
-      _ -> PosServerWeb.Endpoint.url() <> "/auth/google/callback"
+      _ -> TigooServerWeb.Endpoint.url() <> "/auth/google/callback"
     end
   end
 
@@ -177,7 +177,7 @@ defmodule PosServerWeb.GoogleAuthController do
       %{client: "tauri", attempt_id: attempt_id} ->
         case Authentication.complete_tauri_login_attempt(attempt_id, user) do
           {:ok, payload} ->
-            PosServerWeb.Endpoint.broadcast("login:" <> attempt_id, "login_result", payload)
+            TigooServerWeb.Endpoint.broadcast("login:" <> attempt_id, "login_result", payload)
             tauri_result_page(conn, :success)
 
           {:error, _} ->
@@ -208,7 +208,7 @@ defmodule PosServerWeb.GoogleAuthController do
   end
 
   defp tenant_url(%Scope{tenant: tenant}, path) when is_binary(tenant) and tenant != "" do
-    url = PosServerWeb.Endpoint.config(:url)
+    url = TigooServerWeb.Endpoint.config(:url)
     host = url |> Keyword.get(:host, "localhost") |> to_string()
     scheme = url |> Keyword.get(:scheme, "https") |> to_string()
 
@@ -222,7 +222,7 @@ defmodule PosServerWeb.GoogleAuthController do
       %{client: "tauri", attempt_id: attempt_id} ->
         case Authentication.fail_tauri_login_attempt(attempt_id, "google_sign_in_failed") do
           {:ok, payload} ->
-            PosServerWeb.Endpoint.broadcast("login:" <> attempt_id, "login_result", payload)
+            TigooServerWeb.Endpoint.broadcast("login:" <> attempt_id, "login_result", payload)
 
           _ ->
             :ok

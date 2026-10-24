@@ -1,4 +1,4 @@
-defmodule PosServer.Retaily.OrderRequests.Line do
+defmodule TigooServer.Retaily.OrderRequests.Line do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -20,12 +20,12 @@ defmodule PosServer.Retaily.OrderRequests.Line do
   end
 end
 
-defmodule PosServer.Retaily.OrderRequests.Create do
+defmodule TigooServer.Retaily.OrderRequests.Create do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias PosServer.Retaily.OrderRequests.Line
+  alias TigooServer.Retaily.OrderRequests.Line
 
   @primary_key false
   embedded_schema do
@@ -48,7 +48,7 @@ defmodule PosServer.Retaily.OrderRequests.Create do
   end
 end
 
-defmodule PosServer.Retaily.OrderRequests.ReceiptLine do
+defmodule TigooServer.Retaily.OrderRequests.ReceiptLine do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -69,12 +69,12 @@ defmodule PosServer.Retaily.OrderRequests.ReceiptLine do
   end
 end
 
-defmodule PosServer.Retaily.OrderRequests.Receive do
+defmodule TigooServer.Retaily.OrderRequests.Receive do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias PosServer.Retaily.OrderRequests.ReceiptLine
+  alias TigooServer.Retaily.OrderRequests.ReceiptLine
 
   @primary_key false
   embedded_schema do

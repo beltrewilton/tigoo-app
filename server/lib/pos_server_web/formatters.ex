@@ -1,4 +1,4 @@
-defmodule PosServerWeb.Formatters do
+defmodule TigooServerWeb.Formatters do
   @moduledoc false
 
   import Phoenix.HTML, only: [html_escape: 1]

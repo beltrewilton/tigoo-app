@@ -1,7 +1,7 @@
-defmodule PosServerWeb.PurchaseSourceController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.PurchaseSourceController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Retaily.Orders
+  alias TigooServer.Retaily.Orders
 
   def index(conn, %{"store_id" => store_id}) do
     case positive_integer(store_id) do

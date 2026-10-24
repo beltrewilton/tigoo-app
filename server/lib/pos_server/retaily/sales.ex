@@ -1,4 +1,4 @@
-defmodule PosServer.Retaily.Sequence do
+defmodule TigooServer.Retaily.Sequence do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -23,7 +23,7 @@ defmodule PosServer.Retaily.Sequence do
   end
 end
 
-defmodule PosServer.Retaily.Sale do
+defmodule TigooServer.Retaily.Sale do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -46,10 +46,10 @@ defmodule PosServer.Retaily.Sale do
     field :cancelled_by, :string
     field :additional_info, :string
 
-    belongs_to :client, PosServer.Retaily.Client, type: :integer
-    belongs_to :store, PosServer.Retaily.Store, type: :integer
-    has_many :sale_lines, PosServer.Retaily.SaleLine
-    has_many :sale_paids, PosServer.Retaily.SalePaid
+    belongs_to :client, TigooServer.Retaily.Client, type: :integer
+    belongs_to :store, TigooServer.Retaily.Store, type: :integer
+    has_many :sale_lines, TigooServer.Retaily.SaleLine
+    has_many :sale_paids, TigooServer.Retaily.SalePaid
 
     field :total_paid, :decimal, virtual: true
     field :due_balance, :decimal, virtual: true
@@ -97,7 +97,7 @@ defmodule PosServer.Retaily.Sale do
   end
 end
 
-defmodule PosServer.Retaily.SaleLine do
+defmodule TigooServer.Retaily.SaleLine do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -113,8 +113,8 @@ defmodule PosServer.Retaily.SaleLine do
     field :price, :decimal, virtual: true
     field :total_amount, :decimal
 
-    belongs_to :sale, PosServer.Retaily.Sale, type: :integer
-    belongs_to :product, PosServer.Retaily.Product, type: :integer
+    belongs_to :sale, TigooServer.Retaily.Sale, type: :integer
+    belongs_to :product, TigooServer.Retaily.Product, type: :integer
 
     def changeset(line, attrs) do
       line
@@ -144,7 +144,7 @@ defmodule PosServer.Retaily.SaleLine do
   end
 end
 
-defmodule PosServer.Retaily.SalePaid do
+defmodule TigooServer.Retaily.SalePaid do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -154,7 +154,7 @@ defmodule PosServer.Retaily.SalePaid do
     field :type, :string
     field :login, :string
     field :date_create, :naive_datetime
-    belongs_to :sale, PosServer.Retaily.Sale, type: :integer
+    belongs_to :sale, TigooServer.Retaily.Sale, type: :integer
 
     def changeset(payment, attrs) do
       payment

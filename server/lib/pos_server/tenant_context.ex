@@ -1,4 +1,4 @@
-defmodule PosServer.TenantContext do
+defmodule TigooServer.TenantContext do
   @moduledoc """
   Holds the authenticated request's Triplex tenant for the current process.
 

@@ -1,5 +1,5 @@
-defmodule PosServerWeb.LiveViewAssetController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.LiveViewAssetController do
+  use TigooServerWeb, :controller
 
   # Serve the browser client supplied by the installed Phoenix LiveView
   # dependency. This keeps the JavaScript protocol version identical to the

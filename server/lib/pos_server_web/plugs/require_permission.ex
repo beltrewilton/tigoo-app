@@ -1,7 +1,7 @@
-defmodule PosServerWeb.Plugs.RequirePermission do
+defmodule TigooServerWeb.Plugs.RequirePermission do
   @moduledoc "Applies the imported Retaily scope names to tenant API requests."
   import Plug.Conn
-  alias PosServer.Accounts.Scope
+  alias TigooServer.Accounts.Scope
 
   def init(opts), do: opts
 

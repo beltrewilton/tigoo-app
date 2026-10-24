@@ -1,13 +1,13 @@
-defmodule PosServerWeb.SaleControllerTest do
-  use PosServerWeb.ConnCase, async: false
+defmodule TigooServerWeb.SaleControllerTest do
+  use TigooServerWeb.ConnCase, async: false
 
   import Ecto.Query
 
-  alias PosServer.Accounts
-  alias PosServer.InventoryEvents
-  alias PosServer.Repo
+  alias TigooServer.Accounts
+  alias TigooServer.InventoryEvents
+  alias TigooServer.Repo
 
-  alias PosServer.Retaily.{
+  alias TigooServer.Retaily.{
     Client,
     Inventory,
     PricingList,
@@ -44,7 +44,7 @@ defmodule PosServerWeb.SaleControllerTest do
 
   test "creates the paid discounted delivery sale from 363886", %{walex_conn: conn} do
     before_quantity = inventory_quantity(19_463)
-    Phoenix.PubSub.subscribe(PosServer.PubSub, InventoryEvents.topic(@tenant, 2))
+    Phoenix.PubSub.subscribe(TigooServer.PubSub, InventoryEvents.topic(@tenant, 2))
     sale = create_delivery_sale(conn)
 
     assert sale["invoice_status"] == "close"
@@ -145,7 +145,7 @@ defmodule PosServerWeb.SaleControllerTest do
     sale = create_delivery_sale(conn)
     assert inventory_quantity(19_463) == before_quantity - 1
 
-    Phoenix.PubSub.subscribe(PosServer.PubSub, InventoryEvents.topic(@tenant, 2))
+    Phoenix.PubSub.subscribe(TigooServer.PubSub, InventoryEvents.topic(@tenant, 2))
 
     cancelled =
       authenticated_conn_for("walex")

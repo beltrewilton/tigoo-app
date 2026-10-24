@@ -1,11 +1,11 @@
-defmodule PosServerWeb.DashboardComponents do
-  use PosServerWeb, :html
+defmodule TigooServerWeb.DashboardComponents do
+  use TigooServerWeb, :html
 
   attr :active, :any, required: true
   attr :tenant, :string, default: nil
 
   def dashboard_sidebar(assigns) do
-    assigns = assign(assigns, :addons, PosServer.Addons.enabled_for(assigns.tenant))
+    assigns = assign(assigns, :addons, TigooServer.Addons.enabled_for(assigns.tenant))
 
     ~H"""
     <aside class="dashboard-sidebar" aria-label="Primary navigation" data-i18n-aria-label="layout.nav.primary">

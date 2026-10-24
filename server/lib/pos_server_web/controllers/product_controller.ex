@@ -1,8 +1,8 @@
-defmodule PosServerWeb.ProductController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.ProductController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Retaily.{InventoryContext, Sql}
-  alias PosServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Sql}
+  alias TigooServer.Accounts.Scope
 
   @page_size 100
 

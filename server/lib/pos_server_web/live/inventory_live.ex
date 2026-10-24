@@ -1,12 +1,12 @@
-defmodule PosServerWeb.InventoryLive do
+defmodule TigooServerWeb.InventoryLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, InventoryEvents, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, Orders, ProductCatalog, Sql}
+  alias TigooServer.{Authentication, InventoryEvents, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Orders, ProductCatalog, Sql}
 
   @sort_keys ~w(product_name product_code product_cost product_price total_quantity quantity prev_quantity last_update user_updated)
 

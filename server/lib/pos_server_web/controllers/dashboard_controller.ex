@@ -1,11 +1,11 @@
-defmodule PosServerWeb.DashboardController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.DashboardController do
+  use TigooServerWeb, :controller
 
   import Ecto.Query, only: [from: 2]
 
-  alias PosServer.{Accounts, Authentication, Repo}
-  alias PosServer.Accounts.{Company, Scope}
-  alias PosServer.Retaily.{CompanySettings, InventoryContext}
+  alias TigooServer.{Accounts, Authentication, Repo}
+  alias TigooServer.Accounts.{Company, Scope}
+  alias TigooServer.Retaily.{CompanySettings, InventoryContext}
 
   def index(%{assigns: %{current_scope: scope}} = conn, params) do
     if Scope.allowed?(scope, "dashboard.view"),
@@ -173,7 +173,7 @@ defmodule PosServerWeb.DashboardController do
   end
 
   defp tenant_dashboard_url(tenant) do
-    url = PosServerWeb.Endpoint.config(:url)
+    url = TigooServerWeb.Endpoint.config(:url)
     host = url |> Keyword.get(:host, "localhost") |> to_string()
     scheme = url |> Keyword.get(:scheme, "https") |> to_string()
 

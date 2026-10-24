@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateRetailySchema do
+defmodule TigooServer.Repo.Migrations.CreateRetailySchema do
   use Ecto.Migration
 
   def change do

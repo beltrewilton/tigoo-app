@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateAppSequenceRotation do
+defmodule TigooServer.Repo.Migrations.CreateAppSequenceRotation do
   use Ecto.Migration
 
   def change do

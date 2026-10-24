@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddImageUpdatedAtToProduct do
+defmodule TigooServer.Repo.Migrations.AddImageUpdatedAtToProduct do
   use Ecto.Migration
 
   def up do

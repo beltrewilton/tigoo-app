@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddTimezoneOffsetToCompany do
+defmodule TigooServer.Repo.Migrations.AddTimezoneOffsetToCompany do
   use Ecto.Migration
 
   def change do

@@ -1,11 +1,11 @@
-defmodule PosServer.Retaily.ProductCatalog do
+defmodule TigooServer.Retaily.ProductCatalog do
   @moduledoc false
 
   import Ecto.Query
 
-  alias PosServer.{InventoryEvents, Repo}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{BusinessTime, Inventory, Pricing, PricingList, Product, Store}
+  alias TigooServer.{InventoryEvents, Repo}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{BusinessTime, Inventory, Pricing, PricingList, Product, Store}
 
   def pricing_lists(%Scope{tenant: tenant}) do
     Repo.all(
@@ -21,7 +21,7 @@ defmodule PosServer.Retaily.ProductCatalog do
   def create(scope, attrs) do
     with true <- Scope.allowed?(scope, "product.add"),
          store_id when is_integer(store_id) and store_id > 0 <- attrs.store_id,
-         {:ok, tenant} <- PosServer.Retaily.InventoryContext.authorize_store(scope, store_id),
+         {:ok, tenant} <- TigooServer.Retaily.InventoryContext.authorize_store(scope, store_id),
          :ok <- default_price?(attrs.prices) do
       now = BusinessTime.local_now(tenant)
       username = scope.login || get_in(scope.user || %{}, [:name]) || "system"
@@ -156,7 +156,7 @@ defmodule PosServer.Retaily.ProductCatalog do
   def update_status(%Scope{tenant: tenant} = scope, product_id, attrs) do
     with true <- Scope.allowed?(scope, "product.edit"),
          store_id when is_integer(store_id) and store_id > 0 <- attrs.store_id,
-         {:ok, _tenant} <- PosServer.Retaily.InventoryContext.authorize_store(scope, store_id),
+         {:ok, _tenant} <- TigooServer.Retaily.InventoryContext.authorize_store(scope, store_id),
          %Product{} = product <- Repo.get(Product, product_id, prefix: tenant) do
       username = scope.login || get_in(scope.user || %{}, [:name]) || "system"
 

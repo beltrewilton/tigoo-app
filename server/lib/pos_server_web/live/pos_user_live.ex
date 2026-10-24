@@ -1,13 +1,13 @@
-defmodule PosServerWeb.PosUserLive do
+defmodule TigooServerWeb.PosUserLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.PosLayoutComponents
-  import PosServerWeb.PosUserComponents
+  import TigooServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosUserComponents
 
-  alias PosServer.{Authentication, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, Users}
+  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Users}
 
   @impl true
   def mount(params, session, socket) do

@@ -1,9 +1,9 @@
-defmodule PosServerWeb.PricingController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.PricingController do
+  use TigooServerWeb, :controller
 
   import Ecto.Query
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Retaily.Pricing
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Retaily.Pricing
 
   def index(conn, _params) do
     entries =

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.ScopeAddonsToTenants do
+defmodule TigooServer.Repo.Migrations.ScopeAddonsToTenants do
   use Ecto.Migration
 
   def up do

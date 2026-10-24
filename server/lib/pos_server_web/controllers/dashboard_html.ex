@@ -1,7 +1,7 @@
-defmodule PosServerWeb.DashboardHTML do
-  use PosServerWeb, :html
+defmodule TigooServerWeb.DashboardHTML do
+  use TigooServerWeb, :html
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
   embed_templates "dashboard_html/*"
 

@@ -1,6 +1,6 @@
-defmodule PosServerWeb.CustomerComponents do
+defmodule TigooServerWeb.CustomerComponents do
   @moduledoc false
-  use PosServerWeb, :html
+  use TigooServerWeb, :html
 
   attr :customers, :list, required: true
   attr :search, :string, required: true

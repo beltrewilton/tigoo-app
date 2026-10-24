@@ -12,13 +12,13 @@ Authorization: Bearer <Base.url_encode64(token, padding: false)>
 ```
 
 The pipeline resolves the token to its user, assigns `current_scope`, stores
-`current_scope.user.tenant` in `PosServer.TenantContext`, and rejects missing
+`current_scope.user.tenant` in `TigooServer.TenantContext`, and rejects missing
 or invalid credentials with `401`. Tenant contexts must read
 `TenantContext.tenant!/0` and pass it as the Ecto `prefix:` or through the
 tenant-aware SQL helper. Do not accept a tenant ID from HTTP params, JSON, or
 the desktop client.
 
-`PosServer.Accounts.create_company_user/2` already provisions the tenant
+`TigooServer.Accounts.create_company_user/2` already provisions the tenant
 schema with `Triplex.create_schema/3` and runs its tenant migrations before it
 inserts the tenant's company and membership.
 
@@ -28,9 +28,9 @@ Start IEx from `server` with `iex -S mix`. Use a unique tenant name; creating
 the same tenant twice is intentionally rejected.
 
 ```elixir
-alias PosServer.Accounts
-alias PosServer.{Repo, TenantContext}
-alias PosServer.Retaily.{Product, Sql}
+alias TigooServer.Accounts
+alias TigooServer.{Repo, TenantContext}
+alias TigooServer.Retaily.{Product, Sql}
 import Ecto.Query
 
 tenant = "demo_#{System.unique_integer([:positive])}"

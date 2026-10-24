@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.AddGoogleOauthFieldsToUsers do
+defmodule TigooServer.Repo.Migrations.AddGoogleOauthFieldsToUsers do
   use Ecto.Migration
 
   def change do

@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :pos_server, PosServer.Repo,
+config :tigoo_server, TigooServer.Repo,
   username: System.fetch_env!("DB_USER"),
   password: System.fetch_env!("DB_PASS"),
   hostname: "localhost",
@@ -16,7 +16,7 @@ config :pos_server, PosServer.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-config :pos_server, PosServerWeb.Endpoint,
+config :tigoo_server, TigooServerWeb.Endpoint,
   # Bind to all IPv4 interfaces so other devices on the network can reach it.
   http: [ip: {0, 0, 0, 0}, port: String.to_integer(System.get_env("PORT") || "4000")],
   check_origin: false,
@@ -51,7 +51,7 @@ config :pos_server, PosServerWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :pos_server, PosServerWeb.Endpoint,
+config :tigoo_server, TigooServerWeb.Endpoint,
   live_reload: [
     web_console_logger: true,
     patterns: [
@@ -62,7 +62,7 @@ config :pos_server, PosServerWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :pos_server, dev_routes: true
+config :tigoo_server, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"

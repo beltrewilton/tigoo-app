@@ -1,7 +1,7 @@
-defmodule PosServer.PrintRelay do
+defmodule TigooServer.PrintRelay do
   @moduledoc "Tenant-scoped topics and availability lookups for mobile receipt printing."
 
-  alias PosServerWeb.Presence
+  alias TigooServerWeb.Presence
 
   def topic(tenant, store_id), do: "print-relay:#{tenant}:#{store_id}"
 

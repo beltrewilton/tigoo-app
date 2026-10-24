@@ -1,8 +1,8 @@
-defmodule PosServerWeb.SaleController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.SaleController do
+  use TigooServerWeb, :controller
 
   alias Ecto.Changeset
-  alias PosServer.Retaily.{InventoryContext, Sales, Sql}
+  alias TigooServer.Retaily.{InventoryContext, Sales, Sql}
 
   @page_size 100
 

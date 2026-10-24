@@ -1,8 +1,8 @@
-defmodule PosServerWeb.InventoryController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.InventoryController do
+  use TigooServerWeb, :controller
 
   alias Ecto.Changeset
-  alias PosServer.Retaily.{InventoryContext, Orders, Sql}
+  alias TigooServer.Retaily.{InventoryContext, Orders, Sql}
 
   def summary(conn, params) do
     with {:ok, store_id} <- positive_integer(params["store_id"]),

@@ -1,9 +1,9 @@
-defmodule PosServer.Retaily.User do
+defmodule TigooServer.Retaily.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias PosServer.Retaily.BusinessTime
-  alias PosServer.Password
+  alias TigooServer.Retaily.BusinessTime
+  alias TigooServer.Password
 
   schema "app_users" do
     field :username, :string
@@ -15,9 +15,9 @@ defmodule PosServer.Retaily.User do
     field :last_login, :naive_datetime
     field :pic, :string
 
-    has_many :user_stores, PosServer.Retaily.UserStore
-    has_many :scopes, PosServer.Retaily.Scope
-    many_to_many :stores, PosServer.Retaily.Store, join_through: PosServer.Retaily.UserStore
+    has_many :user_stores, TigooServer.Retaily.UserStore
+    has_many :scopes, TigooServer.Retaily.Scope
+    many_to_many :stores, TigooServer.Retaily.Store, join_through: TigooServer.Retaily.UserStore
   end
 
   def changeset(user, attrs) do
@@ -59,28 +59,28 @@ defmodule PosServer.Retaily.User do
   end
 end
 
-defmodule PosServer.Retaily.UserStore do
+defmodule TigooServer.Retaily.UserStore do
   use Ecto.Schema
 
   @primary_key false
 
   schema "app_user_store" do
-    belongs_to :user, PosServer.Retaily.User, primary_key: true
-    belongs_to :store, PosServer.Retaily.Store, primary_key: true
+    belongs_to :user, TigooServer.Retaily.User, primary_key: true
+    belongs_to :store, TigooServer.Retaily.Store, primary_key: true
   end
 end
 
-defmodule PosServer.Retaily.Scope do
+defmodule TigooServer.Retaily.Scope do
   use Ecto.Schema
 
   schema "scopes" do
     field :name, :string
 
-    belongs_to :user, PosServer.Retaily.User
+    belongs_to :user, TigooServer.Retaily.User
   end
 end
 
-defmodule PosServer.Retaily.ScopeList do
+defmodule TigooServer.Retaily.ScopeList do
   use Ecto.Schema
 
   schema "scope_list" do

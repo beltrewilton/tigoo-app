@@ -1,19 +1,19 @@
-defmodule PosServerWeb.Router do
-  use PosServerWeb, :router
+defmodule TigooServerWeb.Router do
+  use TigooServerWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {PosServerWeb.Layouts, :root}
+    plug :put_root_layout, html: {TigooServerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug PosServerWeb.Plugs.ResolveTenant, required: false
-    plug PosServerWeb.Plugs.FetchCurrentScope
+    plug TigooServerWeb.Plugs.ResolveTenant, required: false
+    plug TigooServerWeb.Plugs.FetchCurrentScope
   end
 
   pipeline :tenant_browser do
-    plug PosServerWeb.Plugs.ResolveTenant
+    plug TigooServerWeb.Plugs.ResolveTenant
   end
 
   pipeline :api do
@@ -24,7 +24,7 @@ defmodule PosServerWeb.Router do
   pipeline :tenant_login_api do
     plug :accepts, ["json"]
     plug :put_desktop_cors_headers
-    plug PosServerWeb.Plugs.ResolveTenant, base: :not_found
+    plug TigooServerWeb.Plugs.ResolveTenant, base: :not_found
   end
 
   # The LiveView ESM client is a public, read-only asset. It must not pass
@@ -35,20 +35,20 @@ defmodule PosServerWeb.Router do
   end
 
   pipeline :admin do
-    plug PosServerWeb.Plugs.RequireAdminSession
+    plug TigooServerWeb.Plugs.RequireAdminSession
   end
 
   pipeline :tenant_api do
     plug :accepts, ["json"]
     plug :put_desktop_cors_headers
-    plug PosServerWeb.Plugs.ResolveTenant, base: :not_found
-    plug PosServerWeb.Plugs.FetchCurrentScope
-    plug PosServerWeb.Plugs.PutTenantFromScope
-    plug PosServerWeb.Plugs.RequireTenant
-    plug PosServerWeb.Plugs.RequirePermission
+    plug TigooServerWeb.Plugs.ResolveTenant, base: :not_found
+    plug TigooServerWeb.Plugs.FetchCurrentScope
+    plug TigooServerWeb.Plugs.PutTenantFromScope
+    plug TigooServerWeb.Plugs.RequireTenant
+    plug TigooServerWeb.Plugs.RequirePermission
   end
 
-  scope "/", PosServerWeb do
+  scope "/", TigooServerWeb do
     pipe_through :browser
 
     get "/", LandingController, :index
@@ -63,7 +63,7 @@ defmodule PosServerWeb.Router do
     post "/pos/dashboard/tenant", DashboardController, :create
   end
 
-  scope "/", PosServerWeb do
+  scope "/", TigooServerWeb do
     pipe_through [:browser, :tenant_browser]
 
     post "/pos/dashboard/logo", DashboardController, :update_logo
@@ -82,7 +82,7 @@ defmodule PosServerWeb.Router do
     live "/pos/users", PosUserLive, :index
   end
 
-  scope "/", PosServerWeb do
+  scope "/", TigooServerWeb do
     pipe_through :liveview_asset
 
     get "/liveview-client.js", LiveViewAssetController, :show
@@ -90,7 +90,7 @@ defmodule PosServerWeb.Router do
     get "/login-client.css", LiveViewAssetController, :login_css
   end
 
-  scope "/pos/addons", PosServerWeb do
+  scope "/pos/addons", TigooServerWeb do
     pipe_through [:browser, :tenant_browser]
 
     get "/install", AddonController, :install_index
@@ -98,14 +98,14 @@ defmodule PosServerWeb.Router do
     get "/:identifier", AddonController, :show
   end
 
-  scope "/addons", PosServerWeb do
+  scope "/addons", TigooServerWeb do
     pipe_through [:browser, :tenant_browser]
 
     post "/:identifier/uninstall", AddonController, :uninstall
     get "/:identifier", AddonController, :legacy_show
   end
 
-  scope "/admin", PosServerWeb do
+  scope "/admin", TigooServerWeb do
     pipe_through :browser
 
     get "/login", AdminSessionController, :new
@@ -113,7 +113,7 @@ defmodule PosServerWeb.Router do
     post "/logout", AdminSessionController, :delete
   end
 
-  scope "/admin", PosServerWeb do
+  scope "/admin", TigooServerWeb do
     pipe_through [:browser, :admin]
 
     live "/", UserLive, :index
@@ -121,13 +121,13 @@ defmodule PosServerWeb.Router do
     live "/users/new", UserLive, :new
   end
 
-  scope "/api", PosServerWeb do
+  scope "/api", TigooServerWeb do
     pipe_through :tenant_login_api
 
     post "/login", AuthController, :login
   end
 
-  scope "/api", PosServerWeb do
+  scope "/api", TigooServerWeb do
     pipe_through :api
 
     get "/health", HealthController, :show
@@ -136,7 +136,7 @@ defmodule PosServerWeb.Router do
     options "/*path", HealthController, :show
   end
 
-  scope "/api", PosServerWeb do
+  scope "/api", TigooServerWeb do
     pipe_through :tenant_api
 
     get "/users", UserController, :index
@@ -201,7 +201,7 @@ defmodule PosServerWeb.Router do
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
-  if Application.compile_env(:pos_server, :dev_routes) do
+  if Application.compile_env(:tigoo_server, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
     # it behind authentication and allow only admins to access it.
     # If your application does not have an admins-only section yet,
@@ -212,12 +212,12 @@ defmodule PosServerWeb.Router do
     scope "/dev" do
       pipe_through :browser
 
-      live_dashboard "/dashboard", metrics: PosServerWeb.Telemetry
+      live_dashboard "/dashboard", metrics: TigooServerWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
 
-  scope "/", PosServerWeb do
+  scope "/", TigooServerWeb do
     pipe_through :browser
 
     match :*, "/*path", LandingController, :not_found

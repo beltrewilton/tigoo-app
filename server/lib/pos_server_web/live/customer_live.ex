@@ -1,14 +1,14 @@
-defmodule PosServerWeb.CustomerLive do
+defmodule TigooServerWeb.CustomerLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.CustomerComponents
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.CustomerComponents
+  import TigooServerWeb.PosLayoutComponents
 
   alias Ecto.Changeset
-  alias PosServer.{Authentication, Repo, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{Client, InventoryContext, Sales, Sql}
+  alias TigooServer.{Authentication, Repo, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{Client, InventoryContext, Sales, Sql}
 
   @page_size 100
 

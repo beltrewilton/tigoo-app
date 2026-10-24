@@ -1,11 +1,11 @@
-defmodule PosServerWeb.Plugs.PutTenantFromScope do
+defmodule TigooServerWeb.Plugs.PutTenantFromScope do
   @moduledoc """
   Sets the authenticated user's Triplex tenant in the request process.
   """
 
   import Plug.Conn
 
-  alias PosServer.TenantContext
+  alias TigooServer.TenantContext
 
   def init(opts), do: opts
 

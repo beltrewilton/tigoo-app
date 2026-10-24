@@ -1,4 +1,4 @@
-defmodule PosServer.Addons.Installer do
+defmodule TigooServer.Addons.Installer do
   @moduledoc """
   Discovery and loading boundary for local add-ons.
 
@@ -7,7 +7,7 @@ defmodule PosServer.Addons.Installer do
   identifier-shaped directory names.
   """
 
-  alias PosServer.Addons
+  alias TigooServer.Addons
 
   @supported_events %{
     :sale_completed => "sale_completed",

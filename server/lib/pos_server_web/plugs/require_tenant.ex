@@ -1,11 +1,11 @@
-defmodule PosServerWeb.Plugs.RequireTenant do
+defmodule TigooServerWeb.Plugs.RequireTenant do
   @moduledoc """
   Rejects tenant-owned API requests without an authenticated tenant scope.
   """
 
   import Plug.Conn
 
-  alias PosServer.TenantContext
+  alias TigooServer.TenantContext
 
   def init(opts), do: opts
 

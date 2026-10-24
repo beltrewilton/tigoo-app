@@ -1,5 +1,5 @@
-defmodule PosServer.Repo do
+defmodule TigooServer.Repo do
   use Ecto.Repo,
-    otp_app: :pos_server,
+    otp_app: :tigoo_server,
     adapter: Ecto.Adapters.Postgres
 end

@@ -1,5 +1,5 @@
-defmodule PosServerWeb.HealthController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.HealthController do
+  use TigooServerWeb, :controller
 
   def show(conn, _params) do
     json(conn, %{status: "ok"})

@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateAddons do
+defmodule TigooServer.Repo.Migrations.CreateAddons do
   use Ecto.Migration
 
   def change do

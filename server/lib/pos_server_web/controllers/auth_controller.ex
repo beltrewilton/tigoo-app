@@ -1,7 +1,7 @@
-defmodule PosServerWeb.AuthController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.AuthController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Authentication
+  alias TigooServer.Authentication
 
   def login(conn, params) do
     case Authentication.login(params, conn.assigns[:tenant]) do

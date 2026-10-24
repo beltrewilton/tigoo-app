@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.FixSalePaidLocalTimestamps do
+defmodule TigooServer.Repo.Migrations.FixSalePaidLocalTimestamps do
   use Ecto.Migration
 
   def up do

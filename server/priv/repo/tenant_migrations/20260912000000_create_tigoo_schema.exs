@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.CreateTigooSchema do
+defmodule TigooServer.Repo.Migrations.CreateTigooSchema do
   use Ecto.Migration
 
   @obsolete_permissions ~w(

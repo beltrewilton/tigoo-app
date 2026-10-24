@@ -1,4 +1,4 @@
-defmodule PosServerWeb.ErrorJSON do
+defmodule TigooServerWeb.ErrorJSON do
   @moduledoc """
   This module is invoked by your endpoint in case of errors on JSON requests.
 

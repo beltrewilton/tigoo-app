@@ -1,9 +1,9 @@
-defmodule PosServer.Accounts.UserToken do
+defmodule TigooServer.Accounts.UserToken do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias PosServer.Accounts.User
+  alias TigooServer.Accounts.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
 

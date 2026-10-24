@@ -1,10 +1,10 @@
-defmodule PosServerWeb.AddonController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.AddonController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Addons
-  alias PosServer.Addons.Installer
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.InventoryContext
+  alias TigooServer.Addons
+  alias TigooServer.Addons.Installer
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.InventoryContext
 
   def index(%{assigns: %{current_scope: scope}} = conn, params) do
     tenant = scope.tenant
@@ -166,7 +166,7 @@ defmodule PosServerWeb.AddonController do
         panel_class: "catalog-panel"
       },
       params: Map.take(params, ["login", "date_from", "date_to"]),
-      repo: PosServer.Repo
+      repo: TigooServer.Repo
     }
   end
 

@@ -1,4 +1,4 @@
-defmodule PosServerWeb.Plugs.RequireAdminSession do
+defmodule TigooServerWeb.Plugs.RequireAdminSession do
   @moduledoc "Requires the dedicated admin browser-session flag."
 
   import Plug.Conn

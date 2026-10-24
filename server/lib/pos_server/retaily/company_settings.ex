@@ -1,12 +1,12 @@
-defmodule PosServer.Retaily.CompanySettings do
+defmodule TigooServer.Retaily.CompanySettings do
   @moduledoc false
 
   import Ecto.Query
 
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Accounts.{Company, UserCompany}
-  alias PosServer.Retaily.{BusinessTime, Inventory, Pricing, PricingList, Product, Provider, Sequence, Store}
-  alias PosServer.Retaily.SequenceRotation
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Accounts.{Company, UserCompany}
+  alias TigooServer.Retaily.{BusinessTime, Inventory, Pricing, PricingList, Product, Provider, Sequence, Store}
+  alias TigooServer.Retaily.SequenceRotation
 
   def overview(scope) do
     tenant = TenantContext.tenant!()

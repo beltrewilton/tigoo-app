@@ -1,4 +1,4 @@
-defmodule PosServer.Tenants do
+defmodule TigooServer.Tenants do
   @moduledoc """
   Central tenant validation and registry access.
 
@@ -8,7 +8,7 @@ defmodule PosServer.Tenants do
 
   use GenServer
 
-  alias PosServer.Repo
+  alias TigooServer.Repo
 
   @table __MODULE__
   @reserved ~w(www api admin app mail support status assets static docs auth login signup billing)

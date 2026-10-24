@@ -1,4 +1,4 @@
-defmodule PosServer.Repo.Migrations.UpgradeAddonsRegistry do
+defmodule TigooServer.Repo.Migrations.UpgradeAddonsRegistry do
   use Ecto.Migration
 
   def up do

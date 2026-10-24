@@ -1,7 +1,7 @@
-defmodule PosServerWeb.AddonHTML do
-  use PosServerWeb, :html
+defmodule TigooServerWeb.AddonHTML do
+  use TigooServerWeb, :html
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
   embed_templates "addon_html/*"
 end

@@ -1,10 +1,10 @@
-defmodule PosServer.Retaily.BusinessTime do
+defmodule TigooServer.Retaily.BusinessTime do
   @moduledoc false
 
   import Ecto.Query
 
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Accounts.Company
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Accounts.Company
 
   @default_timezone_offset -4
 

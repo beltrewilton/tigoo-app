@@ -1,8 +1,8 @@
-defmodule PosServerWeb.ProductOrderController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.ProductOrderController do
+  use TigooServerWeb, :controller
 
   alias Ecto.Changeset
-  alias PosServer.Retaily.Orders
+  alias TigooServer.Retaily.Orders
 
   def index(conn, %{"store_id" => store_id} = params) do
     case Integer.parse(store_id) do

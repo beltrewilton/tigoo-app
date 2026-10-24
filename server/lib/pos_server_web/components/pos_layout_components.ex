@@ -1,8 +1,8 @@
-defmodule PosServerWeb.PosLayoutComponents do
+defmodule TigooServerWeb.PosLayoutComponents do
   @moduledoc false
-  use PosServerWeb, :html
+  use TigooServerWeb, :html
 
-  alias PosServer.Accounts.Scope
+  alias TigooServer.Accounts.Scope
 
   attr(:id, :string, required: true)
   attr(:class, :string, default: "pos-shell")

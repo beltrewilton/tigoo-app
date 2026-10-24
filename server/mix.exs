@@ -1,9 +1,9 @@
-defmodule PosServer.MixProject do
+defmodule TigooServer.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :pos_server,
+      app: :tigoo_server,
       version: "0.1.0",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -20,7 +20,7 @@ defmodule PosServer.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {PosServer.Application, []},
+      mod: {TigooServer.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

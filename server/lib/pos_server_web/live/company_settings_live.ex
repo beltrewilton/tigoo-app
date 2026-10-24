@@ -1,12 +1,12 @@
-defmodule PosServerWeb.CompanySettingsLive do
+defmodule TigooServerWeb.CompanySettingsLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.CompanySettings
+  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.CompanySettings
 
   @kinds ~w(price-list store provider)
 

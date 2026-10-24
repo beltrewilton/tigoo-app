@@ -1,14 +1,14 @@
-defmodule PosServerWeb.CashReconciliationLive do
+defmodule TigooServerWeb.CashReconciliationLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
   import Ecto.Query
-  import PosServerWeb.PosLayoutComponents
+  import TigooServerWeb.PosLayoutComponents
 
-  alias PosServer.{Authentication, Repo, TenantContext}
-  alias PosServer.Accounts.{Company, UserCompany}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.{InventoryContext, Sale, SalePaid, User}
+  alias TigooServer.{Authentication, Repo, TenantContext}
+  alias TigooServer.Accounts.{Company, UserCompany}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.{InventoryContext, Sale, SalePaid, User}
 
   @payment_labels %{"CASH" => "Cash payments", "CC" => "Credit/debit card payments"}
 

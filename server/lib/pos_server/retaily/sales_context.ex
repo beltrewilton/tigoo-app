@@ -1,15 +1,15 @@
-defmodule PosServer.Retaily.Sales do
+defmodule TigooServer.Retaily.Sales do
   @moduledoc false
 
   import Ecto.Query
   require Logger
 
   alias Ecto.Changeset
-  alias PosServer.{InventoryEvents, Repo}
-  alias PosServer.Addons.Events, as: AddonEvents
-  alias PosServer.Accounts.Scope, as: AccessScope
+  alias TigooServer.{InventoryEvents, Repo}
+  alias TigooServer.Addons.Events, as: AddonEvents
+  alias TigooServer.Accounts.Scope, as: AccessScope
 
-  alias PosServer.Retaily.{
+  alias TigooServer.Retaily.{
     Client,
     BusinessTime,
     Inventory,
@@ -24,7 +24,7 @@ defmodule PosServer.Retaily.Sales do
     UserStore
   }
 
-  alias PosServer.Retaily.SaleRequests.{Checkout, Payment}
+  alias TigooServer.Retaily.SaleRequests.{Checkout, Payment}
 
   @tax_rate Decimal.new("0.18")
   @zero Decimal.new(0)
@@ -269,7 +269,7 @@ defmodule PosServer.Retaily.Sales do
   defp cashier(_), do: {:error, :unauthorized}
 
   defp cashier_store?(%{admin?: true}, store_id, tenant) do
-    if Repo.exists?(from(store in PosServer.Retaily.Store, where: store.id == ^store_id),
+    if Repo.exists?(from(store in TigooServer.Retaily.Store, where: store.id == ^store_id),
          prefix: tenant
        ),
        do: :ok,
@@ -288,7 +288,7 @@ defmodule PosServer.Retaily.Sales do
   end
 
   defp cashier_store_ids(nil, tenant),
-    do: Repo.all(from(store in PosServer.Retaily.Store, select: store.id), prefix: tenant)
+    do: Repo.all(from(store in TigooServer.Retaily.Store, select: store.id), prefix: tenant)
 
   defp cashier_store_ids(cashier_id, tenant),
     do:

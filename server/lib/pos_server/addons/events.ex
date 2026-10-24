@@ -1,12 +1,12 @@
-defmodule PosServer.Addons.Events do
+defmodule TigooServer.Addons.Events do
   @moduledoc false
 
   require Logger
 
-  alias PosServer.Addons
-  alias PosServer.Addons.Installer
-  alias PosServer.Repo
-  alias PosServer.TenantContext
+  alias TigooServer.Addons
+  alias TigooServer.Addons.Installer
+  alias TigooServer.Repo
+  alias TigooServer.TenantContext
 
   @event_callbacks %{
     sale_completed: {:on_sale_completed, 2}
@@ -29,7 +29,7 @@ defmodule PosServer.Addons.Events do
 
   defp dispatch_async(event_name, payload, scope, addons) do
     try do
-      Task.Supervisor.start_child(PosServer.TaskSupervisor, fn ->
+      Task.Supervisor.start_child(TigooServer.TaskSupervisor, fn ->
         TenantContext.put_tenant(scope.tenant)
 
         Enum.each(addons, fn addon ->

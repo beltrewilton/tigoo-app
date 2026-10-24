@@ -1,9 +1,9 @@
-defmodule PosServer.AdminAuthentication do
+defmodule TigooServer.AdminAuthentication do
   @moduledoc "Server-side authentication for the Phoenix admin area."
 
   @spec authenticate(term(), term()) :: :ok | :error
   def authenticate(username, password) when is_binary(username) and is_binary(password) do
-    credentials = Application.get_env(:pos_server, :admin_auth, [])
+    credentials = Application.get_env(:tigoo_server, :admin_auth, [])
     expected_username = Keyword.get(credentials, :username)
     expected_password = Keyword.get(credentials, :password)
 

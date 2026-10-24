@@ -1,7 +1,7 @@
-defmodule PosServerWeb.AdminSessionController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.AdminSessionController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.AdminAuthentication
+  alias TigooServer.AdminAuthentication
 
   def new(conn, _params) do
     if get_session(conn, :admin_authenticated) == true do

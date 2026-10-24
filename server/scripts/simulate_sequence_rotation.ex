@@ -5,11 +5,11 @@
 # This script commits dedicated simulation rows in ans.app_sequence_rotation.
 # It creates the ans schema and rotation table if missing, using the existing
 # rotation migration. It does not modify existing sequences or the OS clock.
-defmodule PosServer.Scripts.SimulateSequenceRotation do
+defmodule TigooServer.Scripts.SimulateSequenceRotation do
   import Ecto.Query
 
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Retaily.{BusinessTime, SequenceRotation}
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Retaily.{BusinessTime, SequenceRotation}
 
   @tenant "ans"
   @human_users ["PRISCILA"]
@@ -85,7 +85,7 @@ defmodule PosServer.Scripts.SimulateSequenceRotation do
       Code.require_file(migration)
 
       case Ecto.Migrator.up(Repo, 20261017000000,
-             PosServer.Repo.Migrations.CreateAppSequenceRotation,
+             TigooServer.Repo.Migrations.CreateAppSequenceRotation,
              prefix: @tenant, log: false) do
         :ok -> log(output, "SETUP | created ans.app_sequence_rotation using the rotation migration")
         :already_up -> raise "Rotation migration is marked applied but ans.app_sequence_rotation is missing"
@@ -231,4 +231,4 @@ defmodule PosServer.Scripts.SimulateSequenceRotation do
   defp log(output, line), do: IO.write(output, line <> "\n")
 end
 
-PosServer.Scripts.SimulateSequenceRotation.run()
+TigooServer.Scripts.SimulateSequenceRotation.run()

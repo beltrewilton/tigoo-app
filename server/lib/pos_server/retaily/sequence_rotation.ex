@@ -1,10 +1,10 @@
-defmodule PosServer.Retaily.SequenceRotation do
+defmodule TigooServer.Retaily.SequenceRotation do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
 
-  alias PosServer.{Repo, TenantContext}
-  alias PosServer.Retaily.BusinessTime
+  alias TigooServer.{Repo, TenantContext}
+  alias TigooServer.Retaily.BusinessTime
 
   @max_sequence 9_223_372_036_854_775_807
 

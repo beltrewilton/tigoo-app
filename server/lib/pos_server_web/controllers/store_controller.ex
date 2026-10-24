@@ -1,7 +1,7 @@
-defmodule PosServerWeb.StoreController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.StoreController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.Retaily.InventoryContext
+  alias TigooServer.Retaily.InventoryContext
 
   def index(conn, _params) do
     {:ok, entries} = InventoryContext.stores(conn.assigns.current_scope)

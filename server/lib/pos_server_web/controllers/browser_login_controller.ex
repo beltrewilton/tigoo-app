@@ -1,9 +1,9 @@
-defmodule PosServerWeb.BrowserLoginController do
-  use PosServerWeb, :controller
+defmodule TigooServerWeb.BrowserLoginController do
+  use TigooServerWeb, :controller
 
-  alias PosServer.{Authentication, TenantContext}
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.InventoryContext
+  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.InventoryContext
 
   def create(conn, %{"token" => token, "store_id" => store_id}) do
     with {:ok, scope} <- Authentication.authenticate(token),

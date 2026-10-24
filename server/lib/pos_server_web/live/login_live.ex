@@ -1,13 +1,13 @@
-defmodule PosServerWeb.LoginLive do
+defmodule TigooServerWeb.LoginLive do
   @moduledoc false
-  use PosServerWeb, :live_view
+  use TigooServerWeb, :live_view
 
   import Ecto.Query, only: [from: 2]
 
-  alias PosServer.{Authentication, Repo, TenantContext}
-  alias PosServer.Accounts.Company
-  alias PosServer.Accounts.Scope
-  alias PosServer.Retaily.InventoryContext
+  alias TigooServer.{Authentication, Repo, TenantContext}
+  alias TigooServer.Accounts.Company
+  alias TigooServer.Accounts.Scope
+  alias TigooServer.Retaily.InventoryContext
 
   @impl true
   def mount(_params, session, socket) do

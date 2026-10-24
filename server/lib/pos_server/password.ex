@@ -1,4 +1,4 @@
-defmodule PosServer.Password do
+defmodule TigooServer.Password do
   @moduledoc false
 
   # Retaily uses Passlib's default bcrypt configuration: bcrypt revision 2b
