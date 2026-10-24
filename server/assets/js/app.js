@@ -22,7 +22,7 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket, Presence} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import {hooks as colocatedHooks} from "phoenix-colocated/pos_server"
+import {hooks as colocatedHooks} from "phoenix-colocated/tigoo_server"
 import topbar from "../vendor/topbar"
 import {receiptPrinter} from "./receipt_printer/service"
 import {initI18n, money, t, translatePage} from "./i18n"

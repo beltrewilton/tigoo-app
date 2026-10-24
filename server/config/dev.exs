@@ -57,7 +57,7 @@ config :tigoo_server, TigooServerWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/pos_server_web/(?:controllers|live|components|router)/?.*\.(ex|heex)$"
+      ~r"lib/tigoo_server_web/(?:controllers|live|components|router)/?.*\.(ex|heex)$"
     ]
   ]
 
