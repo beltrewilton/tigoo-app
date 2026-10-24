@@ -196,7 +196,8 @@ defmodule PosServer.Addons.Installer do
     revision_part = revision |> String.replace("-", "")
 
     Module.concat([
-      PosServer,
+      # Keep the persisted add-on namespace stable across host renames.
+      "PosServer",
       :TenantAddons,
       "Tenant#{tenant_part}#{tenant_hash}",
       "#{addon_part}Revision#{revision_part}"
