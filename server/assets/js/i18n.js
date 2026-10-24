@@ -7,6 +7,7 @@ export const LANGUAGES = {
 }
 
 const en = {
+  sequences: {"title": "Sequences", "standard": "Sales sequences", "rotation": "Monthly rotating sequences", "standardCopy": "Configure invoice numbers for CF, VF and DV sales.", "rotationCopy": "Configure a monthly window with cyclic number reuse.", "empty": "No sequences configured.", "base": "Current base", "windowSize": "Window size", "allowedSteps": "Allowed steps", "period": "Month", "step": "Step", "lastNumber": "Last number", "estimated": "Estimated monthly amount", "allowed": "Allowed monthly amount", "average": "Average amount", "rotationHelp": "Counts are calculated automatically. Active-month configuration and an initialized base cannot be edited.", "loadFailed": "Sequences could not be loaded.", "saveFailed": "Could not save sequence.", "deleteFailed": "Could not delete sequence."},
   layout: {
     nav: {
       primary: "Primary navigation",
@@ -605,6 +606,7 @@ const en = {
 }
 
 const es = {
+  sequences: {"title": "Secuencias", "standard": "Secuencias de ventas", "rotation": "Secuencias con rotación mensual", "standardCopy": "Configura la numeración de facturas para ventas CF, VF y DV.", "rotationCopy": "Configura una ventana mensual con reutilización cíclica de números.", "empty": "No hay secuencias configuradas.", "base": "Base actual", "windowSize": "Valores disponibles", "allowedSteps": "Pasos permitidos", "period": "Mes", "step": "Paso", "lastNumber": "Último número", "estimated": "Monto mensual estimado", "allowed": "Monto mensual permitido", "average": "Monto promedio", "rotationHelp": "Los valores se calculan automáticamente. No se pueden editar la configuración del mes activo ni una base ya inicializada.", "loadFailed": "No se pudieron cargar las secuencias.", "saveFailed": "No se pudo guardar la secuencia.", "deleteFailed": "No se pudo eliminar la secuencia."},
   layout: {
     nav: {primary: "Navegación principal", pos: "POS", customers: "Clientes", invoices: "Reporte de facturas", inventory: "Inventario", orders: "Órdenes de compra", companySettings: "Configuración de empresa", users: "Usuarios", expand: "Expandir navegación", collapse: "Contraer navegación"},
     theme: {choose: "Elegir tema", label: "Tema", defaultLight: "Claro predeterminado", natureLight: "Naturaleza claro", natureDark: "Naturaleza oscuro", caffeineLight: "Café claro", caffeineDark: "Café oscuro", boldTechLight: "Tecnología claro", boldTechDark: "Tecnología oscuro", doom64Light: "Doom 64 claro", doom64Dark: "Doom 64 oscuro"},
@@ -635,6 +637,7 @@ const es = {
 }
 
 const pt = {
+  sequences: {"title": "Sequências", "standard": "Sequências de vendas", "rotation": "Sequências com rotação mensal", "standardCopy": "Configure a numeração de faturas para vendas CF, VF e DV.", "rotationCopy": "Configure uma janela mensal com reutilização cíclica de números.", "empty": "Nenhuma sequência configurada.", "base": "Base atual", "windowSize": "Valores disponíveis", "allowedSteps": "Passos permitidos", "period": "Mês", "step": "Passo", "lastNumber": "Último número", "estimated": "Valor mensal estimado", "allowed": "Valor mensal permitido", "average": "Valor médio", "rotationHelp": "Os valores são calculados automaticamente. A configuração do mês ativo e uma base já inicializada não podem ser editadas.", "loadFailed": "Não foi possível carregar as sequências.", "saveFailed": "Não foi possível salvar a sequência.", "deleteFailed": "Não foi possível excluir a sequência."},
   layout: {
     nav: {primary: "Navegação principal", pos: "PDV", customers: "Clientes", invoices: "Relatório de faturas", inventory: "Estoque", orders: "Pedidos de compra", companySettings: "Configurações da empresa", users: "Usuários", expand: "Expandir navegação", collapse: "Recolher navegação"},
     theme: {choose: "Escolher tema", label: "Tema", defaultLight: "Claro padrão", natureLight: "Natureza claro", natureDark: "Natureza escuro", caffeineLight: "Café claro", caffeineDark: "Café escuro", boldTechLight: "Tecnologia claro", boldTechDark: "Tecnologia escuro", doom64Light: "Doom 64 claro", doom64Dark: "Doom 64 escuro"},
@@ -677,6 +680,7 @@ const pageTitleKeys = {
   "Inventory": "layout.nav.inventory",
   "Purchase Orders": "orders.purchaseOrders",
   "Tigoo Company settings": "company.title",
+  "Tigoo Sequences": "sequences.title",
   "Tigoo Users": "users.users"
 }
 

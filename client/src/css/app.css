@@ -1986,6 +1986,15 @@ button {
 .company-setting-form .form-field {
   margin-bottom: 8px;
 }
+.sequence-field-errors .field-description {
+  color: var(--destructive, #b91c1c);
+}
+#sequences-screen .company-setting-row > div:first-child {
+  min-width: 0;
+}
+#sequences-screen .company-setting-row .field-description {
+  overflow-wrap: anywhere;
+}
 .company-setting-form .form-actions {
   justify-content: flex-end;
 }

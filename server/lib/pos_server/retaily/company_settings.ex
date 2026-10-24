@@ -6,6 +6,7 @@ defmodule PosServer.Retaily.CompanySettings do
   alias PosServer.{Repo, TenantContext}
   alias PosServer.Accounts.{Company, UserCompany}
   alias PosServer.Retaily.{BusinessTime, Inventory, Pricing, PricingList, Product, Provider, Sequence, Store}
+  alias PosServer.Retaily.SequenceRotation
 
   def overview(scope) do
     tenant = TenantContext.tenant!()
@@ -92,6 +93,20 @@ defmodule PosServer.Retaily.CompanySettings do
   end
 
   def create_sequence_set(_scope, attrs), do: save_sequence_set(%Sequence{}, attrs)
+
+  @doc """
+  Inserts a sequence rotation in the current tenant's schema.
+
+  Returns `{:ok, sequence_rotation}` with the database-computed rotation values,
+  or `{:error, changeset}`. Raises if the tenant context has not been set.
+  """
+  def create_sequence_rotation(attrs) do
+    tenant = TenantContext.tenant!()
+
+    %SequenceRotation{}
+    |> SequenceRotation.changeset(attrs)
+    |> Repo.insert(prefix: tenant)
+  end
 
   def update_sequence_set(_scope, id, attrs) do
     case Repo.get(Sequence, id, prefix: TenantContext.tenant!()) do

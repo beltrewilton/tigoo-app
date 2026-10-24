@@ -8,7 +8,7 @@ defmodule PosServerWeb.CompanySettingsLive do
   alias PosServer.Accounts.Scope
   alias PosServer.Retaily.CompanySettings
 
-  @kinds ~w(price-list store provider sequence)
+  @kinds ~w(price-list store provider)
 
   @impl true
   def mount(params, session, socket) do
@@ -106,16 +106,6 @@ defmodule PosServerWeb.CompanySettingsLive do
             })
           end)
 
-        {"sequence", {"sequence", :new}} ->
-          safe_company_settings(fn ->
-            CompanySettings.create_sequence_set(socket.assigns.scope, sequence_attrs(params))
-          end)
-
-        {"sequence", {"sequence", id}} ->
-          safe_company_settings(fn ->
-            CompanySettings.update_sequence_set(socket.assigns.scope, id, sequence_attrs(params))
-          end)
-
         _ ->
           {:error, :invalid_edit}
       end
@@ -127,13 +117,12 @@ defmodule PosServerWeb.CompanySettingsLive do
   end
 
   def handle_event("delete", %{"kind" => kind, "id" => id}, socket)
-      when kind in ["price-list", "provider", "sequence"] do
+      when kind in ["price-list", "provider"] do
     with {id, ""} <- Integer.parse(id) do
       result =
         case kind do
           "price-list" -> safe_company_settings(fn -> CompanySettings.delete_price_list(id) end)
           "provider" -> safe_company_settings(fn -> CompanySettings.delete_provider(id) end)
-          "sequence" -> safe_company_settings(fn -> CompanySettings.delete_sequence_set(id) end)
         end
 
       case result do
@@ -180,6 +169,9 @@ defmodule PosServerWeb.CompanySettingsLive do
                   <h2 id="company-settings-title" tabindex="-1" data-i18n="company.title">Company settings</h2>
                 </div>
               </div>
+              <a class="btn" data-variant="outline" href={~p"/pos/sequences?store_id=#{@store_id}"}>
+                <span data-i18n="sequences.title">Sequences</span>
+              </a>
             </header>
             <article class="card company-summary" aria-labelledby="company-summary-title">
               <div class="card-header">
@@ -212,16 +204,6 @@ defmodule PosServerWeb.CompanySettingsLive do
               entries={@overview.stores}
               editing={@editing}
               empty="No stores yet."
-              company={@overview.company}
-            />
-            <.settings_card
-              kind="sequence"
-              title="Sequence sets"
-              description="Set the invoice sequences used for CF, VF, and DV sales."
-              add_label="Add sequence"
-              entries={@overview.sequence_sets}
-              editing={@editing}
-              empty="No sequences configured. Add CF, VF, and DV to complete sales."
               company={@overview.company}
             />
             <.settings_card
@@ -300,36 +282,6 @@ defmodule PosServerWeb.CompanySettingsLive do
     ~H"""
     <form class="form company-setting-form" phx-submit="save" phx-value-kind={@kind}>
       <input type="hidden" name="kind" value={@kind} />
-      <%= if @kind == "sequence" do %>
-        <.field label="Name" label_key="common.name" name="name" value={value(@entry, :name)} required /><.field
-          label="Code"
-          label_key="common.code"
-          name="code"
-          value={value(@entry, :code)}
-          required
-        /><.field label="Prefix" label_key="company.prefix" name="prefix" value={value(@entry, :prefix)} required /><.field
-          label="Digits"
-          label_key="company.digits"
-          name="fill"
-          value={value(@entry, :fill) || 8}
-          type="number"
-          required
-        /><.field
-          label="Increment"
-          label_key="company.increment"
-          name="increment_by"
-          value={value(@entry, :increment_by) || 1}
-          type="number"
-          required
-        /><.field
-          label="Next number"
-          label_key="company.nextNumber"
-          name="current_seq"
-          value={value(@entry, :current_seq) || 0}
-          type="number"
-          required
-        />
-      <% else %>
         <.field
           label={setting_name_label(@kind)}
           label_key={setting_name_label_key(@kind)}
@@ -377,7 +329,6 @@ defmodule PosServerWeb.CompanySettingsLive do
             </button>
           </div>
         <% end %>
-      <% end %>
       <div class="form-actions">
         <button class="btn" type="button" data-variant="outline" phx-click="cancel"><span data-i18n="common.cancel">Cancel</span></button><button
           class="btn"
@@ -474,24 +425,6 @@ defmodule PosServerWeb.CompanySettingsLive do
 
   defp store_attrs(params), do: Map.take(params, ["name", "slogan", "address", "logo"])
 
-  defp sequence_attrs(params) do
-    numeric_values =
-      Enum.into(~w(fill increment_by current_seq), %{}, fn key ->
-        {key, integer(Map.get(params, key))}
-      end)
-
-    Map.take(params, ["name", "code", "prefix"]) |> Map.merge(numeric_values)
-  end
-
-  defp integer(value) when is_integer(value), do: value
-
-  defp integer(value) do
-    case Integer.parse(to_string(value || "")) do
-      {number, ""} -> number
-      _ -> 0
-    end
-  end
-
   defp selected_store_id(stores, selected_id) do
     case Integer.parse(to_string(selected_id || "")) do
       {id, ""} ->
@@ -508,7 +441,6 @@ defmodule PosServerWeb.CompanySettingsLive do
   defp entry(overview, "price-list", id), do: Enum.find(overview.price_lists, &(&1.id == id))
   defp entry(overview, "store", id), do: Enum.find(overview.stores, &(&1.id == id))
   defp entry(overview, "provider", id), do: Enum.find(overview.providers, &(&1.id == id))
-  defp entry(overview, "sequence", id), do: Enum.find(overview.sequence_sets, &(&1.id == id))
   defp value(nil, _key), do: nil
   defp value(entry, key), do: Map.get(entry, key) || Map.get(entry, Atom.to_string(key))
 
@@ -537,31 +469,24 @@ defmodule PosServerWeb.CompanySettingsLive do
   defp editing_key({kind, id}), do: "#{kind}:#{id}"
   defp title_id("price-list"), do: "price-lists-title"
   defp title_id("store"), do: "stores-title"
-  defp title_id("sequence"), do: "sequence-sets-title"
   defp title_id("provider"), do: "providers-title"
   defp add_id("price-list"), do: "add-price-list"
   defp add_id("store"), do: "add-store"
-  defp add_id("sequence"), do: "add-sequence-set"
   defp add_id("provider"), do: "add-provider"
   defp content_id("price-list"), do: "price-lists-content"
   defp content_id("store"), do: "stores-content"
-  defp content_id("sequence"), do: "sequence-sets-content"
   defp content_id("provider"), do: "providers-content"
   defp card_title_key("price-list"), do: "company.priceLists"
   defp card_title_key("store"), do: "company.stores"
-  defp card_title_key("sequence"), do: "company.sequenceSets"
   defp card_title_key("provider"), do: "company.providers"
   defp card_description_key("price-list"), do: "company.priceListsCopy"
   defp card_description_key("store"), do: "company.storesCopy"
-  defp card_description_key("sequence"), do: "company.sequenceCopy"
   defp card_description_key("provider"), do: "company.providersCopy"
   defp card_add_key("price-list"), do: "company.addPriceList"
   defp card_add_key("store"), do: "company.addStore"
-  defp card_add_key("sequence"), do: "company.addSequence"
   defp card_add_key("provider"), do: "company.addProvider"
   defp card_empty_key("price-list"), do: "company.noPriceLists"
   defp card_empty_key("store"), do: "company.noStores"
-  defp card_empty_key("sequence"), do: "company.noSequences"
   defp card_empty_key("provider"), do: "company.noProviders"
   defp setting_name_label("price-list"), do: "Price list label"
   defp setting_name_label("provider"), do: "Provider name"
@@ -574,9 +499,7 @@ defmodule PosServerWeb.CompanySettingsLive do
   defp submit_label_key(entry) when not is_nil(entry), do: "common.save"
   defp submit_label_key(nil), do: "common.create"
   defp submit_label(_kind, entry) when not is_nil(entry), do: "Save"
-  defp submit_label("sequence", nil), do: "Save"
   defp submit_label(_, nil), do: "Create"
-  defp row_title("sequence", entry), do: "#{value(entry, :code)} · #{value(entry, :name)}"
   defp row_title("price-list", entry), do: value(entry, :label)
   defp row_title(_, entry), do: value(entry, :name)
 
@@ -589,20 +512,13 @@ defmodule PosServerWeb.CompanySettingsLive do
     end
   end
 
-  defp row_description("sequence", entry),
-    do:
-      "#{value(entry, :prefix)}#{String.pad_leading(to_string(value(entry, :current_seq)), value(entry, :fill), "0")} · increments by #{value(entry, :increment_by)}"
-
   defp row_description("price-list", entry), do: value(entry, :price_key) || ""
   defp row_description(_, _), do: ""
   defp delete_message("price-list"), do: "Delete this price list?"
-  defp delete_message("sequence"), do: "Delete this sequence set?"
   defp delete_message(kind), do: "Delete this #{kind}?"
   defp error_message(_reason, "price-list", :save), do: "Could not save price list."
   defp error_message(_reason, "store", :save), do: "Could not save store."
   defp error_message(_reason, "provider", :save), do: "Could not save provider."
-  defp error_message(_reason, "sequence", :save), do: "Could not save sequence set."
   defp error_message(_reason, "price-list", :delete), do: "Could not delete price list."
   defp error_message(_reason, "provider", :delete), do: "Could not delete provider."
-  defp error_message(_reason, "sequence", :delete), do: "Could not delete sequence set."
 end

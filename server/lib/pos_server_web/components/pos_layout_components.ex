@@ -147,6 +147,15 @@ defmodule PosServerWeb.PosLayoutComponents do
             Company settings
           </a>
           <a
+            :if={nav_allowed?(@scope, :sequences)}
+            class="mobile-nav-link"
+            href={nav_href(:sequences, @active_page, @store_id)}
+            aria-current={current_page(@active_page, :sequences)}
+            data-i18n="sequences.title"
+          >
+            Sequences
+          </a>
+          <a
             :if={nav_allowed?(@scope, :users)}
             class="mobile-nav-link"
             href={nav_href(:users, @active_page, @store_id)}
@@ -440,6 +449,20 @@ defmodule PosServerWeb.PosLayoutComponents do
             stroke-linejoin="round"
           >
             <path d="m3 9 2-5h14l2 5" /><path d="M3 9h18v11H3z" /><path d="M7 20v-6h4v6" /><path d="M3 9c0 2 2 3 4 3s4-1 4-3c0 2 2 3 4 3s4-1 4-3" />
+          </svg>
+        </a>
+        <a
+          :if={nav_allowed?(@scope, :sequences)}
+          id="sequences-nav"
+          class="sidebar-link"
+          href={nav_href(:sequences, @active_page, @store_id)}
+          aria-current={current_page(@active_page, :sequences)}
+          aria-label="Sequences"
+          data-i18n-aria-label="sequences.title"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5h12M9 12h12M9 19h12M3 4h1v3M3 11h2l-2 3h2M3 18h2v3H3" />
           </svg>
         </a>
         <a
@@ -743,6 +766,7 @@ defmodule PosServerWeb.PosLayoutComponents do
   defp nav_href(:orders, _active_page, store_id), do: store_href(~p"/pos/orders", store_id)
   defp nav_href(:installed_addons, _active_page, store_id), do: store_href(~p"/pos/addons", store_id)
   defp nav_href(:company_settings, _active_page, store_id), do: store_href(~p"/pos/company-settings", store_id)
+  defp nav_href(:sequences, _active_page, store_id), do: store_href(~p"/pos/sequences", store_id)
   defp nav_href(:users, _active_page, store_id), do: store_href(~p"/pos/users", store_id)
   defp nav_href(:addons, _active_page, store_id), do: store_href(~p"/pos/addons/install", store_id)
 
@@ -774,6 +798,7 @@ defmodule PosServerWeb.PosLayoutComponents do
   defp nav_permission(:orders), do: "pos.orders"
   defp nav_permission(:installed_addons), do: "pos.addons"
   defp nav_permission(:company_settings), do: "company.settings"
+  defp nav_permission(:sequences), do: "company.settings"
   defp nav_permission(:users), do: "user.view"
   defp nav_permission(:addons), do: "pos.addons.install"
 

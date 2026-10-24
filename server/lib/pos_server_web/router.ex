@@ -78,6 +78,7 @@ defmodule PosServerWeb.Router do
     live "/pos/orders", PurchaseOrdersLive, :index
     get "/pos/addons", AddonController, :index
     live "/pos/company-settings", CompanySettingsLive, :index
+    live "/pos/sequences", SequencesLive, :index
     live "/pos/users", PosUserLive, :index
   end
 

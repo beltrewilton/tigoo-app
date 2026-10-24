@@ -18,6 +18,9 @@ defmodule PosServer.TenantContext do
   @spec get_tenant() :: String.t() | nil
   def get_tenant, do: Process.get(@key)
 
+  @doc "Clears the tenant context for the current process."
+  def clear_tenant, do: Process.delete(@key)
+
   @spec tenant!() :: String.t()
   def tenant! do
     get_tenant() || raise "tenant context is not set"

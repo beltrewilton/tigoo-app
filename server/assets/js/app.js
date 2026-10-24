@@ -55,6 +55,21 @@ function liveSocketParams() {
 const hooks = {
   LoginScreen: window.LoginScreenHook,
   CompanySettings: window.CompanySettingsHook,
+  Sequences: {
+    mounted() {
+      this.editing = this.el.dataset.editing
+      requestAnimationFrame(() => this.el.querySelector("#sequences-title")?.focus())
+    },
+    updated() {
+      const editing = this.el.dataset.editing
+      if (editing === this.editing) return
+      this.editing = editing
+      const target = editing
+        ? this.el.querySelector("#sequence-settings-form input:not(:disabled)")
+        : this.el.querySelector("#sequences-title")
+      requestAnimationFrame(() => target?.focus())
+    }
+  },
   CustomerDialog: dialogHook(),
   ProductDialog: productDialogHook(),
   CustomerScreen: {
