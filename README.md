@@ -1,109 +1,28 @@
-# POS
+# Tigoo POS
 
-POS is a desktop client and server foundation for a future point-of-sale system.
+Web-based point-of-sale application built with Elixir, Phoenix LiveView, and PostgreSQL. Includes sales and payments, customers, inventory, purchase orders, reports, and tenant accounts.
 
-## Architecture
+- `server/` — Elixir/Phoenix APIs, LiveView screens, authentication, and schema-based tenancy via Triplex.
+- `ui/` — vendored UI components; see [UI asset instructions](ui/README.md).
 
-```text
-Tauri Client
-HTML / CSS / Vanilla JavaScript
-Rust native device layer
-        ⇅
-Phoenix / Elixir
-        ⇅
-PostgreSQL
-```
+## Local development
 
-## Responsibilities
+Requires Elixir 1.15+, Erlang/OTP, and PostgreSQL.
 
-- JavaScript renders the POS UI, owns temporary cart state, and invokes client/server boundaries.
-- Rust owns native device access, including isolated CUPS/USB transports and ESC/POS receipt encoding.
-- Elixir/Phoenix will own business rules, authorization, sales, inventory, realtime events, and integrations.
-- PostgreSQL will hold persistent application state.
+Create the PostgreSQL database separately, then configure the server:
 
-## Current status
-
-- The Tauri desktop PoC is validated on macOS Apple Silicon.
-- Epson TM-T20II direct USB ESC/POS printing is validated on macOS. Any CUPS printer queue can also be used, including a Bluetooth printer installed by its vendor driver. Set `POS_PRINTER_QUEUE` to select a named queue; otherwise the macOS default queue is used.
-- The Phoenix server foundation includes PostgreSQL repository configuration, PubSub, Channels, Triplex wiring, public identity migrations, tenant company migrations, and `GET /api/health`.
-- POS business-domain migration has not started.
-- Windows, Android, and iOS printer support have not been validated.
-
-## Repository layout
-
-```text
-client/  Tauri v2 desktop client
-server/  Phoenix/Elixir application foundation
-```
-
-## Development
-
-Prerequisites: Rust stable, Node.js/npm, Elixir/Erlang, Phoenix installer, and PostgreSQL.
-
-Create the Phoenix skeleton (already completed in this repository) with:
-
-```bash
-mix phx.new server \
-  --app pos_server \
-  --module PosServer \
-  --database postgres \
-  --binary-id \
-  --no-tailwind \
-  --no-install \
-  --no-agents-md
-```
-
-Set up the server once:
-
-```bash
+```sh
 cd server
 cp .env.example .env
-./sh/deps_get.sh
-```
-
-The database is provisioned outside of Mix. Public and Triplex tenant migrations are checked in but are not run automatically; tenant creation and migration orchestration will be introduced deliberately in a later SaaS phase.
-
-To run the public migrations after the database has been provisioned:
-
-```bash
-cd server
+# Edit .env with your database credentials and configuration.
+set -a
+. ./.env
+set +a
+mix setup
 ./sh/migrate.sh .env
-```
-
-Run the server in terminal 1:
-
-```bash
-cd server
 ./sh/run_local.sh
 ```
 
-On macOS, `sh/run_local.sh` starts Phoenix with `iex -S mix phx.server`.
+`mix setup` installs dependencies and builds assets; it does not create the database. The migration command above applies public migrations. To create or migrate a tenant schema, run `./sh/migrate.sh .env <tenant_schema>`.
 
-Run the desktop client in terminal 2:
-
-```bash
-cd client
-npm install
-npm run tauri dev
-```
-
-The health endpoint is available at `http://localhost:4000/api/health` when the Phoenix server is running.
-
-## Phoenix LiveView foundation
-
-For a fresh Phoenix application with HTML and LiveView support, use:
-
-```bash
-mix phx.new server \
-  --app pos_server \
-  --module PosServer \
-  --database postgres \
-  --binary-id \
-  --no-tailwind \
-  --no-install \
-  --no-agents-md
-```
-
-Do not add `--no-html`, `--no-assets`, or `--no-live`: the application needs Phoenix HTML, static assets, and LiveView forms. `--no-tailwind` is intentional because the UI uses static framework-agnostic shadcn-html CSS. `--no-install` prevents the generator from fetching dependencies or compiling during generation. The existing `server/` application has been upgraded manually to preserve its Triplex configuration and migrations. Its Users screen is available at `/users` (`/users/new` remains available as a compatibility route).
-
-The UI uses vendored framework-agnostic shadcn-html assets. No npm package or asset build is required for those components.
+The server defaults to `http://localhost:4000`; check `/api/health` for health status. Tenant POS screens use `http://<tenant>.localhost:4000/pos`. Configure `GOOGLE_CLIENT`, `GOOGLE_KEY`, and the OAuth callback for Google sign-in; `/admin/login` uses `ADMIN_USER` and `ADMIN_PASWORD` (the spelling used by the application).

@@ -31,7 +31,6 @@ server/erl_crash.dump
 server/priv/static/assets/**
 !server/priv/static/assets/
 !server/priv/static/assets/app.css
-!server/priv/static/assets/app.js
 !server/priv/static/assets/css/
 !server/priv/static/assets/css/**
 !server/priv/static/assets/pos.css
