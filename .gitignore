@@ -80,3 +80,7 @@ server/evofit-instructive.sql
 server/sh/prepare_evofit_environment.sh
 fe/22813977_identity.p12
 fe/credentials.txt
+server/semilla.xml
+server/signed-seed.xml
+
+p12_companies/

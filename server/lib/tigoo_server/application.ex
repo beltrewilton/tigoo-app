@@ -11,6 +11,7 @@ defmodule TigooServer.Application do
       TigooServerWeb.Telemetry,
       TigooServer.Repo,
       TigooServer.Tenants,
+      TigooServer.FeSeedStore,
       {Task.Supervisor, name: TigooServer.TaskSupervisor},
       {DNSCluster, query: Application.get_env(:tigoo_server, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TigooServer.PubSub},

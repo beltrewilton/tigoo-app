@@ -1,5 +1,17 @@
 import Config
 
+# Each hostname tenant has its signing identity in p12_companies/{tenant}.
+config :tigoo_server, :fe_receivers_directory,
+  Path.expand("../../p12_companies", __DIR__)
+
+# Comma-separated PEM paths; never trust CA certificates supplied by a request.
+config :tigoo_server, :fe_authentication,
+  xmlsec_path: System.get_env("FE_XMLSEC_PATH", "xmlsec1"),
+  openssl_path: System.get_env("FE_OPENSSL_PATH", "openssl"),
+  trusted_certificates: String.split(System.get_env("FE_TRUSTED_CERTIFICATES", ""), ",", trim: true),
+  intermediate_certificates: String.split(System.get_env("FE_INTERMEDIATE_CERTIFICATES", ""), ",", trim: true),
+  crls: String.split(System.get_env("FE_CERTIFICATE_CRLS", ""), ",", trim: true)
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration

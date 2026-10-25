@@ -56,6 +56,13 @@ defmodule TigooServerWeb.Router do
     pipe_through :fe_api
 
     get "/semilla", FeAuthenticationController, :semilla
+    post "/validacioncertificado", FeAuthenticationController, :validacioncertificado
+  end
+
+  scope "/fe/recepcion/api", TigooServerWeb do
+    pipe_through :fe_api
+
+    post "/ecf", FeReceptionController, :create
   end
 
   scope "/", TigooServerWeb do

@@ -21,7 +21,7 @@ defmodule TigooServer.MixProject do
   def application do
     [
       mod: {TigooServer.Application, []},
-      extra_applications: [:logger, :runtime_tools, :xmerl]
+      extra_applications: [:logger, :runtime_tools, :xmerl, :public_key]
     ]
   end
 
