@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Postulacion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PostulacionID>94061</PostulacionID>
+  <TipoRegistro>1</TipoRegistro>
+  <GrupoComprobante>31,32,33,34,41,43,44,45,46,47</GrupoComprobante>
+  <Contribuyente>
+    <RNCContribuyente>131362702</RNCContribuyente>
+    <RazonSocial>EVOFIT W B SRL</RazonSocial>
+    <NombreComercial>EVOFIT W B</NombreComercial>
+    <ActividadEconomica>513940</ActividadEconomica>
+    <Telefono>8296456177</Telefono>
+    <Direccion>EL DIAMANTE, No. #16, SD</Direccion>
+    <Provincia>DISTRITO NACIONAL</Provincia>
+    <Municipio>SANTO DOMINGO DE GUZMAN</Municipio>
+    <Sector>SD</Sector>
+    <CorreoElectronico>beltre.wilton@gmail.com</CorreoElectronico>
+  </Contribuyente>
+  <Representante>
+    <RNCRepresentante>00114277411</RNCRepresentante>
+    <NombreRepresentante>WILTON BELTRE ROSARIO</NombreRepresentante>
+    <TelefonoRepresentante>8296456177</TelefonoRepresentante>
+    <CelularRepresentante>8296456177</CelularRepresentante>
+    <DireccionRepresentante>ONCE, No. 18, ATALA</DireccionRepresentante>
+    <ProvinciaRepresentante>DISTRITO NACIONAL</ProvinciaRepresentante>
+    <MunicipioRepresentante>SANTO DOMINGO DE GUZMAN</MunicipioRepresentante>
+    <SectorRepresentante>ATALA</SectorRepresentante>
+    <CorreoElectronicoRepresentante>beltre.wilton@gmail.com</CorreoElectronicoRepresentante>
+  </Representante>
+  <Software>
+    <TipoDesarrollo>1</TipoDesarrollo>
+    <NombreSoftware>TIGOOAPP</NombreSoftware>
+    <UrlRecepcion>evofitdb.tigoo.app</UrlRecepcion>
+    <UrlAprobacionComercial>evofitdb.tigoo.app</UrlAprobacionComercial>
+    <UrlAutenticacion>evofitdb.tigoo.app</UrlAutenticacion>
+    <VersionSoftware>1.1.0</VersionSoftware>
+  </Software>
+  <FechaSolicitud>2026-10-25T00:32:40.4652853-04:00</FechaSolicitud>
+</Postulacion>

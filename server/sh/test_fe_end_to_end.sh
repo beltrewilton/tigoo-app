@@ -75,7 +75,11 @@ end
 true = is_binary(rnc) and Regex.match?(~r/\A(?:[0-9]{9}|[0-9]{11})\z/, rnc)
 
 directory = Path.join(Application.fetch_env!(:tigoo_server, :fe_receivers_directory), tenant)
-{:ok, files} = File.ls(directory)
+files = case File.ls(directory) do
+  {:ok, files} -> files
+  {:error, reason} ->
+    raise "Cannot read receiver signing directory #{directory}: #{:file.format_error(reason)}. Provision the tenant's .p12 and credentials.txt on this host."
+end
 [filename] = Enum.filter(files, &(String.downcase(Path.extname(&1)) == ".p12"))
 p12 = Path.join(directory, filename)
 credentials = File.read!(Path.join(directory, "credentials.txt"))

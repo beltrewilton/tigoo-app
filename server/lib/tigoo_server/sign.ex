@@ -21,7 +21,7 @@ defmodule TigooServer.Sign do
   @c14n "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
   @rsa "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
   @sha "http://www.w3.org/2001/04/xmlenc#sha256"
-  @roots ~w(SemillaModel ECF ACECF ARECF ANECF RFCE)
+  @roots ~w(SemillaModel ECF ACECF ARECF ANECF RFCE Postulacion)
   @max_bytes 5_000_000
 
   @type reason :: :invalid_xml | :already_signed | :invalid_password |
