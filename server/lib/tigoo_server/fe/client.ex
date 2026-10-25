@@ -8,7 +8,8 @@ defmodule TigooServer.Fe.Client do
   An HTTP-successful fiscal rejection is still an `:ok` response: inspect
   `status/2`. Requests never retry or follow redirects automatically.
   """
-  alias TigooServer.Fe.{Credentials, Sign}
+  alias TigooServer.Fe.Credentials
+  alias TigooServer.Sign
   alias TigooServer.Fe.Client.Error
   alias TigooServer.Fe.Generation.{Rules, Xml}
   @derive {Inspect, except: [:password, :token]}
@@ -50,7 +51,12 @@ defmodule TigooServer.Fe.Client do
       {:ok, authenticated}
     end
   rescue
-    _ -> failure(:authenticate, "Unable to parse or sign DGII seed")
+    error in UndefinedFunctionError ->
+      failure(:authenticate, "DGII authentication function unavailable: #{inspect(error.module)}.#{error.function}/#{error.arity}")
+    error in TigooServer.Fe.Generation.Error ->
+      failure(:authenticate, "DGII authentication XML error: #{Exception.message(error)}")
+    error ->
+      failure(:authenticate, "DGII authentication failed unexpectedly (#{inspect(error.__struct__)})")
   end
 
   @doc "Posts unchanged signed ECF bytes. Type 32 below DOP 250000 is refused here."
