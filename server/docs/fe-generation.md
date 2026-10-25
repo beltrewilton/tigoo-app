@@ -183,10 +183,11 @@ changes and the RFCE regex-only adaptation. Original `fe/xsd` files are untouche
 
 ## Authentication, requests and responses
 
-Generation is offline and requires no seed or access token. A future delivery
-client must obtain a **DGII** seed, sign it using the same reusable signer,
-exchange it using `/autenticacion/api/autenticacion/validarsemilla`, retain
-`token`, `expira`, `expedido`, and send `Authorization: Bearer <token>`.
+Generation is offline and requires no seed or access token. Delivery is implemented
+by `TigooServer.Fe.Client` and the [submission runner](fe-submission.md), separately
+from generation. The client obtains a **DGII** seed, signs it using the same reusable signer,
+exchanges it using `/autenticacion/api/autenticacion/validarsemilla`, retains
+`token`, `expira`, `expedido`, and sends `Authorization: Bearer <token>`.
 
 - Normal ECF reception returns `trackId` and an error field; the client must
   consult the result before treating the document as accepted.

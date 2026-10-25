@@ -190,17 +190,9 @@ defmodule TigooServer.Fe.Generation do
   end
 
   defp password!(opts) do
-    password = case Keyword.fetch(opts, :password) do
-      {:ok, password} -> password
-      :error ->
-        bytes = required_option!(opts, :credentials_file) |> File.read!()
-        case Regex.scan(~r/^[\t ]*Password[\t ]*[:=][\t ]*([^\r\n]+)\r?$/mi, bytes, capture: :all_but_first) do
-          [[value]] -> value |> String.trim() |> String.trim("\"") |> String.trim("'")
-          _ -> Error.fail!(:credentials, "Expected exactly one Password field in credentials file")
-        end
-    end
-    if not is_binary(password) or password == "" or String.contains?(password, ["\0", "\r", "\n"]), do: Error.fail!(:credentials, "Invalid signing password")
-    password
+    TigooServer.Fe.Credentials.password!(opts)
+  rescue
+    error in ArgumentError -> Error.fail!(:credentials, Exception.message(error))
   end
 
   defp required_option!(opts, key), do: Keyword.get(opts, key) || Error.fail!(:options, "Missing option #{key}")
