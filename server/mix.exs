@@ -60,7 +60,8 @@ defmodule TigooServer.MixProject do
       {:jason, "~> 1.2"},
       {:elixlsx, "~> 0.6.0"},
       {:dns_cluster, "~> 0.3.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:saxy, "~> 1.6"}
     ]
   end
 

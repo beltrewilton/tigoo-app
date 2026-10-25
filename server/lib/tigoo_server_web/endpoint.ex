@@ -58,5 +58,6 @@ defmodule TigooServerWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug TigooServerWeb.Plugs.NormalizeFePath
   plug TigooServerWeb.Router
 end

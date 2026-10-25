@@ -21,6 +21,10 @@ defmodule TigooServerWeb.Router do
     plug :put_desktop_cors_headers
   end
 
+  pipeline :fe_api do
+    plug :accepts, ["xml", "json"]
+  end
+
   pipeline :tenant_login_api do
     plug :accepts, ["json"]
     plug :put_desktop_cors_headers
@@ -46,6 +50,12 @@ defmodule TigooServerWeb.Router do
     plug TigooServerWeb.Plugs.PutTenantFromScope
     plug TigooServerWeb.Plugs.RequireTenant
     plug TigooServerWeb.Plugs.RequirePermission
+  end
+
+  scope "/fe/autenticacion/api", TigooServerWeb do
+    pipe_through :fe_api
+
+    get "/semilla", FeAuthenticationController, :semilla
   end
 
   scope "/", TigooServerWeb do
