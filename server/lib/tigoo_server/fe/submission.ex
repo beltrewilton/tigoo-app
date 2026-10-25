@@ -1,9 +1,9 @@
 defmodule TigooServer.Fe.Submission do
   @moduledoc """
-  Sequential sender for a Generation manifest, with a resumable JSON journal.
+  Sequential sender for an ECF/RFCE or ACECF manifest, with a resumable JSON journal.
 
-  Validates the batch before HTTP, follows its dependency order, sends RFCEs
-  instead of full low-amount ECFs, and waits for ECF acceptance before continuing.
+  Validates the batch before HTTP. ECF batches use dependency order, RFCE amount
+  routing and result consultation; ACECF batches use direct approval responses.
   An interrupted/uncertain POST is never automatically repeated. A stored track
   ID is queried on resume; accepted entries are skipped. Tokens are never saved.
   """
@@ -21,11 +21,15 @@ defmodule TigooServer.Fe.Submission do
     end
     manifest_bytes = File.read!(Path.join(batch, "manifest.json"))
     manifest = Jason.decode!(manifest_bytes)
+    expected_type = opts[:expected_document_type]
+    if expected_type && Map.get(manifest, "document_type", "ECF") != expected_type do
+      fail!("Expected a #{expected_type} batch; refusing to use another reception service")
+    end
     jobs = preflight!(batch, manifest, client, opts)
     report_path = Keyword.get(opts, :report, Path.join(batch, "submission-#{client.environment}.json")) |> Path.expand()
     if report_path == Path.join(batch, "manifest.json"), do: fail!("Report must not replace the generation manifest")
     # A journal path must not collide with a signed artifact, even when explicitly supplied.
-    artifacts = Enum.flat_map(manifest["documents"], fn doc -> [doc["ecf_file"], doc["rfce_file"]] end)
+    artifacts = Enum.flat_map(manifest["documents"], fn doc -> [doc["ecf_file"], doc["rfce_file"], doc["file"]] end)
       |> Enum.reject(&is_nil/1) |> Enum.map(&Path.expand(&1, batch))
     if report_path in artifacts, do: fail!("Report must not replace a signed XML")
     File.mkdir_p!(Path.dirname(report_path))
@@ -73,6 +77,10 @@ defmodule TigooServer.Fe.Submission do
     error in File.Error ->
       {:error, %Error{operation: :file, message: "Cannot #{error.action} #{error.path}: #{:file.format_error(error.reason)}"}, nil}
     _ -> {:error, %Error{operation: :submission, message: "Submission stopped unexpectedly; inspect the journal before retrying"}, nil}
+  end
+
+  defp preflight!(batch, %{"document_type" => "ACECF"} = manifest, client, opts) do
+    TigooServer.Fe.CommercialApproval.jobs!(batch, manifest, client.issuer_rnc, opts)
   end
 
   defp preflight!(batch, manifest, client, opts) do
@@ -132,19 +140,26 @@ defmodule TigooServer.Fe.Submission do
   defp load_report!(path, manifest, hash, client) do
     if File.exists?(path) do
       report = path |> File.read!() |> Jason.decode!()
+      party = if manifest["document_type"] == "ACECF", do: report["buyer_rnc"], else: report["issuer_rnc"]
       unless report["manifest_sha256"] == hash and report["environment"] == client.environment and
-               report["issuer_rnc"] == client.issuer_rnc and is_map(report["entries"]) do
-        fail!("Existing journal belongs to another manifest, environment or issuer")
+               party == client.issuer_rnc and is_map(report["entries"]) do
+        fail!("Existing journal belongs to another manifest, environment or taxpayer")
       end
       report
     else
-      %{"version" => 1, "manifest_sha256" => hash, "environment" => client.environment,
+      report = %{"version" => 1, "manifest_sha256" => hash, "environment" => client.environment,
         "issuer_rnc" => client.issuer_rnc, "created_at" => now(), "status" => "running", "entries" => %{},
         "portal_uploads" => manifest["documents"] |> Enum.filter(& &1["small_consumption"]) |> Enum.map(& &1["ecf_file"])}
+      if manifest["document_type"] == "ACECF" do
+        report |> Map.delete("issuer_rnc") |> Map.put("buyer_rnc", client.issuer_rnc) |> Map.put("document_type", "ACECF")
+      else
+        report
+      end
     end
   end
 
   defp process(job, batch, client, report, attempts, interval, opts) do
+    report = reconcile_recorded_approval!(job, client, report)
     entry = report["entries"][job.encf]
     reference = report["entries"][job.reference]
     cond do
@@ -159,18 +174,46 @@ defmodule TigooServer.Fe.Submission do
     end
   end
 
+  # A previously unknown response can become recognizable after a classifier fix.
+  # Reconcile only an actual stored receipt for the same hash-pinned upload; an
+  # interrupted POST without a receipt must remain blocked.
+  defp reconcile_recorded_approval!(%{kind: :approval} = job, client, report) do
+    entry = report["entries"][job.encf]
+    if is_map(entry) and entry["state"] == "unknown" and entry["kind"] == "approval" and
+         entry["sha256"] == job.hash and entry["file"] == job.file and
+         entry["document_state"] == job.document_state and is_map(entry["result"]) and
+         response_matches?(entry["result"], job, client, nil) do
+      case Client.status(entry["result"], :approval) do
+        state when state in [:accepted, :rejected] ->
+          merge_entry!(report, job.encf, %{"state" => Atom.to_string(state),
+            "reclassified_from" => "unknown", "classification_source" => "recorded_dgii_response"})
+        _ -> report
+      end
+    else
+      report
+    end
+  end
+  defp reconcile_recorded_approval!(_job, _client, report), do: report
+
   defp post(job, batch, client, report, attempts, interval, opts) do
     entry = %{"state" => "sending", "kind" => Atom.to_string(job.kind), "file" => job.file,
       "sha256" => job.hash, "started_at" => now()}
+    entry = if job.kind == :approval, do: Map.put(entry, "document_state", job.document_state), else: entry
     report = update!(report, job.encf, entry)
     path = Path.expand(job.file, batch)
     response = case job.kind do
       :ecf -> Client.send_ecf(client, path, expected_sha256: job.hash)
       :rfce -> Client.send_rfce(client, path, expected_sha256: job.hash)
+      :approval -> Client.send_approval(client, path, expected_sha256: job.hash)
     end
     case response do
       {:error, error} ->
-        state = if error.operation in [:document, :seed, :authenticate], do: "not_sent", else: "unknown"
+        state = cond do
+          error.operation in [:document, :seed, :authenticate] -> "not_sent"
+          job.kind == :approval and error.http_status == 400 and is_map(error.details) ->
+            if Client.status(error.details, :approval) == :rejected, do: "rejected", else: "unknown"
+          true -> "unknown"
+        end
         report = update!(report, job.encf, Map.merge(entry, %{"state" => state, "error" => error_data(error)}))
         {:error, error, report}
       {:ok, body, client} ->

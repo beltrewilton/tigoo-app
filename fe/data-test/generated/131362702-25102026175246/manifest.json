@@ -1,0 +1,850 @@
+{
+  "count": 11,
+  "authorized_buyer_rnc": "131362702",
+  "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+  "dgii_acceptance": "not_evaluated",
+  "dgii_submitted": false,
+  "document_type": "ACECF",
+  "documents": [
+    {
+      "file": "acecf/131362702E310000000001.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 2,
+      "encf": "E310000000001",
+      "sha256": "cc4f9aba6032c1a6564677491ae7ee05aed9a4114a3172b2b0ca5d9e750d8a8d",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G2",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D2",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I2",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E2",
+          "source_value": "7080",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "7080.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F2",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B2",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A2",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C2",
+          "source_value": "E310000000001",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E310000000001"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "7080.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E310000000002.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 3,
+      "encf": "E310000000002",
+      "sha256": "c565be19f9233267bfd44213a44c2fd719eef656979da03e5e3cff6526632665",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G3",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D3",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I3",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E3",
+          "source_value": "4674.35",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "4674.35"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F3",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B3",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A3",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C3",
+          "source_value": "E310000000002",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E310000000002"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "4674.35",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E310000000007.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 4,
+      "encf": "E310000000007",
+      "sha256": "36f412347a48a3bed6766d89fb1fae44a56452132baf4ced32d78e4772b687ab",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G4",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D4",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I4",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E4",
+          "source_value": "228460.5",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "228460.50"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F4",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B4",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A4",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C4",
+          "source_value": "E310000000007",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E310000000007"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "228460.50",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E310000000009.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 5,
+      "encf": "E310000000009",
+      "sha256": "63841d01e5de7b97636fa271c18a87d2ed22350c0d25d9c0ec4f8f4412d56f85",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G5",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D5",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I5",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E5",
+          "source_value": "41450",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "41450.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F5",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B5",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A5",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C5",
+          "source_value": "E310000000009",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E310000000009"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "41450.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E330000000001.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 6,
+      "encf": "E330000000001",
+      "sha256": "cc538d37e04c7698d11ea2cca32443c4c4ed8289944efbfd395446052e0397a5",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G6",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D6",
+          "source_value": "02-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "02-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I6",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E6",
+          "source_value": "400000",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "400000.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F6",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B6",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A6",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C6",
+          "source_value": "E330000000001",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E330000000001"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "400000.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E340000000001.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 7,
+      "encf": "E340000000001",
+      "sha256": "c7b5a05d3abb4a8a0a2b3674349fe9823b848b5545fa9aa0393b7ab9c57f6a55",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G7",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D7",
+          "source_value": "02-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "02-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I7",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E7",
+          "source_value": "0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "0.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F7",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B7",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A7",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C7",
+          "source_value": "E340000000001",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E340000000001"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "0.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E340000000015.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 8,
+      "encf": "E340000000015",
+      "sha256": "8e83a5b9c68d3c51bc6313798e36f5c9f3b973a9a7d01c4f7902448f62223fae",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G8",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D8",
+          "source_value": "02-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "02-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I8",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E8",
+          "source_value": "0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "0.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F8",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B8",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A8",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C8",
+          "source_value": "E340000000015",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E340000000015"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "0.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E440000000008.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 9,
+      "encf": "E440000000008",
+      "sha256": "eea59839b46322e21738252391ffd3aabd8b221cc469265612b0b512bc1107a6",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G9",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D9",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I9",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E9",
+          "source_value": "432000",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "432000.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F9",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B9",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A9",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C9",
+          "source_value": "E440000000008",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E440000000008"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "432000.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E440000000010.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 10,
+      "encf": "E440000000010",
+      "sha256": "c91115d72ecac3fdbadb0f524e1ee8f7b23ed9de60bf8e2e7118b1f93649d8cc",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G10",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D10",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I10",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E10",
+          "source_value": "170150",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "170150.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F10",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B10",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A10",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C10",
+          "source_value": "E440000000010",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E440000000010"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "170150.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E450000000002.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 11,
+      "encf": "E450000000002",
+      "sha256": "75ad35f30be01b9f622661e262f23242fa24d42ae9660c7bd0b4e622d9ab68e3",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G11",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D11",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I11",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E11",
+          "source_value": "560925",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "560925.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F11",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B11",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A11",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C11",
+          "source_value": "E450000000002",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E450000000002"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "560925.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    },
+    {
+      "file": "acecf/131362702E450000000008.xml",
+      "state": "1",
+      "buyer_rnc": "131362702",
+      "issuer_rnc": "131880681",
+      "source_row": 12,
+      "encf": "E450000000008",
+      "sha256": "4502f5d92ac9530ebfb28688884de4a34a8e988d50f3899f75a75716a4f26c87",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "certificate_chain_valid": true,
+      "field_mappings": [
+        {
+          "header": "Estado",
+          "cell": "G12",
+          "source_value": "1",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Estado",
+          "xml_value": "1"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "D12",
+          "source_value": "01-04-2020",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaEmision",
+          "xml_value": "01-04-2020"
+        },
+        {
+          "header": "FechaHoraAprobacionComercial",
+          "cell": "I12",
+          "source_value": "25-10-2026 17:52:45",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/FechaHoraAprobacionComercial",
+          "xml_value": "25-10-2026 17:52:45"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "E12",
+          "source_value": "105000",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/MontoTotal",
+          "xml_value": "105000.00"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "F12",
+          "source_value": "131362702",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCComprador",
+          "xml_value": "131362702"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "B12",
+          "source_value": "131880681",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/RNCEmisor",
+          "xml_value": "131880681"
+        },
+        {
+          "header": "Version",
+          "cell": "A12",
+          "source_value": "1.0",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/Version",
+          "xml_value": "1.0"
+        },
+        {
+          "header": "eNCF",
+          "cell": "C12",
+          "source_value": "E450000000008",
+          "xml_path": "/ACECF/DetalleAprobacionComercial/eNCF",
+          "xml_value": "E450000000008"
+        }
+      ],
+      "schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/ACECF v.1.0.xsd",
+      "schema_sha256": "0172c297d133cc923bc9ba9caaea3ed655832801cf446b17691ac1d9183ae9c4",
+      "schema_valid": true,
+      "signature_valid": true,
+      "source_field_count": 8,
+      "amount_dop": "105000.00",
+      "approval_timestamp": "25-10-2026 17:52:45"
+    }
+  ],
+  "generated_at": "2026-10-25T22:17:34.189504Z",
+  "source_sha256": "9e6ad34b1374350921a4ee6dfa98de75954ce8cb0e1b3d299954970060e1c3f7",
+  "source_workbook": "/Users/beltre.wilton/apps/tigoo-app/fe/131362702-25102026175246.xlsx",
+  "worksheet": "ACEECF_Generadas"
+}

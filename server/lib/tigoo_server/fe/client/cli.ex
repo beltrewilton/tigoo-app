@@ -62,7 +62,7 @@ defmodule TigooServer.Fe.Client.CLI do
       end
     else
       batch = Keyword.get(arguments, :batch, Path.join(root, "fe/data-test/generated/131362702-25102026004903"))
-      options = [poll_attempts: Keyword.get(arguments, :poll_attempts, 20),
+      options = [expected_document_type: "ECF", poll_attempts: Keyword.get(arguments, :poll_attempts, 20),
         poll_interval: Keyword.get(arguments, :poll_interval, 1000),
         on_result: fn encf, state, _body -> IO.puts("#{encf}: #{state}") end]
       options = Enum.reduce([report: :report, schema_dir: :schema_directory, xmllint: :xmllint_path], options, fn {flag, key}, opts ->

@@ -1,0 +1,170 @@
+{
+  "buyer_rnc": "131362702",
+  "created_at": "2026-10-25T22:17:44Z",
+  "document_type": "ACECF",
+  "entries": {
+    "E310000000001": {
+      "classification_source": "recorded_dgii_response",
+      "document_state": "1",
+      "file": "acecf/131362702E310000000001.xml",
+      "kind": "approval",
+      "reclassified_from": "unknown",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "cc4f9aba6032c1a6564677491ae7ee05aed9a4114a3172b2b0ca5d9e750d8a8d",
+      "started_at": "2026-10-25T22:17:45Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:17Z"
+    },
+    "E310000000002": {
+      "document_state": "1",
+      "file": "acecf/131362702E310000000002.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "c565be19f9233267bfd44213a44c2fd719eef656979da03e5e3cff6526632665",
+      "started_at": "2026-10-25T22:20:17Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E310000000007": {
+      "document_state": "1",
+      "file": "acecf/131362702E310000000007.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "36f412347a48a3bed6766d89fb1fae44a56452132baf4ced32d78e4772b687ab",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E310000000009": {
+      "document_state": "1",
+      "file": "acecf/131362702E310000000009.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "63841d01e5de7b97636fa271c18a87d2ed22350c0d25d9c0ec4f8f4412d56f85",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E330000000001": {
+      "document_state": "1",
+      "file": "acecf/131362702E330000000001.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "cc538d37e04c7698d11ea2cca32443c4c4ed8289944efbfd395446052e0397a5",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E340000000001": {
+      "document_state": "1",
+      "file": "acecf/131362702E340000000001.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "c7b5a05d3abb4a8a0a2b3674349fe9823b848b5545fa9aa0393b7ab9c57f6a55",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E340000000015": {
+      "document_state": "1",
+      "file": "acecf/131362702E340000000015.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "8e83a5b9c68d3c51bc6313798e36f5c9f3b973a9a7d01c4f7902448f62223fae",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:18Z"
+    },
+    "E440000000008": {
+      "document_state": "1",
+      "file": "acecf/131362702E440000000008.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "eea59839b46322e21738252391ffd3aabd8b221cc469265612b0b512bc1107a6",
+      "started_at": "2026-10-25T22:20:18Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:19Z"
+    },
+    "E440000000010": {
+      "document_state": "1",
+      "file": "acecf/131362702E440000000010.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "c91115d72ecac3fdbadb0f524e1ee8f7b23ed9de60bf8e2e7118b1f93649d8cc",
+      "started_at": "2026-10-25T22:20:19Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:19Z"
+    },
+    "E450000000002": {
+      "document_state": "1",
+      "file": "acecf/131362702E450000000002.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "75ad35f30be01b9f622661e262f23242fa24d42ae9660c7bd0b4e622d9ab68e3",
+      "started_at": "2026-10-25T22:20:19Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:19Z"
+    },
+    "E450000000008": {
+      "document_state": "1",
+      "file": "acecf/131362702E450000000008.xml",
+      "kind": "approval",
+      "result": {
+        "codigo": "01",
+        "estado": "Aprobacion Comercial Aprobada.",
+        "mensaje": []
+      },
+      "sha256": "4502f5d92ac9530ebfb28688884de4a34a8e988d50f3899f75a75716a4f26c87",
+      "started_at": "2026-10-25T22:20:19Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T22:20:19Z"
+    }
+  },
+  "environment": "certecf",
+  "manifest_sha256": "cad32bd341d96594cde734436eea64b771e180cc3b68dbbf4b46542821b7fada",
+  "portal_uploads": [],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/generated/131362702-25102026175246/submission-certecf.json",
+  "status": "complete",
+  "updated_at": "2026-10-25T22:20:19Z",
+  "version": 1
+}

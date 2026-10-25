@@ -1,12 +1,14 @@
 defmodule TigooServer.Fe.Client do
   @moduledoc """
-  DGII REST client: seed/sign/token, ECF reception, RFCE reception and track queries.
+  DGII REST client: seed/sign/token, ECF/RFCE reception, commercial approvals and track queries.
 
   `new/1` builds a client without HTTP calls. `authenticate/1` returns
   `{:ok, client}`. Document and result calls return `{:ok, body, updated_client}`
   or `{:error, %Error{}}`; keep the returned client to reuse refreshed tokens.
   An HTTP-successful fiscal rejection is still an `:ok` response: inspect
   `status/2`. Requests never retry or follow redirects automatically.
+  The existing `:issuer_rnc` option names the authenticated taxpayer; for ACECF
+  uploads that taxpayer is RNCComprador, the buyer issuing the decision.
   """
   alias TigooServer.Fe.Credentials
   alias TigooServer.Sign
@@ -67,6 +69,10 @@ defmodule TigooServer.Fe.Client do
   @spec send_rfce(t(), Path.t(), keyword()) :: {:ok, map(), t()} | {:error, Error.t()}
   def send_rfce(client, path, opts \\ []), do: send_document(client, :rfce, path, opts)
 
+  @doc "Posts a signed ACECF. The configured taxpayer RNC must match RNCComprador, not RNCEmisor."
+  @spec send_approval(t(), Path.t(), keyword()) :: {:ok, map(), t()} | {:error, Error.t()}
+  def send_approval(client, path, opts \\ []), do: send_document(client, :approval, path, opts)
+
   @doc "Queries a previously received ECF track ID; does not repost the document."
   @spec result(t(), String.t()) :: {:ok, map(), t()} | {:error, Error.t()}
   def result(client, track_id) when is_binary(track_id) and byte_size(track_id) > 0 do
@@ -84,6 +90,25 @@ defmodule TigooServer.Fe.Client do
          {:ok, body} <- upload(client, kind, upload_url(client, kind), xml, filename, true) do
       {:ok, body, client}
     end
+  end
+
+  defp document(client, :approval, path, opts) do
+    with {:ok, %{size: size}} when size <= 5_000_000 <- File.stat(path),
+         {:ok, xml} <- File.read(path) do
+      root = Xml.parse!(xml)
+      info = TigooServer.Fe.CommercialApproval.Document.validate!(root, client.issuer_rnc)
+      expected = Keyword.get(opts, :expected_sha256)
+      cond do
+        expected && sha256(xml) != expected -> failure(:document, "Signed approval checksum differs from manifest")
+        Path.basename(path) != info.buyer_rnc <> info.encf <> ".xml" -> failure(:document, "Approval filename must be RNCComprador + eNCF + .xml")
+        true -> {:ok, xml, Path.basename(path), Xml.signature!(root)}
+      end
+    else
+      _ -> failure(:document, "Cannot read signed approval or file exceeds 5 MB")
+    end
+  rescue
+    error in TigooServer.Fe.Generation.Error -> failure(:document, Exception.message(error))
+    _ -> failure(:document, "Invalid signed commercial approval")
   end
 
   defp document(client, kind, path, opts) do
@@ -176,18 +201,18 @@ defmodule TigooServer.Fe.Client do
         {:error, %Error{operation: operation, http_status: status,
           message: "DGII #{operation} returned HTTP #{status}",
           details: if(operation in [:seed, :authenticate], do: nil, else: response_details(body)),
-          uncertain: operation in [:ecf, :rfce]}}
-      {:error, _} -> failure(operation, "DGII #{operation} transport failure", operation in [:ecf, :rfce])
+          uncertain: operation in [:ecf, :rfce, :approval]}}
+      {:error, _} -> failure(operation, "DGII #{operation} transport failure", operation in [:ecf, :rfce, :approval])
     end
   rescue
-    _ -> failure(operation, "DGII #{operation} request failed", operation in [:ecf, :rfce])
+    _ -> failure(operation, "DGII #{operation} request failed", operation in [:ecf, :rfce, :approval])
   end
 
   defp json_response(body, operation) do
     decoded = if is_map(body), do: {:ok, body}, else: Jason.decode(body)
     case decoded do
       {:ok, body} when is_map(body) -> {:ok, body}
-      _ -> failure(operation, "DGII returned an invalid JSON response", operation in [:ecf, :rfce])
+      _ -> failure(operation, "DGII returned an invalid JSON response", operation in [:ecf, :rfce, :approval])
     end
   end
 
@@ -206,10 +231,18 @@ defmodule TigooServer.Fe.Client do
       _ -> ""
     end
     code = case body["codigo"] do
-      value when is_binary(value) or is_integer(value) -> to_string(value)
+      value when is_binary(value) ->
+        case Integer.parse(String.trim(value)) do
+          {number, ""} when number >= 0 -> Integer.to_string(number)
+          _ -> ""
+        end
+      value when is_integer(value) -> Integer.to_string(value)
       _ -> ""
     end
     cond do
+      channel == :approval and code == "1" -> :accepted
+      channel == :approval and code == "2" -> :rejected
+      channel == :approval -> :unknown
       state == "aceptado" -> :accepted
       state == "aceptadocondicional" -> :accepted_conditional
       state == "rechazado" -> :rejected
@@ -231,9 +264,10 @@ defmodule TigooServer.Fe.Client do
   defp headers(client), do: [{"accept", "application/json"}, {"authorization", "Bearer " <> client.token}]
   defp upload_url(client, :ecf), do: endpoint(client, :ecf) <> "/api/FacturasElectronicas"
   defp upload_url(client, :rfce), do: endpoint(client, :rfce) <> "/api/recepcion/ecf"
+  defp upload_url(client, :approval), do: endpoint(client, :approval) <> "/api/AprobacionComercial"
   defp endpoint(client, :rfce), do: "https://fc.dgii.gov.do/#{client.environment}/recepcionfc"
   defp endpoint(client, service) do
-    path = %{auth: "Autenticacion", ecf: "Recepcion", result: "ConsultaResultado"}[service]
+    path = %{auth: "Autenticacion", ecf: "Recepcion", result: "ConsultaResultado", approval: "AprobacionComercial"}[service]
     environment = if client.environment == "certecf", do: "CerteCF", else: client.environment
     "https://ecf.dgii.gov.do/#{environment}/#{path}"
   end

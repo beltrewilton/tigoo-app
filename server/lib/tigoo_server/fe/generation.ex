@@ -11,7 +11,7 @@ defmodule TigooServer.Fe.Generation do
   `:password` or `:credentials_file`. Trust roots must be supplied through
   `:trusted_certificates` or the existing `:fe_authentication` configuration.
   """
-  alias TigooServer.Fe.Generation.{Command, Document, Error, Rules, Schema, Workbook, Xml}
+  alias TigooServer.Fe.Generation.{Artifact, Document, Error, Rules, Schema, Workbook, Xml}
   alias TigooServer.Sign
 
   @spec generate(keyword()) :: {:ok, map()} | {:error, Error.t()}
@@ -40,15 +40,8 @@ defmodule TigooServer.Fe.Generation do
     if not File.regular?(identity), do: Error.fail!(:options, "Signing identity is unavailable")
     password = password!(opts)
     if exists?(output), do: Error.fail!(:output, "Output already exists: #{output}")
-    opts = native_options(opts)
-    Enum.each([:xmlsec_path, :openssl_path, :xmllint_path], fn key ->
-      unless System.find_executable(opts[key]), do: Error.fail!(:dependency, "Executable unavailable: #{opts[key]}")
-    end)
-    roots = Keyword.fetch!(opts, :trusted_certificates)
-    if roots == [], do: Error.fail!(:options, "Trusted CA certificates are required for signed batch generation")
-    Enum.each(roots ++ opts[:intermediate_certificates] ++ opts[:crls], fn path ->
-      unless File.regular?(path), do: Error.fail!(:options, "Certificate-chain file is unavailable: #{path}")
-    end)
+    opts = Artifact.options(opts)
+    Artifact.validate_options!(opts)
     source_hash = sha256(File.read!(workbook))
     signed_at = DateTime.utc_now() |> DateTime.truncate(:second)
     rows = Workbook.read!(workbook)
@@ -123,7 +116,7 @@ defmodule TigooServer.Fe.Generation do
     signed = sign!(built.xml, identity, password, opts, row.number)
     root = Document.assert_source_preserved!(signed, built.mappings, row.number)
     signature = Xml.signature!(root)
-    save_verified!(signed, Path.join(stage, relative), schema, opts)
+    Artifact.save_verified!(signed, Path.join(stage, relative), schema, opts)
     record = %{
       source_row: row.number, case: row.fields["CasoPrueba"], type: info.type, encf: info.encf,
       issuer_rnc: info.issuer_rnc, amount_dop: info.amount, small_consumption: info.small_consumption?,
@@ -147,7 +140,7 @@ defmodule TigooServer.Fe.Generation do
         end
       end)
       rfce_relative = "rfce/" <> filename
-      save_verified!(signed_summary, Path.join(stage, rfce_relative), rfce_schema, opts)
+      Artifact.save_verified!(signed_summary, Path.join(stage, rfce_relative), rfce_schema, opts)
       Map.merge(record, %{rfce_file: rfce_relative, rfce_sha256: sha256(signed_summary),
         rfce_schema: rfce_schema.path, rfce_schema_sha256: rfce_schema.sha256,
         rfce_security_code: summary.security_code, rfce_schema_valid: true, rfce_signature_valid: true})
@@ -168,25 +161,6 @@ defmodule TigooServer.Fe.Generation do
       {:ok, signed} -> signed
       {:error, reason} -> Error.fail!(:signing, "Signing failed: #{reason}", row: row)
     end
-  end
-
-  defp save_verified!(xml, path, schema, opts) do
-    File.write!(path, xml, [:exclusive])
-    Schema.validate_file!(path, schema, opts)
-    certificate_args = Enum.flat_map([
-      {:trusted_certificates, "--trusted-pem"}, {:intermediate_certificates, "--untrusted-pem"}, {:crls, "--crl-pem"}
-    ], fn {key, flag} -> Enum.flat_map(opts[key], &[flag, &1]) end)
-    Command.run!(opts[:xmlsec_path], ["--verify", "--crypto", "openssl", "--crypto-config", Path.dirname(path),
-      "--enabled-reference-uris", "empty", "--enabled-key-data", "x509"] ++ certificate_args ++ [path])
-    if sha256(File.read!(path)) != sha256(xml), do: Error.fail!(:verification, "Signed bytes changed during export")
-  end
-
-  defp native_options(opts) do
-    config = Application.get_env(:tigoo_server, :fe_authentication, [])
-    Enum.reduce([xmlsec_path: "xmlsec1", openssl_path: "openssl", xmllint_path: "xmllint",
-      trusted_certificates: [], intermediate_certificates: [], crls: []], opts, fn {key, default}, acc ->
-      Keyword.put_new(acc, key, Keyword.get(config, key, default))
-    end)
   end
 
   defp password!(opts) do

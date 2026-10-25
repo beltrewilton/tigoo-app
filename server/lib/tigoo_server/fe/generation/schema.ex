@@ -7,6 +7,7 @@ defmodule TigooServer.Fe.Generation.Schema do
     filename = cond do
       type in @types -> "e-CF #{type} v.1.0.xsd"
       type == "RFCE" -> "RFCE 32 v.1.0.xsd"
+      type == "ACECF" -> "ACECF v.1.0.xsd"
       true -> Error.fail!(:schema, "Unsupported document type #{type}")
     end
     directory = Keyword.get(opts, :schema_directory, Application.app_dir(:tigoo_server, "priv/fe/xsd"))

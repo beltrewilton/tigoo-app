@@ -1,6 +1,7 @@
 defmodule TigooServer.Fe.Generation.Workbook do
   @moduledoc """
-  Reads the first ECF worksheet using OTP ZIP and Saxy, without Excel or Python.
+  Reads a first worksheet using OTP ZIP and Saxy, without Excel or Python.
+  The expected worksheet defaults to ECF; pass `sheet: name` for another format.
 
   Rows contain `:number`, `:fields` and `:cells`. Values are strings: no amount or
   identifier passes through a float. Only blank cells and the literal `#e` are
@@ -12,8 +13,9 @@ defmodule TigooServer.Fe.Generation.Workbook do
   alias TigooServer.Fe.Generation.{Error, Xml}
   @max_expanded 150_000_000
 
-  @spec read!(Path.t()) :: [map()]
-  def read!(path) do
+  @spec read!(Path.t(), keyword()) :: [map()]
+  def read!(path, opts \\ []) do
+    expected_sheet = Keyword.get(opts, :sheet, "ECF")
     if File.stat!(path).size > 20_000_000, do: Error.fail!(:workbook, "Workbook exceeds 20 MB")
     entries = unzip!(path)
     workbook = entry!(entries, "xl/workbook.xml") |> Xml.parse!()
@@ -21,13 +23,13 @@ defmodule TigooServer.Fe.Generation.Workbook do
       nil -> Error.fail!(:workbook, "Missing worksheet list")
       sheets -> List.first(Xml.elements(sheets)) || Error.fail!(:workbook, "Missing worksheet list")
     end
-    if Xml.attr(first, "name") != "ECF", do: Error.fail!(:workbook, "First worksheet must be ECF")
+    if Xml.attr(first, "name") != expected_sheet, do: Error.fail!(:workbook, "First worksheet must be #{expected_sheet}")
 
     relationships = entry!(entries, "xl/_rels/workbook.xml.rels") |> Xml.parse!() |> Xml.elements()
     {_, sheet_attributes, _} = first
     relationship_id = Enum.find_value(sheet_attributes, fn {name, value} -> if Xml.local(name) == "id", do: value end)
     relation = Enum.find(relationships, &(Xml.attr(&1, "Id") == relationship_id)) ||
-      Error.fail!(:workbook, "Missing ECF worksheet relationship")
+      Error.fail!(:workbook, "Missing worksheet relationship for #{expected_sheet}")
     if Xml.attr(relation, "TargetMode") == "External", do: Error.fail!(:workbook, "External worksheets are unsupported")
     target = Xml.attr(relation, "Target")
     sheet_path = if String.starts_with?(target, "/"), do: String.trim_leading(target, "/"), else: Path.join("xl", target)
@@ -40,7 +42,7 @@ defmodule TigooServer.Fe.Generation.Workbook do
 
     sheet = entry!(entries, sheet_path) |> Xml.parse!()
     sheet_rows = sheet |> Xml.child("sheetData") |> Xml.children("row")
-    if sheet_rows == [], do: Error.fail!(:workbook, "ECF worksheet is empty")
+    if sheet_rows == [], do: Error.fail!(:workbook, "#{expected_sheet} worksheet is empty")
     [header | body] = sheet_rows
     headers = Map.new(Xml.children(header, "c"), fn cell ->
       {column(cell), cell_value!(cell, strings, styles, date1904) |> String.trim()}
@@ -67,7 +69,7 @@ defmodule TigooServer.Fe.Generation.Workbook do
       }]
     end)
 
-    if rows == [], do: Error.fail!(:workbook, "No ECF data rows")
+    if rows == [], do: Error.fail!(:workbook, "No #{expected_sheet} data rows")
     rows
   end
 

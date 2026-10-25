@@ -15,6 +15,11 @@ ordinary XSD regular-expression group openings `(`. XML Schema regular
 expressions do not support noncapturing groups; the substitution preserves the
 accepted values. No other RFCE bytes or element names were changed.
 
+Commercial approvals use `ACECF v.1.0.xsd`. Its runtime copy replaces the one
+unsupported `(?:` group opening in DateValidation with `(`. Element names,
+cardinalities, RNC patterns and date/amount constraints remain unchanged. The
+original `fe/xsd/ACECF v.1.0.xsd` is retained unchanged.
+
 Every generated manifest records the actual validation schema path and SHA256.
 The generator validates complete signed XML with `xmllint --nonet` and verifies
 the signature and configured certificate chain separately. The XSD's Signature

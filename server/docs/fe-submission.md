@@ -6,6 +6,10 @@ the generation XML helpers and a shared `TigooServer.Fe.Credentials` reader.
 `TigooServer.Fe.Submission` sends a generated manifest sequentially and records
 its progress. No controllers, database tables, queues or schedulers are added.
 
+For buyer-issued ACECF documents, use the separate
+[commercial approval generation and submission commands](fe-commercial-approval.md).
+The ECF and ACECF shell commands refuse a batch of the other document type.
+
 ## Run
 
 The new/changed modules must be built through your normal project workflow first.
