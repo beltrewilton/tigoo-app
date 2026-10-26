@@ -1,0 +1,375 @@
+{
+  "created_at": "2026-10-25T23:16:57Z",
+  "entries": {
+    "E310000000018": {
+      "file": "ecf/recepcion/131362702E310000000018.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E310000000018",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:16:57 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "35615671-4535-4812-895a-3a9f748d9218"
+      },
+      "sha256": "11e21bb2ba348b989fdf6a9c532ff8119889b18ac1900c14f5296fa1cbd13d00",
+      "started_at": "2026-10-25T23:16:57Z",
+      "state": "accepted",
+      "track_id": "35615671-4535-4812-895a-3a9f748d9218",
+      "updated_at": "2026-10-25T23:16:58Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "35615671-4535-4812-895a-3a9f748d9218"
+      }
+    },
+    "E310000000019": {
+      "file": "ecf/recepcion/131362702E310000000019.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E310000000019",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:16:59 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "88004c17-a3e9-45d2-b5e9-6db3f1fe4a1f"
+      },
+      "sha256": "25b0a2ef87e988f9fc2cf10291591902f6fce28644e80aee6ec4c84e62c2bd53",
+      "started_at": "2026-10-25T23:16:58Z",
+      "state": "accepted",
+      "track_id": "88004c17-a3e9-45d2-b5e9-6db3f1fe4a1f",
+      "updated_at": "2026-10-25T23:17:00Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "88004c17-a3e9-45d2-b5e9-6db3f1fe4a1f"
+      }
+    },
+    "E310000000020": {
+      "file": "ecf/recepcion/131362702E310000000020.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E310000000020",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:00 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "fbc5ee60-9ad0-41e8-b988-7cb60d432ef2"
+      },
+      "sha256": "d387f864d7d5b0032d290245466fa4dea3c7afa9abf9836363bc069da508269d",
+      "started_at": "2026-10-25T23:17:00Z",
+      "state": "accepted",
+      "track_id": "fbc5ee60-9ad0-41e8-b988-7cb60d432ef2",
+      "updated_at": "2026-10-25T23:17:01Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "fbc5ee60-9ad0-41e8-b988-7cb60d432ef2"
+      }
+    },
+    "E310000000021": {
+      "file": "ecf/recepcion/131362702E310000000021.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E310000000021",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:01 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "7e971fd0-af2d-452d-bf65-94db506f33df"
+      },
+      "sha256": "00f48b42044591e8b2b69ec607401e05b98bcb936be39aeb33c4aaa0ef014b16",
+      "started_at": "2026-10-25T23:17:01Z",
+      "state": "accepted",
+      "track_id": "7e971fd0-af2d-452d-bf65-94db506f33df",
+      "updated_at": "2026-10-25T23:17:02Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "7e971fd0-af2d-452d-bf65-94db506f33df"
+      }
+    },
+    "E320000000028": {
+      "file": "ecf/recepcion/131362702E320000000028.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E320000000028",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:03 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "c149bec7-19c2-4edb-a3dd-dc5f476ddb5b"
+      },
+      "sha256": "9334bacab35e799a83f348adc028d3eab409bd149c4a21bfeabff9d486b07752",
+      "started_at": "2026-10-25T23:17:02Z",
+      "state": "accepted",
+      "track_id": "c149bec7-19c2-4edb-a3dd-dc5f476ddb5b",
+      "updated_at": "2026-10-25T23:17:04Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "c149bec7-19c2-4edb-a3dd-dc5f476ddb5b"
+      }
+    },
+    "E320000000029": {
+      "file": "ecf/recepcion/131362702E320000000029.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E320000000029",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:04 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "68cb1398-5905-4282-99c2-7ad19ff1d580"
+      },
+      "sha256": "6d8e99422203f5e20820253c1a1252edf7cede95a9db717350333740fb113325",
+      "started_at": "2026-10-25T23:17:04Z",
+      "state": "accepted",
+      "track_id": "68cb1398-5905-4282-99c2-7ad19ff1d580",
+      "updated_at": "2026-10-25T23:17:05Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "68cb1398-5905-4282-99c2-7ad19ff1d580"
+      }
+    },
+    "E320000000030": {
+      "file": "rfce/131362702E320000000030.xml",
+      "kind": "rfce",
+      "result": {
+        "codigo": 1,
+        "encf": "E320000000030",
+        "estado": "Aceptado",
+        "mensajes": null,
+        "secuenciaUtilizada": true
+      },
+      "sha256": "ff7e013919955026e322a05be715c3c725c7d91ae2526747f1f36da90d1c9eb1",
+      "started_at": "2026-10-25T23:17:05Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T23:17:05Z"
+    },
+    "E320000000031": {
+      "file": "rfce/131362702E320000000031.xml",
+      "kind": "rfce",
+      "result": {
+        "codigo": 1,
+        "encf": "E320000000031",
+        "estado": "Aceptado",
+        "mensajes": null,
+        "secuenciaUtilizada": true
+      },
+      "sha256": "43d564613fac0fc7fd1023a6a4a2926ced4b8f9633c1961a6959fa1d60d7f0d0",
+      "started_at": "2026-10-25T23:17:05Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T23:17:06Z"
+    },
+    "E320000000032": {
+      "file": "rfce/131362702E320000000032.xml",
+      "kind": "rfce",
+      "result": {
+        "codigo": 1,
+        "encf": "E320000000032",
+        "estado": "Aceptado",
+        "mensajes": null,
+        "secuenciaUtilizada": true
+      },
+      "sha256": "48c470cff948f46e4e8f0b5ca7cb5176547bcd6ca2eba25ff41f7cdb7dba6e56",
+      "started_at": "2026-10-25T23:17:06Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T23:17:06Z"
+    },
+    "E320000000033": {
+      "file": "rfce/131362702E320000000033.xml",
+      "kind": "rfce",
+      "result": {
+        "codigo": 1,
+        "encf": "E320000000033",
+        "estado": "Aceptado",
+        "mensajes": null,
+        "secuenciaUtilizada": true
+      },
+      "sha256": "4060f83727009529ab6d1f81254b34a1c5979619f8cfa6cbac8daf20ac7d1736",
+      "started_at": "2026-10-25T23:17:06Z",
+      "state": "accepted",
+      "updated_at": "2026-10-25T23:17:06Z"
+    },
+    "E330000000004": {
+      "file": "ecf/recepcion/131362702E330000000004.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E330000000004",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:06 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "855c0891-c49d-44b8-984e-472385b8d399"
+      },
+      "sha256": "3c22cddaa8763e96a628e142e482af7af96d5230514eb0ac61f8537daa367bec",
+      "started_at": "2026-10-25T23:17:06Z",
+      "state": "accepted",
+      "track_id": "855c0891-c49d-44b8-984e-472385b8d399",
+      "updated_at": "2026-10-25T23:17:07Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "855c0891-c49d-44b8-984e-472385b8d399"
+      }
+    },
+    "E340000000020": {
+      "file": "ecf/recepcion/131362702E340000000020.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E340000000020",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:07 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "84f517a8-df06-4cec-ab7f-ba91ca91ce07"
+      },
+      "sha256": "be83cb7787a00c1e1aca25add752def129cac3347d2c1105b8dcd7e6ed233c01",
+      "started_at": "2026-10-25T23:17:07Z",
+      "state": "accepted",
+      "track_id": "84f517a8-df06-4cec-ab7f-ba91ca91ce07",
+      "updated_at": "2026-10-25T23:17:08Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "84f517a8-df06-4cec-ab7f-ba91ca91ce07"
+      }
+    },
+    "E340000000021": {
+      "file": "ecf/recepcion/131362702E340000000021.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E340000000021",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/25/2026 7:17:09 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "d0b6384d-cfa5-4f91-9f70-665427ff38d1"
+      },
+      "sha256": "767b3bb8539beeb6067675332938c16f3b0185f1d318204042bbd9f2a85f2544",
+      "started_at": "2026-10-25T23:17:08Z",
+      "state": "accepted",
+      "track_id": "d0b6384d-cfa5-4f91-9f70-665427ff38d1",
+      "updated_at": "2026-10-25T23:17:10Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "d0b6384d-cfa5-4f91-9f70-665427ff38d1"
+      }
+    },
+    "E410000000012": {
+      "file": "ecf/recepcion/131362702E410000000012.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "2",
+        "encf": "E410000000012",
+        "estado": "Rechazado",
+        "fechaRecepcion": "10/25/2026 7:17:10 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": "El campo ValorPagar del área Totales de la sección Encabezado no coincide con la sumatoria de los montos SaldoAnterior, MontoAvancePago y MontoTotal."
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "6379f0d0-6cb6-4740-ac1f-518ab3f6d943"
+      },
+      "sha256": "3d97b72c2941ae5c8bca929d65d06b1b089caf1d13b0d046b7e23e84ba2526a7",
+      "started_at": "2026-10-25T23:17:10Z",
+      "state": "rejected",
+      "track_id": "6379f0d0-6cb6-4740-ac1f-518ab3f6d943",
+      "updated_at": "2026-10-25T23:17:11Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "6379f0d0-6cb6-4740-ac1f-518ab3f6d943"
+      }
+    }
+  },
+  "environment": "certecf",
+  "issuer_rnc": "131362702",
+  "last_error": {
+    "details": null,
+    "http_status": null,
+    "message": "DGII rejected result for E410000000012; inspect the recorded response",
+    "operation": "submission",
+    "uncertain": false
+  },
+  "manifest_sha256": "cf8823ad615d44f9f70374bd515f28aee6d41040d0ce1d1932f51bfe6fd15a33",
+  "portal_uploads": [
+    "ecf/consumo-menor-250000/131362702E320000000030.xml",
+    "ecf/consumo-menor-250000/131362702E320000000031.xml",
+    "ecf/consumo-menor-250000/131362702E320000000032.xml",
+    "ecf/consumo-menor-250000/131362702E320000000033.xml"
+  ],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/generated/step4-attempt-4/submission-certecf.json",
+  "status": "stopped",
+  "updated_at": "2026-10-25T23:17:11Z",
+  "version": 1
+}

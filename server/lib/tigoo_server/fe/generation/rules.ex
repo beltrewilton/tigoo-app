@@ -51,8 +51,35 @@ defmodule TigooServer.Fe.Generation.Rules do
     row.fields[field] || Error.fail!(:rules, "Required value is missing", row: row.number, field: field)
   end
 
+  @doc "Checks explicit amount-based adjustment breakdowns used by simulation scenarios."
+  def check_adjustments!(row, tree) do
+    items = tree |> Xml.child("DetallesItems") |> Xml.children("Item")
+    Enum.each(items, fn item ->
+      Enum.each([{"DescuentoMonto", "TablaSubDescuento", "SubDescuento", ~w(MontoSubDescuento)},
+        {"RecargoMonto", "TablaSubRecargo", "SubRecargo", ~w(MontoSubRecargo MontosubRecargo)}], fn {amount_field, table_field, entry_field, amount_names} ->
+        amount = Xml.value(item, [amount_field])
+        table = Xml.child(item, table_field)
+        if amount && Decimal.compare(decimal!(amount), 0) == :gt && is_nil(table) do
+          Error.fail!(:rules, "#{table_field} required for #{amount_field} on line #{Xml.value(item, ["NumeroLinea"])}", row: row.number)
+        end
+        if table do
+          amounts = table |> Xml.children(entry_field) |> Enum.map(fn entry ->
+            value = Enum.find_value(amount_names, &Xml.value(entry, [&1]))
+            if is_nil(value), do: Error.fail!(:rules, "Explicit adjustment amount required in #{table_field}", row: row.number)
+            decimal!(value)
+          end)
+          if is_nil(amount) or not Decimal.equal?(sum(amounts), decimal!(amount)) do
+            Error.fail!(:rules, "#{table_field} must sum to #{amount_field}", row: row.number)
+          end
+        end
+      end)
+    end)
+    :ok
+  end
+
   @doc "Checks conditional tax, withholding and foreign-currency fields from the PDF."
   def check_document!(row, tree) do
+    check_service_kind!(tree, row.number)
     items = tree |> Xml.child("DetallesItems") |> Xml.children("Item")
     indicators = items |> Enum.map(&Xml.value(&1, ["IndicadorFacturacion"])) |> Enum.uniq()
     Enum.each(indicators, fn
@@ -79,6 +106,36 @@ defmodule TigooServer.Fe.Generation.Rules do
       {%Decimal{coef: coefficient} = number, ""} when is_integer(coefficient) -> number
       _ -> Error.fail!(:rules, "Expected a finite decimal value")
     end
+  end
+
+  @doc "DGII type 47 supports service lines only, even though the XSD enum also permits goods."
+  def check_service_kind!(tree, row \\ nil) do
+    if Xml.value(tree, ~w(Encabezado IdDoc TipoeCF)) == "47" do
+      items = tree |> Xml.child("DetallesItems") |> Xml.children("Item")
+      Enum.each(items, fn item ->
+        unless Xml.value(item, ["IndicadorBienoServicio"]) == "2" do
+          Error.fail!(:rules, "Type 47 requires IndicadorBienoServicio=2 on line #{Xml.value(item, ["NumeroLinea"])}", row: row)
+        end
+      end)
+    end
+    :ok
+  end
+
+  @doc "Checks the standard payable formula for simulation cases without Norma 10-07 adjustments."
+  def check_simulation_payable!(row, tree) do
+    totals = tree |> Xml.child("Encabezado") |> Xml.child("Totales")
+    if actual = Xml.value(totals, ["ValorPagar"]) do
+      adjustments = Xml.child(tree, "DescuentosORecargos")
+      if adjustments && Enum.any?(Xml.children(adjustments, "DescuentoORecargo"), &(Xml.value(&1, ["IndicadorNorma1007"]) == "1")) do
+        Error.fail!(:rules, "Norma 10-07 payable adjustments are not supported by simulation cases", row: row.number)
+      end
+      value = fn name -> decimal!(Xml.value(totals, [name]) || "0") end
+      expected = value.("MontoTotal") |> Decimal.sub(value.("MontoAvancePago")) |> Decimal.add(value.("SaldoAnterior"))
+      unless Decimal.equal?(decimal!(actual), expected) do
+        Error.fail!(:rules, "ValorPagar must equal MontoTotal - MontoAvancePago + SaldoAnterior; withholdings are separate", row: row.number)
+      end
+    end
+    :ok
   end
 
   def observations(tree) do

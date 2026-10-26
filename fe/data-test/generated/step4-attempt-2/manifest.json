@@ -1,0 +1,5024 @@
+{
+  "counts": {
+    "ecf": 25,
+    "rfce": 4,
+    "low_consumption": 4,
+    "normal_reception": 21
+  },
+  "source_metadata": {
+    "history_directory": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/generated",
+    "issuer_address": "SANTO DOMINGO, REPUBLICA DOMINICANA",
+    "assumptions": [
+      "User authorized documented quantity variations and invented scenarios using CSV products/customers",
+      "18% inclusive VAT for taxable simulation cases; purchase ISR3%/VAT100%, foreign-payment ISR27% are scenario assumptions",
+      "Customer identities reused in synthetic supplier/special-regime/government/export roles; actual eligibility is not established",
+      "Issuer address is a configurable simulation placeholder; source dates and B-series numbers remain provenance only",
+      "Current simulation issue date; initial lower bound 1; skip earlier local ECF batch numbers; remote-only submissions are not discoverable locally"
+    ],
+    "attempt": "nF7bTfPWeUdyVZC-",
+    "observed_next": {
+      "31": 10,
+      "32": 16,
+      "33": 2,
+      "34": 16,
+      "41": 8,
+      "43": 13,
+      "44": 11,
+      "45": 9,
+      "46": 12,
+      "47": 11
+    },
+    "sales": {
+      "invoices": 71,
+      "excluded": [
+        {
+          "reason": "Identifier is not 9 or 11 digits; no invented correction applied",
+          "sequence": "B0100001254",
+          "customer_document_id": "8094639985"
+        },
+        {
+          "reason": "Identifier is not 9 or 11 digits; no invented correction applied",
+          "sequence": "B0100001277",
+          "customer_document_id": "8094639985"
+        },
+        {
+          "reason": "Identifier is not 9 or 11 digits; no invented correction applied",
+          "sequence": "B0100001338",
+          "customer_document_id": "8094639985"
+        }
+      ],
+      "excluded_line_items": 6,
+      "line_items": 95,
+      "negative_discount_lines": 1,
+      "usable_invoices": 68
+    },
+    "sequence_ledger": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/simulation-sequences-131362702.json",
+    "sequence_ranges": {
+      "31": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "32": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "33": [
+        2
+      ],
+      "34": [
+        16,
+        17
+      ],
+      "41": [
+        8,
+        9
+      ],
+      "43": [
+        13,
+        14
+      ],
+      "44": [
+        11,
+        12
+      ],
+      "45": [
+        9,
+        10
+      ],
+      "46": [
+        12,
+        13
+      ],
+      "47": [
+        11,
+        12
+      ]
+    }
+  },
+  "source_sha256": "5f8bda8937d6b96e2a3cbc9ea3b2468dadc99c63ba791d57436bb880a4b916a9",
+  "purpose": "dgii_step4_simulation",
+  "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+  "authorized_issuer_rnc": "131362702",
+  "dependency_order": [
+    "E310000000010",
+    "E310000000011",
+    "E310000000012",
+    "E310000000013",
+    "E320000000016",
+    "E320000000017",
+    "E320000000018",
+    "E320000000019",
+    "E320000000020",
+    "E320000000021",
+    "E330000000002",
+    "E340000000016",
+    "E340000000017",
+    "E410000000008",
+    "E410000000009",
+    "E430000000013",
+    "E430000000014",
+    "E440000000011",
+    "E440000000012",
+    "E450000000009",
+    "E450000000010",
+    "E460000000012",
+    "E460000000013",
+    "E470000000011",
+    "E470000000012"
+  ],
+  "dgii_acceptance": "not_evaluated",
+  "dgii_submitted": false,
+  "documents": [
+    {
+      "type": "31",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E310000000010",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Retail sale based on CSV",
+        "case_id": "31-1",
+        "original_billed_total": "4840.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "2290",
+            "customer": "BRUZUAL GROUP SRL",
+            "customer_document_id": "132706013",
+            "discount": "310.00",
+            "price": "2600",
+            "product": "ATLAS GAINER 5LB ",
+            "quantity": "1",
+            "sale_date": "2026-05-08 16:31:31",
+            "sequence": "B0100001255",
+            "unit_price": "2600"
+          },
+          {
+            "billed_to_customer": "2500",
+            "customer": "BRUZUAL GROUP SRL",
+            "customer_document_id": "132706013",
+            "discount": "300.00",
+            "price": "2800",
+            "product": "CREATINA 1KG ",
+            "quantity": "1",
+            "sale_date": "2026-05-08 16:31:31",
+            "sequence": "B0100001255",
+            "unit_price": "2800"
+          },
+          {
+            "billed_to_customer": "50",
+            "customer": "BRUZUAL GROUP SRL",
+            "customer_document_id": "132706013",
+            "discount": "250.00",
+            "price": "300",
+            "product": "SHAKER NORMAL ",
+            "quantity": "1",
+            "sale_date": "2026-05-08 16:31:31",
+            "sequence": "B0100001255",
+            "unit_price": "300"
+          }
+        ],
+        "original_sale_date": "2026-05-08 16:31:31",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          5,
+          6,
+          7
+        ],
+        "source_sequence": "B0100001255"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "4840.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E310000000010.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 31 v.1.0.xsd",
+      "ecf_schema_sha256": "a7d60a64bda4a9846ce5729f1de21be3f35031229db7aed2407fe84811f6081b",
+      "ecf_sha256": "d01c677a8a7c8cc888003f64f211e97ac05a994391966e4c3938a3c502d643ef",
+      "field_mappings": [
+        {
+          "header": "TipoeCF",
+          "cell": "31-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "IndicadorBienoServicio[2]",
+          "cell": "31-1:IndicadorBienoServicio[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[2]",
+          "cell": "31-1:IndicadorFacturacion[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "31-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "CantidadItem[1]",
+          "cell": "31-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "MontoItem[3]",
+          "cell": "31-1:MontoItem[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/MontoItem"
+        },
+        {
+          "header": "IndicadorFacturacion[3]",
+          "cell": "31-1:IndicadorFacturacion[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/IndicadorFacturacion"
+        },
+        {
+          "header": "Version",
+          "cell": "31-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "31-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "31-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "31-1:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "31-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "31-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoItem[2]",
+          "cell": "31-1:MontoItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/MontoItem"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "31-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "31-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "31-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "NombreItem[3]",
+          "cell": "31-1:NombreItem[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/NombreItem"
+        },
+        {
+          "header": "NombreItem[2]",
+          "cell": "31-1:NombreItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NombreItem"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "31-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "NumeroLinea[2]",
+          "cell": "31-1:NumeroLinea[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NumeroLinea"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "31-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "PrecioUnitarioItem[2]",
+          "cell": "31-1:PrecioUnitarioItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/PrecioUnitarioItem"
+        },
+        {
+          "header": "DescuentoMonto[2]",
+          "cell": "31-1:DescuentoMonto[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/DescuentoMonto"
+        },
+        {
+          "header": "CantidadItem[3]",
+          "cell": "31-1:CantidadItem[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/CantidadItem"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "31-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "31-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "31-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "31-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "CantidadItem[2]",
+          "cell": "31-1:CantidadItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "31-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "31-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "31-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "31-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "NumeroLinea[3]",
+          "cell": "31-1:NumeroLinea[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/NumeroLinea"
+        },
+        {
+          "header": "DescuentoMonto[3]",
+          "cell": "31-1:DescuentoMonto[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/DescuentoMonto"
+        },
+        {
+          "header": "IndicadorBienoServicio[3]",
+          "cell": "31-1:IndicadorBienoServicio[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "31-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "31-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "31-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ENCF",
+          "cell": "31-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "PrecioUnitarioItem[3]",
+          "cell": "31-1:PrecioUnitarioItem[3]",
+          "xml_path": "/ECF/DetallesItems/Item[3]/PrecioUnitarioItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "31-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 43,
+      "source_fields_preserved": true,
+      "source_row": 1
+    },
+    {
+      "type": "31",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E310000000011",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Retail sale based on CSV",
+        "case_id": "31-2",
+        "original_billed_total": "8050.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "8000",
+            "customer": "ALCANTARA JAVIER SRL",
+            "customer_document_id": "131461735",
+            "discount": "0.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-05-11 14:38:02",
+            "sequence": "B0100001258",
+            "unit_price": "8000"
+          },
+          {
+            "billed_to_customer": "50",
+            "customer": "ALCANTARA JAVIER SRL",
+            "customer_document_id": "131461735",
+            "discount": "250.00",
+            "price": "300",
+            "product": "SHAKER NORMAL ",
+            "quantity": "1",
+            "sale_date": "2026-05-11 14:38:02",
+            "sequence": "B0100001258",
+            "unit_price": "300"
+          }
+        ],
+        "original_sale_date": "2026-05-11 14:38:02",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          8,
+          9
+        ],
+        "source_sequence": "B0100001258"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "8050.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E310000000011.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 31 v.1.0.xsd",
+      "ecf_schema_sha256": "a7d60a64bda4a9846ce5729f1de21be3f35031229db7aed2407fe84811f6081b",
+      "ecf_sha256": "4b3f7eac4e3723186a44f42bd9adc7c3b0dc6fad32e418f4c77c119d6e8670e6",
+      "field_mappings": [
+        {
+          "header": "TipoeCF",
+          "cell": "31-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "IndicadorBienoServicio[2]",
+          "cell": "31-2:IndicadorBienoServicio[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[2]",
+          "cell": "31-2:IndicadorFacturacion[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "31-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "CantidadItem[1]",
+          "cell": "31-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "Version",
+          "cell": "31-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "31-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "31-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "31-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "31-2:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoItem[2]",
+          "cell": "31-2:MontoItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/MontoItem"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "31-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "31-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "31-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "NombreItem[2]",
+          "cell": "31-2:NombreItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NombreItem"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "31-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "NumeroLinea[2]",
+          "cell": "31-2:NumeroLinea[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NumeroLinea"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "31-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "PrecioUnitarioItem[2]",
+          "cell": "31-2:PrecioUnitarioItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/PrecioUnitarioItem"
+        },
+        {
+          "header": "DescuentoMonto[2]",
+          "cell": "31-2:DescuentoMonto[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/DescuentoMonto"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "31-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "31-2:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "31-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "31-2:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "CantidadItem[2]",
+          "cell": "31-2:CantidadItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "31-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "31-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "31-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "31-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "31-2:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "31-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "31-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ENCF",
+          "cell": "31-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "31-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 34,
+      "source_fields_preserved": true,
+      "source_row": 2
+    },
+    {
+      "type": "31",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E310000000012",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Retail sale based on CSV",
+        "case_id": "31-3",
+        "original_billed_total": "7440.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "7390",
+            "customer": "LR CATIVIAS BY DENISE CORDERO RUBIERA SRL",
+            "customer_document_id": "132812158",
+            "discount": "610.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-05-12 11:44:11",
+            "sequence": "B0100001259",
+            "unit_price": "8000"
+          },
+          {
+            "billed_to_customer": "50",
+            "customer": "LR CATIVIAS BY DENISE CORDERO RUBIERA SRL",
+            "customer_document_id": "132812158",
+            "discount": "250.00",
+            "price": "300",
+            "product": "SHAKER NORMAL ",
+            "quantity": "1",
+            "sale_date": "2026-05-12 11:44:11",
+            "sequence": "B0100001259",
+            "unit_price": "300"
+          }
+        ],
+        "original_sale_date": "2026-05-12 11:44:11",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          10,
+          11
+        ],
+        "source_sequence": "B0100001259"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "7440.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E310000000012.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 31 v.1.0.xsd",
+      "ecf_schema_sha256": "a7d60a64bda4a9846ce5729f1de21be3f35031229db7aed2407fe84811f6081b",
+      "ecf_sha256": "5e94b9788a2e7ade5e76b2ddb4d1cfcecc8b54a4939471671189091f3e77bc6f",
+      "field_mappings": [
+        {
+          "header": "TipoeCF",
+          "cell": "31-3:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "IndicadorBienoServicio[2]",
+          "cell": "31-3:IndicadorBienoServicio[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[2]",
+          "cell": "31-3:IndicadorFacturacion[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "31-3:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "CantidadItem[1]",
+          "cell": "31-3:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "Version",
+          "cell": "31-3:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "31-3:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "31-3:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "31-3:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "31-3:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "31-3:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoItem[2]",
+          "cell": "31-3:MontoItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/MontoItem"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "31-3:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "31-3:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "31-3:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "NombreItem[2]",
+          "cell": "31-3:NombreItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NombreItem"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "31-3:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "NumeroLinea[2]",
+          "cell": "31-3:NumeroLinea[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NumeroLinea"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "31-3:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "PrecioUnitarioItem[2]",
+          "cell": "31-3:PrecioUnitarioItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/PrecioUnitarioItem"
+        },
+        {
+          "header": "DescuentoMonto[2]",
+          "cell": "31-3:DescuentoMonto[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/DescuentoMonto"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "31-3:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "31-3:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "31-3:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "31-3:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "CantidadItem[2]",
+          "cell": "31-3:CantidadItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "31-3:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "31-3:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "31-3:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "31-3:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "31-3:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "31-3:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "31-3:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ENCF",
+          "cell": "31-3:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "31-3:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 35,
+      "source_fields_preserved": true,
+      "source_row": 3
+    },
+    {
+      "type": "31",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E310000000013",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Retail sale based on CSV",
+        "case_id": "31-4",
+        "original_billed_total": "3990.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "1300",
+            "customer": "TECNO PREMIUN SUPLY ",
+            "customer_document_id": "132061063",
+            "discount": "400.00",
+            "price": "1700",
+            "product": "DK CREATINE 300GR",
+            "quantity": "1",
+            "sale_date": "2026-05-28 11:22:37",
+            "sequence": "B0100001270",
+            "unit_price": "1700"
+          },
+          {
+            "billed_to_customer": "2690",
+            "customer": "TECNO PREMIUN SUPLY ",
+            "customer_document_id": "132061063",
+            "discount": "510.00",
+            "price": "3200",
+            "product": "ISO 100 1.3LB ",
+            "quantity": "1",
+            "sale_date": "2026-05-28 11:22:37",
+            "sequence": "B0100001270",
+            "unit_price": "3200"
+          }
+        ],
+        "original_sale_date": "2026-05-28 11:22:37",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          12,
+          13
+        ],
+        "source_sequence": "B0100001270"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "3990.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E310000000013.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 31 v.1.0.xsd",
+      "ecf_schema_sha256": "a7d60a64bda4a9846ce5729f1de21be3f35031229db7aed2407fe84811f6081b",
+      "ecf_sha256": "d34fbd0ffa8b31ed2f6654a3c52007ac96711fed02c49a42338c3d7d9bc69c1c",
+      "field_mappings": [
+        {
+          "header": "TipoeCF",
+          "cell": "31-4:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "IndicadorBienoServicio[2]",
+          "cell": "31-4:IndicadorBienoServicio[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[2]",
+          "cell": "31-4:IndicadorFacturacion[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "31-4:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "CantidadItem[1]",
+          "cell": "31-4:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "Version",
+          "cell": "31-4:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "31-4:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "31-4:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "31-4:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "31-4:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "31-4:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoItem[2]",
+          "cell": "31-4:MontoItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/MontoItem"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "31-4:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "31-4:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "31-4:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "NombreItem[2]",
+          "cell": "31-4:NombreItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NombreItem"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "31-4:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "NumeroLinea[2]",
+          "cell": "31-4:NumeroLinea[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NumeroLinea"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "31-4:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "PrecioUnitarioItem[2]",
+          "cell": "31-4:PrecioUnitarioItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/PrecioUnitarioItem"
+        },
+        {
+          "header": "DescuentoMonto[2]",
+          "cell": "31-4:DescuentoMonto[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/DescuentoMonto"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "31-4:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "31-4:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "31-4:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "31-4:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "CantidadItem[2]",
+          "cell": "31-4:CantidadItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "31-4:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "31-4:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "31-4:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "31-4:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "31-4:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "31-4:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "31-4:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ENCF",
+          "cell": "31-4:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "31-4:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 35,
+      "source_fields_preserved": true,
+      "source_row": 4
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000016",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated bulk quantity to meet >= DOP250000",
+        "case_id": "32-1",
+        "original_billed_total": "88400.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "88400",
+            "customer": "GOSAGA SRL",
+            "customer_document_id": "133805367",
+            "discount": "15600.00",
+            "price": "104000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "13",
+            "sale_date": "2026-09-23 12:09:42",
+            "sequence": "B01000001349",
+            "unit_price": "8000"
+          }
+        ],
+        "original_sale_date": "2026-09-23 12:09:42",
+        "quantity_multiplier": 3,
+        "source_csv_records": [
+          79
+        ],
+        "source_sequence": "B01000001349"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "265200.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E320000000016.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "dfdd32306b55ea4d81f25aae48649a1f09869910a72871d936b5c05486db2382",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "32-1:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 26,
+      "source_fields_preserved": true,
+      "source_row": 5
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000017",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated bulk quantity to meet >= DOP250000",
+        "case_id": "32-2",
+        "original_billed_total": "54400.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "54400",
+            "customer": "GOSAGA SRL",
+            "customer_document_id": "133805367",
+            "discount": "9600.00",
+            "price": "64000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "8",
+            "sale_date": "2026-09-30 15:25:44",
+            "sequence": "B01000001356",
+            "unit_price": "8000"
+          }
+        ],
+        "original_sale_date": "2026-09-30 15:25:44",
+        "quantity_multiplier": 5,
+        "source_csv_records": [
+          86
+        ],
+        "source_sequence": "B01000001356"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "272000.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E320000000017.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "bbbb9fac81b0b2cb8efadca21c0887980ceb0d46ddf082023698d90d2e394517",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "32-2:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-2:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-2:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-2:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-2:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 26,
+      "source_fields_preserved": true,
+      "source_row": 6
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000018",
+      "small_consumption": true,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Low-amount consumption sale from CSV",
+        "case_id": "32-3",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-02 21:05:30",
+            "sequence": "B0200034185",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-02 21:05:30",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          14
+        ],
+        "source_sequence": "B0200034185"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "rfce_then_full_ecf_portal_upload",
+      "ecf_file": "ecf/consumo-menor-250000/131362702E320000000018.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "5cab7559d90a7d1884073043a6922557add85c8139307d9ecc6e07f39fbb44f8",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-3:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-3:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-3:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-3:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-3:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-3:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-3:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-3:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-3:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-3:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-3:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-3:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-3:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-3:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-3:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-3:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-3:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-3:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-3:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-3:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-3:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-3:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-3:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-3:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-3:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:06",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 25,
+      "source_fields_preserved": true,
+      "source_row": 7,
+      "rfce_file": "rfce/131362702E320000000018.xml",
+      "rfce_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/RFCE 32 v.1.0.xsd",
+      "rfce_schema_sha256": "30b9ae65fd2d1ccdcd9340106069208302dda4989247be2a8be214c6bdbf73d4",
+      "rfce_schema_valid": true,
+      "rfce_security_code": "VqsP0h",
+      "rfce_sha256": "5a49d5eb01429c02f8fa8b594fad0fa357348678a116df39b9e5d672f3b1b9a0",
+      "rfce_signature_valid": true
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000019",
+      "small_consumption": true,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Low-amount consumption sale from CSV",
+        "case_id": "32-4",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-04 17:05:45",
+            "sequence": "B0200034203",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-04 17:05:45",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          15
+        ],
+        "source_sequence": "B0200034203"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "rfce_then_full_ecf_portal_upload",
+      "ecf_file": "ecf/consumo-menor-250000/131362702E320000000019.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "b68a719e725d0d32fca37b721c8e5607f2d98f44b74ce82a410f81ef582d46c8",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-4:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-4:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-4:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-4:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-4:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-4:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-4:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-4:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-4:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-4:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-4:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-4:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-4:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-4:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-4:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-4:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-4:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-4:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-4:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-4:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-4:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-4:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-4:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-4:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-4:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 25,
+      "source_fields_preserved": true,
+      "source_row": 8,
+      "rfce_file": "rfce/131362702E320000000019.xml",
+      "rfce_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/RFCE 32 v.1.0.xsd",
+      "rfce_schema_sha256": "30b9ae65fd2d1ccdcd9340106069208302dda4989247be2a8be214c6bdbf73d4",
+      "rfce_schema_valid": true,
+      "rfce_security_code": "g/5L8Y",
+      "rfce_sha256": "4daaa0018209a4ff56fb89fa76fabfba86a900417de9bba527d682ed23a3f8a4",
+      "rfce_signature_valid": true
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000020",
+      "small_consumption": true,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Low-amount consumption sale from CSV",
+        "case_id": "32-5",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-10 20:38:26",
+            "sequence": "B0200034303",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-10 20:38:26",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          17
+        ],
+        "source_sequence": "B0200034303"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "rfce_then_full_ecf_portal_upload",
+      "ecf_file": "ecf/consumo-menor-250000/131362702E320000000020.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "1b290d9aecae2212fc2fba9ae5ba1fe5355360b9dde5dea4839fc52d1ea918b9",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-5:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-5:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-5:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-5:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-5:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-5:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-5:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-5:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-5:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-5:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-5:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-5:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-5:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-5:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-5:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-5:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-5:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-5:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-5:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-5:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-5:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-5:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-5:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-5:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-5:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 25,
+      "source_fields_preserved": true,
+      "source_row": 9,
+      "rfce_file": "rfce/131362702E320000000020.xml",
+      "rfce_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/RFCE 32 v.1.0.xsd",
+      "rfce_schema_sha256": "30b9ae65fd2d1ccdcd9340106069208302dda4989247be2a8be214c6bdbf73d4",
+      "rfce_schema_valid": true,
+      "rfce_security_code": "AAlGZU",
+      "rfce_sha256": "d1d2f3077c3d10ac7c2dd25b5308923459b1121f1cb3f49c33a0c402b12b8a12",
+      "rfce_signature_valid": true
+    },
+    {
+      "type": "32",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E320000000021",
+      "small_consumption": true,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Low-amount consumption sale from CSV",
+        "case_id": "32-6",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "GRUPO MIRACARIBE SRL",
+            "customer_document_id": "133120933",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-16 17:38:07",
+            "sequence": "B0200034395",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-16 17:38:07",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          20
+        ],
+        "source_sequence": "B0200034395"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "rfce_then_full_ecf_portal_upload",
+      "ecf_file": "ecf/consumo-menor-250000/131362702E320000000021.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "7233c69d4d0bbfcd0c569bb010728b879d4fe8263c8fa747b5ae3d9cffc27213",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "32-6:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "32-6:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "32-6:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "32-6:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "32-6:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "32-6:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "32-6:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "32-6:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "32-6:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "32-6:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "32-6:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "32-6:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "32-6:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "32-6:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "32-6:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "32-6:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "32-6:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "32-6:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "32-6:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "32-6:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "32-6:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "32-6:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "32-6:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "32-6:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "32-6:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 25,
+      "source_fields_preserved": true,
+      "source_row": 10,
+      "rfce_file": "rfce/131362702E320000000021.xml",
+      "rfce_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/RFCE 32 v.1.0.xsd",
+      "rfce_schema_sha256": "30b9ae65fd2d1ccdcd9340106069208302dda4989247be2a8be214c6bdbf73d4",
+      "rfce_schema_valid": true,
+      "rfce_security_code": "IWPvri",
+      "rfce_sha256": "3fd60c967f14d90c7acad903125cc3978a43d3161464829a31d64ef52aac00e7",
+      "rfce_signature_valid": true
+    },
+    {
+      "type": "33",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E330000000002",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated additional product charge",
+        "case_id": "33-1",
+        "original_billed_total": "4840.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "2290",
+            "customer": "BRUZUAL GROUP SRL",
+            "customer_document_id": "132706013",
+            "discount": "310.00",
+            "price": "2600",
+            "product": "ATLAS GAINER 5LB ",
+            "quantity": "1",
+            "sale_date": "2026-05-08 16:31:31",
+            "sequence": "B0100001255",
+            "unit_price": "2600"
+          }
+        ],
+        "original_sale_date": "2026-05-08 16:31:31",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          5
+        ],
+        "source_sequence": "B0100001255"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "2290.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E330000000002.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 33 v.1.0.xsd",
+      "ecf_schema_sha256": "0d3b2d601998528ce4b2575e1e31edf88ec1a22bcd0c29738b2179274860fe2e",
+      "ecf_sha256": "e7a03a62199fdde3089f0dd00373b84860ed37b8873c0516eae079e9da4c1a54",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "33-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "CodigoModificacion",
+          "cell": "33-1:CodigoModificacion",
+          "xml_path": "/ECF/InformacionReferencia/CodigoModificacion"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "33-1:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "33-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "33-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "33-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaNCFModificado",
+          "cell": "33-1:FechaNCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/FechaNCFModificado"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "33-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "33-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "33-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "33-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "33-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "33-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "33-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "33-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "33-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NCFModificado",
+          "cell": "33-1:NCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/NCFModificado"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "33-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "33-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "33-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "33-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "33-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonModificacion",
+          "cell": "33-1:RazonModificacion",
+          "xml_path": "/ECF/InformacionReferencia/RazonModificacion"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "33-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "33-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "33-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "33-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "33-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "33-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "33-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "33-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": "E310000000010",
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 31,
+      "source_fields_preserved": true,
+      "source_row": 11
+    },
+    {
+      "type": "34",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E340000000016",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated partial product return",
+        "case_id": "34-1",
+        "original_billed_total": "8050.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "8000",
+            "customer": "ALCANTARA JAVIER SRL",
+            "customer_document_id": "131461735",
+            "discount": "0.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-05-11 14:38:02",
+            "sequence": "B0100001258",
+            "unit_price": "8000"
+          }
+        ],
+        "original_sale_date": "2026-05-11 14:38:02",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          8
+        ],
+        "source_sequence": "B0100001258"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "8000.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E340000000016.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 34 v.1.0.xsd",
+      "ecf_schema_sha256": "59ed47a92e2ea78f7abd1d0364f24edfc55cbd725a45972bdf0d06d85ce6d211",
+      "ecf_sha256": "29ed1b58208b70eef2cf6958cd8008a776a60ca834f832aaebef86e37396b1c2",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "34-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "CodigoModificacion",
+          "cell": "34-1:CodigoModificacion",
+          "xml_path": "/ECF/InformacionReferencia/CodigoModificacion"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "34-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "34-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "34-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaNCFModificado",
+          "cell": "34-1:FechaNCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/FechaNCFModificado"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "34-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "34-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "34-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "34-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "IndicadorNotaCredito",
+          "cell": "34-1:IndicadorNotaCredito",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorNotaCredito"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "34-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "34-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "34-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "34-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NCFModificado",
+          "cell": "34-1:NCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/NCFModificado"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "34-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "34-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "34-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "34-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "34-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonModificacion",
+          "cell": "34-1:RazonModificacion",
+          "xml_path": "/ECF/InformacionReferencia/RazonModificacion"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "34-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "34-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "34-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "34-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "34-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "34-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "34-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "34-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": "E310000000011",
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 30,
+      "source_fields_preserved": true,
+      "source_row": 12
+    },
+    {
+      "type": "34",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E340000000017",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated full cancellation",
+        "case_id": "34-2",
+        "original_billed_total": "7440.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "7390",
+            "customer": "LR CATIVIAS BY DENISE CORDERO RUBIERA SRL",
+            "customer_document_id": "132812158",
+            "discount": "610.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-05-12 11:44:11",
+            "sequence": "B0100001259",
+            "unit_price": "8000"
+          },
+          {
+            "billed_to_customer": "50",
+            "customer": "LR CATIVIAS BY DENISE CORDERO RUBIERA SRL",
+            "customer_document_id": "132812158",
+            "discount": "250.00",
+            "price": "300",
+            "product": "SHAKER NORMAL ",
+            "quantity": "1",
+            "sale_date": "2026-05-12 11:44:11",
+            "sequence": "B0100001259",
+            "unit_price": "300"
+          }
+        ],
+        "original_sale_date": "2026-05-12 11:44:11",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          10,
+          11
+        ],
+        "source_sequence": "B0100001259"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "7440.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E340000000017.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 34 v.1.0.xsd",
+      "ecf_schema_sha256": "59ed47a92e2ea78f7abd1d0364f24edfc55cbd725a45972bdf0d06d85ce6d211",
+      "ecf_sha256": "d45d6f924227da402ac97416b8bb60e3184f2347d5f23735197df8af99488f56",
+      "field_mappings": [
+        {
+          "header": "TipoeCF",
+          "cell": "34-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "IndicadorBienoServicio[2]",
+          "cell": "34-2:IndicadorBienoServicio[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[2]",
+          "cell": "34-2:IndicadorFacturacion[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/IndicadorFacturacion"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "34-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "CantidadItem[1]",
+          "cell": "34-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "NCFModificado",
+          "cell": "34-2:NCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/NCFModificado"
+        },
+        {
+          "header": "Version",
+          "cell": "34-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "34-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "CodigoModificacion",
+          "cell": "34-2:CodigoModificacion",
+          "xml_path": "/ECF/InformacionReferencia/CodigoModificacion"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "34-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "34-2:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "34-2:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoItem[2]",
+          "cell": "34-2:MontoItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/MontoItem"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "34-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaNCFModificado",
+          "cell": "34-2:FechaNCFModificado",
+          "xml_path": "/ECF/InformacionReferencia/FechaNCFModificado"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "34-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "34-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "NombreItem[2]",
+          "cell": "34-2:NombreItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NombreItem"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "34-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "NumeroLinea[2]",
+          "cell": "34-2:NumeroLinea[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/NumeroLinea"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "34-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "PrecioUnitarioItem[2]",
+          "cell": "34-2:PrecioUnitarioItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/PrecioUnitarioItem"
+        },
+        {
+          "header": "DescuentoMonto[2]",
+          "cell": "34-2:DescuentoMonto[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/DescuentoMonto"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "34-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "34-2:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "IndicadorNotaCredito",
+          "cell": "34-2:IndicadorNotaCredito",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorNotaCredito"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "34-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "34-2:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "CantidadItem[2]",
+          "cell": "34-2:CantidadItem[2]",
+          "xml_path": "/ECF/DetallesItems/Item[2]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "34-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "34-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "34-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "34-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonModificacion",
+          "cell": "34-2:RazonModificacion",
+          "xml_path": "/ECF/InformacionReferencia/RazonModificacion"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "34-2:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "34-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "34-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "ENCF",
+          "cell": "34-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "34-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        }
+      ],
+      "reference_encf": "E310000000012",
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:07",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 39,
+      "source_fields_preserved": true,
+      "source_row": 13
+    },
+    {
+      "type": "41",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E410000000008",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated purchase; CSV customer assumed to be an unregistered supplier; VAT100% / ISR3% assumptions",
+        "case_id": "41-1",
+        "original_billed_total": "5800.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "5800",
+            "customer": "JOAN MANUEL ALCANTARA JAVIER",
+            "customer_document_id": "00115772162",
+            "discount": "0.00",
+            "price": "5800",
+            "product": "IM ISO TRIPLE ZERO PT 1,8KG CHOCOLATE",
+            "quantity": "1",
+            "sale_date": "2026-10-12 14:33:22",
+            "sequence": "B01000001365",
+            "unit_price": "5800"
+          }
+        ],
+        "original_sale_date": "2026-10-12 14:33:22",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          91
+        ],
+        "source_sequence": "B01000001365"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "5800.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E410000000008.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 41 v.1.0.xsd",
+      "ecf_schema_sha256": "a281cb3173f68ba09bc5248037cc9f57aaee423e9fa79ba4842123061149a0f1",
+      "ecf_sha256": "8cb6e71aacbec821b471d2b9e889aa1a5fc207d92c9272854344f7398307afa3",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "41-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "41-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "41-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "41-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "41-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "41-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorAgenteRetencionoPercepcion[1]",
+          "cell": "41-1:IndicadorAgenteRetencionoPercepcion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/IndicadorAgenteRetencionoPercepcion"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "41-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "41-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "41-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "41-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "41-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoISRRetenido[1]",
+          "cell": "41-1:MontoISRRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoISRRetenido"
+        },
+        {
+          "header": "MontoITBISRetenido[1]",
+          "cell": "41-1:MontoITBISRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoITBISRetenido"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "41-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "41-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "41-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "41-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "41-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "41-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "41-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "41-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "41-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "41-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "41-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalISRRetencion",
+          "cell": "41-1:TotalISRRetencion",
+          "xml_path": "/ECF/Encabezado/Totales/TotalISRRetencion"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "41-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "41-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "TotalITBISRetenido",
+          "cell": "41-1:TotalITBISRetenido",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBISRetenido"
+        },
+        {
+          "header": "ValorPagar",
+          "cell": "41-1:ValorPagar",
+          "xml_path": "/ECF/Encabezado/Totales/ValorPagar"
+        },
+        {
+          "header": "Version",
+          "cell": "41-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 31,
+      "source_fields_preserved": true,
+      "source_row": 14
+    },
+    {
+      "type": "41",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E410000000009",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated purchase; CSV customer assumed to be an unregistered supplier; VAT100% / ISR3% assumptions",
+        "case_id": "41-2",
+        "original_billed_total": "5800.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "5800",
+            "customer": "JOAN MANUEL ALCANTARA JAVIER",
+            "customer_document_id": "00115772162",
+            "discount": "0.00",
+            "price": "5800",
+            "product": "IM ISO TRIPLE ZERO PT 1,8KG CHOCOLATE",
+            "quantity": "1",
+            "sale_date": "2026-10-12 14:33:22",
+            "sequence": "B01000001365",
+            "unit_price": "5800"
+          }
+        ],
+        "original_sale_date": "2026-10-12 14:33:22",
+        "quantity_multiplier": 2,
+        "source_csv_records": [
+          91
+        ],
+        "source_sequence": "B01000001365"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "11600.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E410000000009.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 41 v.1.0.xsd",
+      "ecf_schema_sha256": "a281cb3173f68ba09bc5248037cc9f57aaee423e9fa79ba4842123061149a0f1",
+      "ecf_sha256": "104c14a925e4616af307c5c71690b570992c7a10a1c1457c77be2e06b233010e",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "41-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "41-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "41-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "41-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "41-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "41-2:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorAgenteRetencionoPercepcion[1]",
+          "cell": "41-2:IndicadorAgenteRetencionoPercepcion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/IndicadorAgenteRetencionoPercepcion"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "41-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "41-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "41-2:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "41-2:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "41-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoISRRetenido[1]",
+          "cell": "41-2:MontoISRRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoISRRetenido"
+        },
+        {
+          "header": "MontoITBISRetenido[1]",
+          "cell": "41-2:MontoITBISRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoITBISRetenido"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "41-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "41-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "41-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "41-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "41-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "41-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "41-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "41-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "41-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "41-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "41-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalISRRetencion",
+          "cell": "41-2:TotalISRRetencion",
+          "xml_path": "/ECF/Encabezado/Totales/TotalISRRetencion"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "41-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "41-2:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "TotalITBISRetenido",
+          "cell": "41-2:TotalITBISRetenido",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBISRetenido"
+        },
+        {
+          "header": "ValorPagar",
+          "cell": "41-2:ValorPagar",
+          "xml_path": "/ECF/Encabezado/Totales/ValorPagar"
+        },
+        {
+          "header": "Version",
+          "cell": "41-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 31,
+      "source_fields_preserved": true,
+      "source_row": 15
+    },
+    {
+      "type": "43",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E430000000013",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated minor cash expense using CSV goods",
+        "case_id": "43-1",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-02 21:05:30",
+            "sequence": "B0200034185",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-02 21:05:30",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          14
+        ],
+        "source_sequence": "B0200034185"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E430000000013.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 43 v.1.0.xsd",
+      "ecf_schema_sha256": "6e8151f92364de5fb5f01d5ba608c43aa3bacff1e25d34219f46a99cce914b2b",
+      "ecf_sha256": "29595a80d3fe7977238c61da0f0e043e55632a9891466bda59656d50688cbecf",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "43-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "43-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "43-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "43-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "43-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "43-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "43-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "43-1:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "43-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "43-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "43-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "43-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "43-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "43-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "43-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "43-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "43-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "Version",
+          "cell": "43-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 18,
+      "source_fields_preserved": true,
+      "source_row": 16
+    },
+    {
+      "type": "43",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E430000000014",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "Simulated minor cash expense using CSV goods",
+        "case_id": "43-2",
+        "original_billed_total": "240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "240",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "240",
+            "product": "C4 ENERGY 16 ONZ - ORIGINAL",
+            "quantity": "1",
+            "sale_date": "2026-06-04 17:05:45",
+            "sequence": "B0200034203",
+            "unit_price": "240"
+          }
+        ],
+        "original_sale_date": "2026-06-04 17:05:45",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          15
+        ],
+        "source_sequence": "B0200034203"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E430000000014.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 43 v.1.0.xsd",
+      "ecf_schema_sha256": "6e8151f92364de5fb5f01d5ba608c43aa3bacff1e25d34219f46a99cce914b2b",
+      "ecf_sha256": "6790724c047bb3c241a782f555b1fb01065dd837b078aaa6c9deec6d56d71928",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "43-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "43-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "43-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "43-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "43-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "43-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "43-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "43-2:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "43-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "43-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "43-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "43-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "43-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "43-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "43-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "43-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "43-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "Version",
+          "cell": "43-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 18,
+      "source_fields_preserved": true,
+      "source_row": 17
+    },
+    {
+      "type": "44",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E440000000011",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated special-regime buyer; not evidence of actual status",
+        "case_id": "44-1",
+        "original_billed_total": "3340.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "1100",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "1100",
+            "product": "vitamina c 1000 mg",
+            "quantity": "1",
+            "sale_date": "2026-06-20 17:41:30",
+            "sequence": "B0100001284",
+            "unit_price": "1100"
+          }
+        ],
+        "original_sale_date": "2026-06-20 17:41:30",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          22
+        ],
+        "source_sequence": "B0100001284"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "1100.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E440000000011.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 44 v.1.0.xsd",
+      "ecf_schema_sha256": "6190d5b6a8a9e675d27f99bd8a34a4cf4f750f5b717bf909c01b5d6787a114f1",
+      "ecf_sha256": "b736e9253c8704fb8933b4d43f87a2b2e144f462baf3449aa116567a31edb18e",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "44-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "44-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "44-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "44-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "44-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "44-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "44-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "44-1:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "44-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "44-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "44-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "44-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "44-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "44-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "44-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "44-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "44-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "44-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "44-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "44-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "Version",
+          "cell": "44-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 21,
+      "source_fields_preserved": true,
+      "source_row": 18
+    },
+    {
+      "type": "44",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E440000000012",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated special-regime buyer; not evidence of actual status",
+        "case_id": "44-2",
+        "original_billed_total": "1600.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "1600",
+            "customer": "KION SRL",
+            "customer_document_id": "132000897",
+            "discount": "500.00",
+            "price": "2100",
+            "product": "GREENS SUPERFOOD 30S",
+            "quantity": "1",
+            "sale_date": "2026-07-03 11:47:49",
+            "sequence": "B0100001292",
+            "unit_price": "2100"
+          }
+        ],
+        "original_sale_date": "2026-07-03 11:47:49",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          26
+        ],
+        "source_sequence": "B0100001292"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "1600.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E440000000012.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 44 v.1.0.xsd",
+      "ecf_schema_sha256": "6190d5b6a8a9e675d27f99bd8a34a4cf4f750f5b717bf909c01b5d6787a114f1",
+      "ecf_sha256": "ac41681bc65e2c8a6c389e0b8b86a96a4ff8f57309179ead71c9eaa489a6bec1",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "44-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "44-2:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "44-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "44-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "44-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "44-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "44-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "44-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "44-2:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "44-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "44-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "44-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "44-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "44-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "44-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "44-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "44-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "44-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "44-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "44-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "44-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "Version",
+          "cell": "44-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 22,
+      "source_fields_preserved": true,
+      "source_row": 19
+    },
+    {
+      "type": "45",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E450000000009",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated government buyer; not evidence of actual status",
+        "case_id": "45-1",
+        "original_billed_total": "1600.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "1600",
+            "customer": "KION SRL",
+            "customer_document_id": "132000897",
+            "discount": "500.00",
+            "price": "2100",
+            "product": "GREENS SUPERFOOD 30S",
+            "quantity": "1",
+            "sale_date": "2026-07-03 11:47:49",
+            "sequence": "B0100001292",
+            "unit_price": "2100"
+          }
+        ],
+        "original_sale_date": "2026-07-03 11:47:49",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          26
+        ],
+        "source_sequence": "B0100001292"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "1600.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E450000000009.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 45 v.1.0.xsd",
+      "ecf_schema_sha256": "f96734bc1f8637a086dfd3f7c84defdc1729c7cbcb8291e7067a5b9c52b9e0d7",
+      "ecf_sha256": "a29c1d109fefd5c46c39c2b4f0035d2e0f9987c6d12c99643638555ec6832bd0",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "45-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "45-1:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "45-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "45-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "45-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "45-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "45-1:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "45-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "45-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "45-1:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "45-1:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "45-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "45-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "45-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "45-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "45-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "45-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "45-1:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "45-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "45-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "45-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "45-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "45-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "45-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "45-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "45-1:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "45-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 27,
+      "source_fields_preserved": true,
+      "source_row": 20
+    },
+    {
+      "type": "45",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E450000000010",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated government buyer; not evidence of actual status",
+        "case_id": "45-2",
+        "original_billed_total": "7990.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "7990",
+            "customer": "\tBRISERVINT CONSULTING SRL",
+            "customer_document_id": "132116283",
+            "discount": "10.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-07-16 15:43:00",
+            "sequence": "B0100001299",
+            "unit_price": "8000"
+          }
+        ],
+        "original_sale_date": "2026-07-16 15:43:00",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          28
+        ],
+        "source_sequence": "B0100001299"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "7990.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E450000000010.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 45 v.1.0.xsd",
+      "ecf_schema_sha256": "f96734bc1f8637a086dfd3f7c84defdc1729c7cbcb8291e7067a5b9c52b9e0d7",
+      "ecf_sha256": "cd3427999629dfadf86e75001fce8711a440b3f23f2f2e43b88c85183e2de864",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "45-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "45-2:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "45-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "45-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "45-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "45-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "45-2:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "45-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "45-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "45-2:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "45-2:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "45-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "45-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "45-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "45-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "45-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "45-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "45-2:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "45-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "45-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "45-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "45-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "45-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "45-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "45-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "45-2:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "45-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 27,
+      "source_fields_preserved": true,
+      "source_row": 21
+    },
+    {
+      "type": "46",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E460000000012",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated export buyer; not evidence of actual status",
+        "case_id": "46-1",
+        "original_billed_total": "7990.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "7990",
+            "customer": "\tBRISERVINT CONSULTING SRL",
+            "customer_document_id": "132116283",
+            "discount": "10.00",
+            "price": "8000",
+            "product": "ISOPURE 4.5lb ",
+            "quantity": "1",
+            "sale_date": "2026-07-16 15:43:00",
+            "sequence": "B0100001299",
+            "unit_price": "8000"
+          }
+        ],
+        "original_sale_date": "2026-07-16 15:43:00",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          28
+        ],
+        "source_sequence": "B0100001299"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "7990.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E460000000012.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 46 v.1.0.xsd",
+      "ecf_schema_sha256": "e35f40af7bfbf566e14ec21fc139a3dab31a1bd3b139edba4d9586ce86fcda4e",
+      "ecf_sha256": "7da8ba71ed51c49351a425d708db1ae205ada7ef12c7c762dab226b2f58a7ccf",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "46-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DescuentoMonto[1]",
+          "cell": "46-1:DescuentoMonto[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/DescuentoMonto"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "46-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "46-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "46-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "46-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS3",
+          "cell": "46-1:ITBIS3",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS3"
+        },
+        {
+          "header": "IdentificadorExtranjero",
+          "cell": "46-1:IdentificadorExtranjero",
+          "xml_path": "/ECF/Encabezado/Comprador/IdentificadorExtranjero"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "46-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "46-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoGravadoI3",
+          "cell": "46-1:MontoGravadoI3",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI3"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "46-1:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "46-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "46-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "46-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "46-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PaisDestino",
+          "cell": "46-1:PaisDestino",
+          "xml_path": "/ECF/Encabezado/Transporte/PaisDestino"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "46-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "46-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "46-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "46-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "46-1:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "46-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "46-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "46-1:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS3",
+          "cell": "46-1:TotalITBIS3",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS3"
+        },
+        {
+          "header": "Version",
+          "cell": "46-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:08",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 27,
+      "source_fields_preserved": true,
+      "source_row": 22
+    },
+    {
+      "type": "46",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E460000000013",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated export buyer; not evidence of actual status",
+        "case_id": "46-2",
+        "original_billed_total": "2240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "2000",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "2000",
+            "product": "GUMMIES CREATINA ANS 120UNIT ",
+            "quantity": "1",
+            "sale_date": "2026-07-18 17:33:15",
+            "sequence": "B0100001303",
+            "unit_price": "2000"
+          }
+        ],
+        "original_sale_date": "2026-07-18 17:33:15",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          31
+        ],
+        "source_sequence": "B0100001303"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "2000.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E460000000013.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 46 v.1.0.xsd",
+      "ecf_schema_sha256": "e35f40af7bfbf566e14ec21fc139a3dab31a1bd3b139edba4d9586ce86fcda4e",
+      "ecf_sha256": "8f736f5e8205726745e725c4b65b40a69d488cd1808d2cb1ecc73d88ab26aab3",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "46-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "46-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "46-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "46-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "46-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "ITBIS3",
+          "cell": "46-2:ITBIS3",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS3"
+        },
+        {
+          "header": "IdentificadorExtranjero",
+          "cell": "46-2:IdentificadorExtranjero",
+          "xml_path": "/ECF/Encabezado/Comprador/IdentificadorExtranjero"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "46-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "46-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoGravadoI3",
+          "cell": "46-2:MontoGravadoI3",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI3"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "46-2:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "46-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "46-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "46-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "46-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PaisDestino",
+          "cell": "46-2:PaisDestino",
+          "xml_path": "/ECF/Encabezado/Transporte/PaisDestino"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "46-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "46-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "46-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "46-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "46-2:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "46-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "46-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "46-2:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS3",
+          "cell": "46-2:TotalITBIS3",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS3"
+        },
+        {
+          "header": "Version",
+          "cell": "46-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:09",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 26,
+      "source_fields_preserved": true,
+      "source_row": 23
+    },
+    {
+      "type": "47",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E470000000011",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated nonresident supplier/payment; ISR27% assumption; not evidence of actual status",
+        "case_id": "47-1",
+        "original_billed_total": "2240.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "2000",
+            "customer": "INGENIERIA DIVERSAS",
+            "customer_document_id": "131426591",
+            "discount": "0.00",
+            "price": "2000",
+            "product": "GUMMIES CREATINA ANS 120UNIT ",
+            "quantity": "1",
+            "sale_date": "2026-07-18 17:33:15",
+            "sequence": "B0100001303",
+            "unit_price": "2000"
+          }
+        ],
+        "original_sale_date": "2026-07-18 17:33:15",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          31
+        ],
+        "source_sequence": "B0100001303"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "2000.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E470000000011.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 47 v.1.0.xsd",
+      "ecf_schema_sha256": "530a4c40005977ed47fb79fc2690fcc994f3dcaeb8045498be506867ec64d640",
+      "ecf_sha256": "d87724cfcf8044011ced1094a5e242131046c0c3e9a5770f3672a9548bd3e8aa",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "47-1:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "47-1:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "47-1:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "47-1:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "47-1:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IdentificadorExtranjero",
+          "cell": "47-1:IdentificadorExtranjero",
+          "xml_path": "/ECF/Encabezado/Comprador/IdentificadorExtranjero"
+        },
+        {
+          "header": "IndicadorAgenteRetencionoPercepcion[1]",
+          "cell": "47-1:IndicadorAgenteRetencionoPercepcion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/IndicadorAgenteRetencionoPercepcion"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "47-1:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "47-1:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "47-1:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoISRRetenido[1]",
+          "cell": "47-1:MontoISRRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoISRRetenido"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "47-1:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "47-1:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "47-1:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "47-1:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "47-1:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "47-1:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "47-1:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "47-1:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "47-1:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "47-1:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalISRRetencion",
+          "cell": "47-1:TotalISRRetencion",
+          "xml_path": "/ECF/Encabezado/Totales/TotalISRRetencion"
+        },
+        {
+          "header": "ValorPagar",
+          "cell": "47-1:ValorPagar",
+          "xml_path": "/ECF/Encabezado/Totales/ValorPagar"
+        },
+        {
+          "header": "Version",
+          "cell": "47-1:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:09",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 24,
+      "source_fields_preserved": true,
+      "source_row": 24
+    },
+    {
+      "type": "47",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E470000000012",
+      "small_consumption": false,
+      "source_provenance": {
+        "overrides": {},
+        "assumptions": "CSV customer/product adapted to a simulated nonresident supplier/payment; ISR27% assumption; not evidence of actual status",
+        "case_id": "47-2",
+        "original_billed_total": "1750.00",
+        "original_rows": [
+          {
+            "billed_to_customer": "1750",
+            "customer": "KION SRL",
+            "customer_document_id": "132000897",
+            "discount": "250.00",
+            "price": "2000",
+            "product": "EAA ANS 30S PINNEAPPLE ",
+            "quantity": "1",
+            "sale_date": "2026-07-28 09:53:48",
+            "sequence": "B0100001309",
+            "unit_price": "2000"
+          }
+        ],
+        "original_sale_date": "2026-07-28 09:53:48",
+        "quantity_multiplier": 1,
+        "source_csv_records": [
+          35
+        ],
+        "source_sequence": "B0100001309"
+      },
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "amount_dop": "1750.00",
+      "certificate_chain_valid": true,
+      "delivery": "normal_ecf_reception",
+      "ecf_file": "ecf/recepcion/131362702E470000000012.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 47 v.1.0.xsd",
+      "ecf_schema_sha256": "530a4c40005977ed47fb79fc2690fcc994f3dcaeb8045498be506867ec64d640",
+      "ecf_sha256": "35b9393748724475f8d92213fbfa37dd496e592a3727e80b09e24b50cf38910c",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "47-2:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "47-2:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "47-2:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "47-2:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "47-2:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "IdentificadorExtranjero",
+          "cell": "47-2:IdentificadorExtranjero",
+          "xml_path": "/ECF/Encabezado/Comprador/IdentificadorExtranjero"
+        },
+        {
+          "header": "IndicadorAgenteRetencionoPercepcion[1]",
+          "cell": "47-2:IndicadorAgenteRetencionoPercepcion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/IndicadorAgenteRetencionoPercepcion"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "47-2:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "47-2:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "MontoExento",
+          "cell": "47-2:MontoExento",
+          "xml_path": "/ECF/Encabezado/Totales/MontoExento"
+        },
+        {
+          "header": "MontoISRRetenido[1]",
+          "cell": "47-2:MontoISRRetenido[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/Retencion/MontoISRRetenido"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "47-2:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "47-2:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "47-2:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "47-2:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "47-2:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "47-2:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "47-2:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "47-2:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "47-2:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "47-2:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalISRRetencion",
+          "cell": "47-2:TotalISRRetencion",
+          "xml_path": "/ECF/Encabezado/Totales/TotalISRRetencion"
+        },
+        {
+          "header": "ValorPagar",
+          "cell": "47-2:ValorPagar",
+          "xml_path": "/ECF/Encabezado/Totales/ValorPagar"
+        },
+        {
+          "header": "Version",
+          "cell": "47-2:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_timestamp": "25-10-2026 19:13:09",
+      "signature_valid": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 24,
+      "source_fields_preserved": true,
+      "source_row": 25
+    }
+  ],
+  "external_reference_encfs": [],
+  "generated_at": "2026-10-25T23:13:06Z",
+  "normal_reception_order": [
+    "E310000000010",
+    "E310000000011",
+    "E310000000012",
+    "E310000000013",
+    "E320000000016",
+    "E320000000017",
+    "E330000000002",
+    "E340000000016",
+    "E340000000017",
+    "E410000000008",
+    "E410000000009",
+    "E430000000013",
+    "E430000000014",
+    "E440000000011",
+    "E440000000012",
+    "E450000000009",
+    "E450000000010",
+    "E460000000012",
+    "E460000000013",
+    "E470000000011",
+    "E470000000012"
+  ],
+  "source_file": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/evofitdb-real-data-1792968037699.csv",
+  "source_format": "csv",
+  "source_workbook": null,
+  "worksheet": null
+}

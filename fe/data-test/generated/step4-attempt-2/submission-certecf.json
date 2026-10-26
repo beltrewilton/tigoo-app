@@ -1,0 +1,54 @@
+{
+  "created_at": "2026-10-25T23:13:22Z",
+  "entries": {
+    "E310000000010": {
+      "file": "ecf/recepcion/131362702E310000000010.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "2",
+        "encf": "E310000000010",
+        "estado": "Rechazado",
+        "fechaRecepcion": "10/25/2026 7:13:23 PM",
+        "mensajes": [
+          {
+            "codigo": 2020,
+            "valor": "El campo TablaSubDescuento de la sección DetallesItems de la línea 1 no es válidoEl campo DescuentoMonto de la sección DetallesItems de la línea 1 no es válido"
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "1e2fc098-9414-436b-9bd8-31ca24c03c55"
+      },
+      "sha256": "d01c677a8a7c8cc888003f64f211e97ac05a994391966e4c3938a3c502d643ef",
+      "started_at": "2026-10-25T23:13:23Z",
+      "state": "rejected",
+      "track_id": "1e2fc098-9414-436b-9bd8-31ca24c03c55",
+      "updated_at": "2026-10-25T23:13:24Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "1e2fc098-9414-436b-9bd8-31ca24c03c55"
+      }
+    }
+  },
+  "environment": "certecf",
+  "issuer_rnc": "131362702",
+  "last_error": {
+    "details": null,
+    "http_status": null,
+    "message": "DGII rejected result for E310000000010; inspect the recorded response",
+    "operation": "submission",
+    "uncertain": false
+  },
+  "manifest_sha256": "4f80950bbc297d1f5694ca44b6cb7cce631d2484db0b74eeac261cadb7fa6f5e",
+  "portal_uploads": [
+    "ecf/consumo-menor-250000/131362702E320000000018.xml",
+    "ecf/consumo-menor-250000/131362702E320000000019.xml",
+    "ecf/consumo-menor-250000/131362702E320000000020.xml",
+    "ecf/consumo-menor-250000/131362702E320000000021.xml"
+  ],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/fe/data-test/generated/step4-attempt-2/submission-certecf.json",
+  "status": "stopped",
+  "updated_at": "2026-10-25T23:13:24Z",
+  "version": 1
+}

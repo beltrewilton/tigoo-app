@@ -26,13 +26,23 @@ defmodule TigooServer.Fe.Generation do
 
   @spec generate!(keyword()) :: map()
   def generate!(opts) do
+    path = required_option!(opts, :workbook) |> Path.expand()
+    hash = sha256(File.read!(path))
+    rows = Workbook.read!(path)
+    generate_rows!(rows, Keyword.merge(opts, source_path: path, source_sha256: hash, source_kind: :xlsx))
+  end
+
+  @doc "Signs canonical ECF rows from another source, reusing all batch validation and export logic."
+  @spec generate_rows!([map()], keyword()) :: map()
+  def generate_rows!(rows, opts) do
+    if rows == [], do: Error.fail!(:source, "No document rows")
     Enum.each([:crypto, :public_key], fn app ->
       case Application.ensure_all_started(app) do
         {:ok, _} -> :ok
         {:error, _} -> Error.fail!(:dependency, "Cannot start #{app}")
       end
     end)
-    workbook = required_option!(opts, :workbook) |> Path.expand()
+    workbook = required_option!(opts, :source_path) |> Path.expand()
     output = required_option!(opts, :output) |> Path.expand()
     issuer = required_option!(opts, :issuer_rnc)
     if not Regex.match?(~r/\A(?:[0-9]{9}|[0-9]{11})\z/, issuer), do: Error.fail!(:options, "Issuer RNC must have 9 or 11 digits")
@@ -42,15 +52,16 @@ defmodule TigooServer.Fe.Generation do
     if exists?(output), do: Error.fail!(:output, "Output already exists: #{output}")
     opts = Artifact.options(opts)
     Artifact.validate_options!(opts)
-    source_hash = sha256(File.read!(workbook))
+    source_hash = Keyword.get(opts, :source_sha256, sha256(File.read!(workbook)))
     signed_at = DateTime.utc_now() |> DateTime.truncate(:second)
-    rows = Workbook.read!(workbook)
     checked = Enum.map(rows, &%{row: &1, info: Rules.check!(&1, issuer)})
     schemas = checked |> Enum.map(& &1.info.type) |> Enum.uniq() |> Map.new(&{&1, Schema.load!(&1, opts)})
     documents = Enum.map(checked, fn %{row: row, info: info} ->
       try do
         built = Document.build_ecf!(row, Map.fetch!(schemas, info.type), signed_at)
         Rules.check_document!(row, built.tree)
+        if opts[:purpose] == "dgii_step4_simulation", do: Rules.check_adjustments!(row, built.tree)
+        if opts[:purpose] == "dgii_step4_simulation", do: Rules.check_simulation_payable!(row, built.tree)
         observations = Rules.observations(built.tree)
         if opts[:strict_arithmetic] && observations != [], do: Error.fail!(:arithmetic, "Source arithmetic observations require review", row: row.number)
         %{row: row, info: info, observations: observations}
@@ -87,7 +98,10 @@ defmodule TigooServer.Fe.Generation do
       low = Enum.count(documents, & &1.info.small_consumption?)
       normal = records |> Enum.reject(& &1.small_consumption) |> MapSet.new(& &1.encf)
       manifest = %{
-        source_workbook: workbook, source_sha256: source_hash, worksheet: "ECF",
+        source_workbook: if(opts[:source_kind] == :csv, do: nil, else: workbook),
+        source_file: workbook, source_format: to_string(Keyword.get(opts, :source_kind, :xlsx)),
+        source_sha256: source_hash, worksheet: if(opts[:source_kind] == :csv, do: nil, else: "ECF"),
+        purpose: Keyword.get(opts, :purpose, "dgii_data_tests"), source_metadata: Keyword.get(opts, :source_metadata, %{}),
         generated_at: DateTime.to_iso8601(signed_at), authorized_issuer_rnc: issuer,
         certificate_sha256: records |> hd() |> Map.fetch!(:certificate_sha256),
         counts: %{ecf: length(records), normal_reception: length(records) - low, low_consumption: low, rfce: low},
@@ -147,6 +161,10 @@ defmodule TigooServer.Fe.Generation do
     else
       record
     end
+    record = case Map.get(row, :source_provenance) do
+      nil -> record
+      provenance -> Map.put(record, :source_provenance, provenance)
+    end
     if callback = opts[:on_document], do: callback.(record)
     record
   rescue
@@ -190,7 +208,7 @@ defmodule TigooServer.Fe.Generation do
     File.write!(Path.join(stage, "README.md"), """
     # ECF certification batch
 
-    Worksheet: ECF. Issuer RNC: #{manifest.authorized_issuer_rnc}.
+    Source: #{manifest.source_format}; #{manifest.source_file}. Issuer RNC: #{manifest.authorized_issuer_rnc}.
     #{manifest.counts.ecf} signed ECFs; #{manifest.counts.rfce} signed RFCEs.
 
     - `ecf/recepcion`: #{manifest.counts.normal_reception} full documents for normal reception.

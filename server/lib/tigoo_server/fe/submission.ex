@@ -21,6 +21,12 @@ defmodule TigooServer.Fe.Submission do
     end
     manifest_bytes = File.read!(Path.join(batch, "manifest.json"))
     manifest = Jason.decode!(manifest_bytes)
+    if opts[:expected_purpose] && manifest["purpose"] != opts[:expected_purpose] do
+      fail!("Unexpected batch purpose; refusing submission")
+    end
+    if manifest["purpose"] == "dgii_step4_simulation" and client.environment != "certecf" do
+      fail!("Step-4 simulation batches may only be submitted to CerteCF")
+    end
     expected_type = opts[:expected_document_type]
     if expected_type && Map.get(manifest, "document_type", "ECF") != expected_type do
       fail!("Expected a #{expected_type} batch; refusing to use another reception service")
@@ -86,7 +92,9 @@ defmodule TigooServer.Fe.Submission do
   defp preflight!(batch, manifest, client, opts) do
     documents = manifest["documents"]
     order = manifest["dependency_order"]
-    unless manifest["worksheet"] == "ECF" and manifest["authorized_issuer_rnc"] == client.issuer_rnc and
+    source_supported = manifest["worksheet"] == "ECF" or
+      (manifest["purpose"] == "dgii_step4_simulation" and manifest["source_format"] == "csv")
+    unless source_supported and manifest["authorized_issuer_rnc"] == client.issuer_rnc and
              is_list(documents) and documents != [] and is_list(order) do
       fail!("Expected a Generation ECF manifest for the configured issuer")
     end
@@ -101,6 +109,10 @@ defmodule TigooServer.Fe.Submission do
       reference = doc["reference_encf"]
       if Map.has_key?(lookup, reference) and not MapSet.member?(seen, reference), do: fail!("Manifest dependency order is invalid")
       root = validate_file!(batch, doc["ecf_file"], doc["ecf_sha256"], "ECF", doc, fingerprint, opts)
+      if manifest["purpose"] == "dgii_step4_simulation" do
+        Rules.check_adjustments!(%{number: doc["source_row"]}, root)
+        Rules.check_simulation_payable!(%{number: doc["source_row"]}, root)
+      end
       small = doc["type"] == "32" and Decimal.compare(Rules.decimal!(doc["amount_dop"]), "250000.00") == :lt
       if small != doc["small_consumption"], do: fail!("Manifest consumption routing disagrees with amount and type")
       job = if small do
@@ -124,6 +136,7 @@ defmodule TigooServer.Fe.Submission do
     xml = File.read!(path)
     if sha256(xml) != expected, do: fail!("Signed XML checksum mismatch: #{relative}")
     root = Xml.parse!(xml)
+    if wanted_root == "ECF", do: Rules.check_service_kind!(root, doc["source_row"])
     unless elem(root, 0) == wanted_root and Xml.value(root, ~w(Encabezado IdDoc eNCF)) == doc["encf"] and
              Xml.value(root, ~w(Encabezado IdDoc TipoeCF)) == doc["type"] and
              Xml.value(root, ~w(Encabezado Emisor RNCEmisor)) == doc["issuer_rnc"] and

@@ -59,6 +59,7 @@ defmodule TigooServer.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:decimal, "~> 3.0"},
+      {:qqr, "~> 0.2.0"},
       {:elixlsx, "~> 0.6.0"},
       {:dns_cluster, "~> 0.3.0"},
       {:bandit, "~> 1.5"},
