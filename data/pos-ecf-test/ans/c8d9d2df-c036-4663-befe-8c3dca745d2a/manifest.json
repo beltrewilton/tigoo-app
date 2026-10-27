@@ -1,0 +1,179 @@
+{
+  "purpose": "pos_ecf_test",
+  "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+  "source_sha256": "acaa9ca554dabac25597f9ecc4bacfa845b9640514ee0395db7ae0b094d48718",
+  "source_metadata": {},
+  "authorized_issuer_rnc": "131362702",
+  "counts": {
+    "ecf": 1,
+    "rfce": 1,
+    "low_consumption": 1,
+    "normal_reception": 0
+  },
+  "dependency_order": [
+    "E320000000001"
+  ],
+  "dgii_acceptance": "not_evaluated",
+  "dgii_submitted": false,
+  "documents": [
+    {
+      "type": "32",
+      "case": null,
+      "delivery": "rfce_then_full_ecf_portal_upload",
+      "issuer_rnc": "131362702",
+      "encf": "E320000000001",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "signature_timestamp": "26-10-2026 20:24:51",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "ecf_file": "ecf/consumo-menor-250000/131362702E320000000001.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 32 v.1.0.xsd",
+      "ecf_schema_sha256": "9d39295ac02be92fa80ce20572903659008bb1a304dc34797646110e0d33d44a",
+      "ecf_sha256": "b78cbff6d344b064bd6a5eb35369c65a8ee83851384b3104b00ce89cfaabc1e7",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "POS:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "POS:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "POS:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "POS:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "POS:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "POS:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "POS:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "POS:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "POS:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "POS:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "POS:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "POS:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "POS:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "POS:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "POS:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "POS:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "POS:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "POS:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "POS:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "POS:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "POS:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "POS:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "POS:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "POS:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_valid": true,
+      "small_consumption": true,
+      "source_arithmetic_observations": [],
+      "source_field_count": 24,
+      "source_fields_preserved": true,
+      "source_row": 1,
+      "rfce_file": "rfce/131362702E320000000001.xml",
+      "rfce_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/RFCE 32 v.1.0.xsd",
+      "rfce_schema_sha256": "30b9ae65fd2d1ccdcd9340106069208302dda4989247be2a8be214c6bdbf73d4",
+      "rfce_schema_valid": true,
+      "rfce_security_code": "Ymr91R",
+      "rfce_sha256": "cc43f2ba8f7a083169fa2ce80164902f54c1865d92872b639354d5a89b082c00",
+      "rfce_signature_valid": true
+    }
+  ],
+  "external_reference_encfs": [],
+  "generated_at": "2026-10-27T00:24:51Z",
+  "normal_reception_order": [],
+  "source_file": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/c8d9d2df-c036-4663-befe-8c3dca745d2a.source.json",
+  "source_format": "pos",
+  "source_workbook": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/c8d9d2df-c036-4663-befe-8c3dca745d2a.source.json",
+  "worksheet": "ECF"
+}

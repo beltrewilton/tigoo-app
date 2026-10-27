@@ -91,6 +91,10 @@ defmodule TigooServerWeb.Router do
     live "/pos/reconciliation", CashReconciliationLive, :index
     live "/pos/customers", CustomerLive, :index
     live "/pos/invoices", InvoiceReportLive, :index
+    live "/pos/ecf-tests", EcfTestLive, :index
+    live "/pos/ecf-tests/:id/xml", EcfTestXmlLive, :index
+    get "/pos/ecf-tests/:id/dgii", EcfTestXmlController, :verify
+    get "/pos/ecf-tests/:id/xml/download", EcfTestXmlController, :download
     live "/pos/inventory", InventoryLive, :index
     live "/pos/orders", PurchaseOrdersLive, :index
     get "/pos/addons", AddonController, :index
@@ -199,6 +203,7 @@ defmodule TigooServerWeb.Router do
     patch "/customers/:id", CustomerController, :update
     get "/sales/report", SaleController, :report
     get "/sales", SaleController, :index
+    get "/sales/ecf-tests/:id", SaleController, :ecf_test_status
     get "/sales/:id", SaleController, :show
     post "/sales", SaleController, :create
     post "/sales/:id/payments", SaleController, :add_payment

@@ -90,6 +90,9 @@ defmodule TigooServerWeb.PosLayoutComponents do
           >
             POS
           </a>
+          <a :if={nav_allowed?(@scope, :ecf_tests)} class="mobile-nav-link"
+            href={nav_href(:ecf_tests, @active_page, @store_id)}
+            aria-current={current_page(@active_page, :ecf_tests)}>eCF Test history</a>
           <a
             :if={nav_allowed?(@scope, :invoices)}
             class="mobile-nav-link"
@@ -316,6 +319,14 @@ defmodule TigooServerWeb.PosLayoutComponents do
             stroke-width="2"
           >
             <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
+          </svg>
+        </a>
+        <a :if={nav_allowed?(@scope, :ecf_tests)} class="sidebar-link"
+          href={nav_href(:ecf_tests, @active_page, @store_id)}
+          aria-current={current_page(@active_page, :ecf_tests)}
+          aria-label="eCF Test history" title="eCF Test history">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5" />
           </svg>
         </a>
         <a
@@ -656,7 +667,9 @@ defmodule TigooServerWeb.PosLayoutComponents do
           </div>
         </details>
       </nav>
-      <div class="status-strip" aria-label="System status" data-i18n-aria-label="layout.status.system">
+      <div class="status-strip" aria-label="System status" data-i18n-aria-label="layout.status.system"
+        style={if Map.get(@scope, :ecf_test_enabled, false), do: "background: #b91c1c; color: white;", else: nil}>
+        <strong :if={Map.get(@scope, :ecf_test_enabled, false)}>eCF Test</strong>
         <span class="session-store-status" aria-live="polite">{@scope.login}</span>
         <details class="language-switcher">
           <summary aria-label="Change display language" data-i18n-aria-label="layout.status.language">
@@ -759,6 +772,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp nav_href(active_page, active_page, _store_id), do: "#"
   defp nav_href(:dashboard, _active_page, store_id), do: store_href(~p"/pos/dashboard", store_id)
   defp nav_href(:pos, _active_page, store_id), do: store_href(~p"/pos", store_id)
+  defp nav_href(:ecf_tests, _active_page, store_id), do: store_href(~p"/pos/ecf-tests", store_id)
   defp nav_href(:invoices, _active_page, store_id), do: store_href(~p"/pos/invoices", store_id)
   defp nav_href(:reconciliation, _active_page, store_id), do: store_href(~p"/pos/reconciliation", store_id)
   defp nav_href(:customers, _active_page, store_id), do: store_href(~p"/pos/customers", store_id)
@@ -773,6 +787,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp store_href(path, nil), do: path
   defp store_href(path, ""), do: path
   defp store_href(path, store_id), do: path <> "?" <> URI.encode_query(%{"store_id" => store_id})
+  defp nav_allowed?(scope, :ecf_tests), do: Map.get(scope, :ecf_test_enabled, false)
   defp nav_allowed?(scope, page), do: Scope.allowed?(scope, nav_permission(page))
 
   defp theme_options do

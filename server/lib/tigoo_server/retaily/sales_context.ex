@@ -30,12 +30,60 @@ defmodule TigooServer.Retaily.Sales do
   @zero Decimal.new(0)
 
   def create_sale(scope, attrs) do
-    with {:ok, checkout} <- valid_checkout(attrs),
+    with {:ok, cashier, tenant} <- cashier(scope) do
+      if Map.get(cashier, :ecf_test_enabled, false) do
+        create_test_invoice(scope, attrs, cashier, tenant)
+      else
+        create_operational_sale(scope, attrs, cashier, tenant)
+      end
+    end
+  end
+
+  defp create_test_invoice(scope, attrs, cashier, tenant) do
+    changeset = Checkout.changeset(%Checkout{}, attrs, TigooServer.Fe.TestInvoices.checkout_codes())
+    with true <- changeset.valid?,
+         checkout <- Changeset.apply_changes(changeset),
          :ok <- delivery_allowed?(scope, checkout),
-         {:ok, cashier, tenant} <- cashier(scope) do
+         :ok <- cashier_store?(cashier, checkout.store_id, tenant),
+         %Client{} = client <- Repo.get(Client, checkout.client_id, prefix: tenant),
+         {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant, false, checkout.sequence_type),
+         totals <- totals(lines, checkout),
+         :ok <- valid_payments?(checkout.payments, totals.amount) do
+      snapshot = %{
+        client: serialize_client(client), lines: Enum.map(lines, fn prepared ->
+          product = Repo.get!(Product, prepared.line.product_id, prefix: tenant)
+          %{product_id: product.id, name: product.name, code: product.code,
+            quantity: prepared.line.quantity, price: prepared.price,
+            discount: prepared.discount, total: prepared.total,
+            tax: TigooServer.Fe.SaleFiscal.indicator(checkout.sequence_type, prepared.line.ecf_tax),
+            kind: prepared.line.ecf_kind}
+        end), totals: totals, sequence_type: checkout.sequence_type,
+        ecf: Map.take(checkout, [:ecf_buyer_kind, :ecf_buyer_id, :ecf_buyer_name, :ecf_buyer_address,
+          :ecf_buyer_country, :ecf_destination_country, :ecf_income_type, :ecf_buyer_confirmed, :ecf_export_confirmed]), delivery_charge: checkout.delivery_charge,
+        status: checkout.status, due_date: checkout.due_date,
+        additional_info: checkout.additional_info, login: cashier.username,
+        payments: Enum.map(checkout.payments, &Map.take(&1, [:amount, :type]))
+      }
+      fiscal_totals = TigooServer.Fe.TestInvoiceDocument.totals(snapshot)
+      snapshot = Map.put(snapshot, :totals, Map.merge(totals, fiscal_totals))
+      TigooServer.Fe.TestInvoices.create(scope, checkout, snapshot, attrs)
+    else
+      false -> {:error, changeset}
+      nil -> {:error, :not_found}
+      :error -> {:error, :forbidden_store}
+      error -> error
+    end
+  rescue
+    error in ArgumentError -> {:error, {:ecf_document, Exception.message(error)}}
+  end
+
+  defp create_operational_sale(scope, attrs, cashier, tenant) do
+    with {:ok, checkout} <- valid_checkout(attrs),
+         :ok <- delivery_allowed?(scope, checkout) do
       with {:ok, sale} <-
              Repo.transaction(fn ->
-               with :ok <- cashier_store?(cashier, checkout.store_id, tenant),
+               with :ok <- lock_operational_mode(scope, tenant),
+                    :ok <- cashier_store?(cashier, checkout.store_id, tenant),
                     %Client{} = client <- Repo.get(Client, checkout.client_id, prefix: tenant),
                     {:ok, sequence} <- next_sequence(checkout.sequence_type, tenant),
                     {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant),
@@ -68,6 +116,14 @@ defmodule TigooServer.Retaily.Sales do
       end
     end
   end
+
+  defp lock_operational_mode(%AccessScope{actor: :employee, actor_id: id}, tenant) do
+    case Repo.one(from(u in User, where: u.id == ^id, lock: "FOR UPDATE"), prefix: tenant) do
+      %User{is_active: 1, ecf_test_enabled: false} -> :ok
+      _ -> {:error, :ecf_mode_changed}
+    end
+  end
+  defp lock_operational_mode(%AccessScope{actor: :admin}, _tenant), do: :ok
 
   defp delivery_allowed?(scope, checkout) do
     if Decimal.compare(checkout.delivery_charge || @zero, @zero) == :gt and
@@ -314,19 +370,14 @@ defmodule TigooServer.Retaily.Sales do
     end
   end
 
-  defp sale_lines(lines, store_id, tenant) do
+  defp sale_lines(lines, store_id, tenant, move_inventory? \\ true, ecf_sequence \\ nil) do
     if duplicate_products?(lines) do
       {:error, :duplicate_product_lines}
     else
       Enum.reduce_while(lines, {:ok, []}, fn line, {:ok, result} ->
-        inventory =
-          Repo.one(
-            from(i in Inventory,
-              where: i.store_id == ^store_id and i.product_id == ^line.product_id,
-              lock: "FOR UPDATE"
-            ),
-            prefix: tenant
-          )
+        query = from(i in Inventory, where: i.store_id == ^store_id and i.product_id == ^line.product_id)
+        query = if move_inventory?, do: from(i in query, lock: "FOR UPDATE"), else: query
+        inventory = Repo.one(query, prefix: tenant)
 
         product = Repo.get(Product, line.product_id, prefix: tenant)
         price = if product, do: sale_price(product, tenant)
@@ -351,6 +402,8 @@ defmodule TigooServer.Retaily.Sales do
             # Normalize the active catalog price before it becomes the
             # immutable Decimal sale snapshot.
             unit_price = price |> Decimal.from_float() |> Decimal.round(2)
+            unit_price = if ecf_sequence,
+              do: TigooServer.Fe.SaleFiscal.price(unit_price, ecf_sequence, line.ecf_tax), else: unit_price
             discount = line_discount(line, unit_price)
             extended = unit_price |> Decimal.mult(line.quantity) |> Decimal.sub(discount)
 
@@ -359,7 +412,7 @@ defmodule TigooServer.Retaily.Sales do
             else
               before = inventory.quantity || 0
 
-              Repo.update!(
+              if move_inventory?, do: Repo.update!(
                 Changeset.change(inventory,
                   prev_quantity: before,
                   quantity: before - line.quantity,

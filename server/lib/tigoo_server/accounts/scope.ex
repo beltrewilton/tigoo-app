@@ -13,6 +13,7 @@ defmodule TigooServer.Accounts.Scope do
             actor_id: nil,
             login: nil,
             pic: nil,
+            ecf_test_enabled: false,
             store_ids: [],
             scopes: []
 

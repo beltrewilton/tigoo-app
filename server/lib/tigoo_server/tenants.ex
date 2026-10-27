@@ -22,6 +22,8 @@ defmodule TigooServer.Tenants do
     {:ok, %{}}
   end
 
+  def list, do: :ets.tab2list(@table) |> Enum.map(&elem(&1, 0)) |> Enum.sort()
+
   def refresh, do: GenServer.call(__MODULE__, :refresh)
 
   def put(tenant) when is_binary(tenant), do: GenServer.call(__MODULE__, {:put, tenant})

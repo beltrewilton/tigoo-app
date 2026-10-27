@@ -13,6 +13,7 @@ defmodule TigooServer.Application do
       TigooServer.Tenants,
       TigooServer.FeSeedStore,
       {Task.Supervisor, name: TigooServer.TaskSupervisor},
+      TigooServer.Fe.TestInvoiceWorker,
       {DNSCluster, query: Application.get_env(:tigoo_server, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TigooServer.PubSub},
       TigooServerWeb.Presence,

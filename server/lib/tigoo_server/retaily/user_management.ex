@@ -45,6 +45,28 @@ defmodule TigooServer.Retaily.Users do
 
   def update(scope, id, attrs), do: update_user(scope, id, attrs)
 
+  def set_ecf_test(scope, id, enabled) when is_boolean(enabled) do
+    with :ok <- authorize(scope, "user.view") do
+      result = Repo.transaction(fn ->
+        user = Repo.one(from(u in User, where: u.id == ^id, lock: "FOR UPDATE"), prefix: scope.tenant)
+        if is_nil(user), do: Repo.rollback(:not_found)
+        updated = user |> Ecto.Changeset.change(ecf_test_enabled: enabled) |> Repo.update!(prefix: scope.tenant)
+        if user.ecf_test_enabled != enabled do
+          Repo.insert_all("fe_test_mode_changes", [%{user_id: user.id,
+            actor: "#{scope.actor}:#{scope.actor_id}", enabled: enabled,
+            inserted_at: DateTime.utc_now() |> DateTime.truncate(:second)}], prefix: scope.tenant)
+        end
+        {serialize(updated, scope.tenant), user.ecf_test_enabled != enabled}
+      end)
+      case result do
+        {:ok, {user, changed?}} ->
+          if changed?, do: Phoenix.PubSub.broadcast(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{user.id}", {:ecf_test_mode, enabled})
+          {:ok, user}
+        error -> error
+      end
+    end
+  end
+
   def deactivate(scope, id), do: update_user(scope, id, %{"is_active" => 0})
 
   defp update_user(scope, id, attrs) do
@@ -104,6 +126,7 @@ defmodule TigooServer.Retaily.Users do
       first_name: user.first_name,
       last_name: user.last_name,
       is_active: user.is_active,
+      ecf_test_enabled: user.ecf_test_enabled,
       pic: user.pic,
       date_joined: user.date_joined,
       last_login: user.last_login,

@@ -11,6 +11,7 @@ defmodule TigooServer.Retaily.User do
     field :first_name, :string
     field :last_name, :string
     field :is_active, :integer, default: 1
+    field :ecf_test_enabled, :boolean, default: false
     field :date_joined, :naive_datetime
     field :last_login, :naive_datetime
     field :pic, :string

@@ -1,0 +1,2 @@
+"source_row","type","encf","amount_dop","ecf_file","rfce_file","reference_encf","delivery"
+"1","32","E320000000001","240.00","ecf/consumo-menor-250000/131362702E320000000001.xml","rfce/131362702E320000000001.xml","","rfce_then_full_ecf_portal_upload"

@@ -197,6 +197,23 @@ defmodule TigooServerWeb.SaleController do
 
   defp parse_invoice_status(_), do: {:error, :invalid_invoice_status}
 
+  def ecf_test_status(conn, %{"id" => "ecf-test-" <> id}), do: ecf_test_status(conn, %{"id" => id})
+  def ecf_test_status(conn, %{"id" => id}) do
+    with {:ok, id} <- parse_id(id),
+         {:ok, invoice} <- TigooServer.Fe.TestInvoices.get(conn.assigns.current_scope, id) do
+      json(conn, invoice)
+    else
+      :error -> error(conn, :invalid_id)
+      {:error, reason} -> error(conn, reason)
+    end
+  end
+
+  defp error(conn, {:ecf_test_not_configured, message}),
+    do: conn |> put_status(:unprocessable_entity) |> json(%{error: message})
+
+  defp error(conn, {:ecf_document, message}),
+    do: conn |> put_status(:unprocessable_entity) |> json(%{error: message})
+
   defp error(conn, %Changeset{} = changeset),
     do:
       conn

@@ -33,6 +33,8 @@ defmodule TigooServerWeb.PosUserLive do
         |> assign(:saving?, false)
         |> load_users()
 
+      if connected?(socket) and scope.actor == :employee,
+        do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
       {:ok, socket}
     else
       _ ->
@@ -146,6 +148,13 @@ defmodule TigooServerWeb.PosUserLive do
     end
   end
 
+  def handle_event("set_ecf_test", %{"id" => id, "enabled" => enabled}, socket) when enabled in ["true", "false"] do
+    case Users.set_ecf_test(socket.assigns.scope, id, enabled == "true") do
+      {:ok, _} -> {:noreply, load_users(socket)}
+      {:error, reason} -> {:noreply, assign(socket, :status, error_message(reason))}
+    end
+  end
+
   def handle_event("deactivate_user", %{"id" => id}, socket) do
     if Scope.allowed?(socket.assigns.scope, "user.view") do
       case Users.deactivate(socket.assigns.scope, id) do
@@ -155,6 +164,11 @@ defmodule TigooServerWeb.PosUserLive do
     else
       {:noreply, assign(socket, :status, "User settings permission is required.")}
     end
+  end
+
+  @impl true
+  def handle_info({:ecf_test_mode, enabled}, socket) do
+    {:noreply, socket |> assign(:scope, %{socket.assigns.scope | ecf_test_enabled: enabled}) |> load_users()}
   end
 
   defp load_users(socket) do

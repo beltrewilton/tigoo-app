@@ -14,11 +14,52 @@ defmodule TigooServer.Retaily.CompanySettings do
     {:ok,
      %{
        company: company(scope),
+       ecf_test: ecf_test_settings(tenant),
        price_lists: list_price_lists(tenant),
        stores: list_stores(tenant),
        sequence_sets: list_sequence_sets(tenant),
        providers: list_providers(tenant)
      }}
+  end
+
+  defp ecf_test_settings(tenant) do
+    case Repo.all(from(c in Company, where: c.active == true, limit: 2), prefix: tenant) do
+      [company] -> Map.take(company, [:address, :ecf_test_sequence_expiry, :ecf_test_sequences_ready])
+      _ -> nil
+    end
+  end
+
+  def update_ecf_test_settings(scope, attrs) do
+    if TigooServer.Accounts.Scope.allowed?(scope, "company.settings") do
+      Repo.transaction(fn ->
+        company = case Repo.all(from(c in Company, where: c.active == true, limit: 2, lock: "FOR UPDATE"), prefix: scope.tenant) do
+          [company] -> company
+          _ -> Repo.rollback(:company_unavailable)
+        end
+        changeset = company
+          |> Ecto.Changeset.cast(attrs, [:address, :ecf_test_sequence_expiry, :ecf_test_sequences_ready])
+          |> Ecto.Changeset.update_change(:address, &String.trim/1)
+          |> Ecto.Changeset.validate_length(:address, max: 100)
+        changeset = if Ecto.Changeset.get_field(changeset, :ecf_test_sequences_ready) do
+          changeset = Ecto.Changeset.validate_required(changeset, [:address, :ecf_test_sequence_expiry])
+          case Ecto.Changeset.get_field(changeset, :ecf_test_sequence_expiry) do
+            %Date{} = expiry ->
+              today = DateTime.utc_now() |> DateTime.add(-14_400) |> DateTime.to_date()
+              if Date.compare(expiry, today) == :lt,
+                do: Ecto.Changeset.add_error(changeset, :ecf_test_sequence_expiry, "has expired"), else: changeset
+            _ -> changeset
+          end
+        else
+          changeset
+        end
+        case Repo.update(changeset, prefix: scope.tenant) do
+          {:ok, company} -> Map.take(company, [:address, :ecf_test_sequence_expiry, :ecf_test_sequences_ready])
+          {:error, changeset} -> Repo.rollback(changeset)
+        end
+      end)
+    else
+      {:error, :forbidden}
+    end
   end
 
   def create_price_list(scope, attrs), do: save_price_list(scope, %Pricing{}, attrs)

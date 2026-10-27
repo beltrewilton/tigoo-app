@@ -7,6 +7,9 @@ defmodule TigooServerWeb.PosLive do
 
   alias TigooServer.{Authentication, InventoryEvents, Repo, TenantContext}
   alias TigooServer.Accounts.Scope
+  alias TigooServer.Fe.TestInvoices
+  alias TigooServer.Fe.SaleFiscal
+  import TigooServerWeb.EcfSaleComponents
   alias TigooServer.Retaily.{Client, InventoryContext, Product, Sales, Sequence, Sql}
 
   @impl true
@@ -54,8 +57,14 @@ defmodule TigooServerWeb.PosLive do
         |> assign(:credit, false)
         |> assign(:credit_due_date, "")
         |> assign(:payments, [])
-        |> assign(:sequence, "CF")
-        |> assign(:sequences, sequence_options(scope.tenant))
+        |> assign(:ecf_request_id, if(scope.ecf_test_enabled, do: Ecto.UUID.generate()))
+        |> assign(:ecf_details, default_ecf_details())
+        |> assign(:ecf_lines, %{})
+        |> assign(:ecf_test_invoice, nil)
+        |> assign(:ecf_test_modal?, false)
+        |> assign(:ecf_test_print_prompt, nil)
+        |> assign(:sequence, if(scope.ecf_test_enabled, do: "TEST_E32", else: "CF"))
+        |> assign(:sequences, sequence_options(scope))
         |> assign(:memo, "")
         |> assign(:print_prompt, nil)
         |> assign(:client_info, nil)
@@ -63,7 +72,11 @@ defmodule TigooServerWeb.PosLive do
         |> load_products()
         |> sync()
 
-      if connected?(socket) and store, do: InventoryEvents.subscribe(scope.tenant, store.id)
+      if connected?(socket) do
+        if store, do: InventoryEvents.subscribe(scope.tenant, store.id)
+        if scope.actor == :employee,
+          do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
+      end
       {:ok, socket}
     else
       _ ->
@@ -285,6 +298,7 @@ defmodule TigooServerWeb.PosLive do
          Enum.find(socket.assigns.customers, &(to_string(&1.id) == id))
        )
        |> assign(:dialog, nil)
+       |> assign(:ecf_details, default_ecf_details())
        |> assign(:checkout_stage, nil)
        |> sync()}
 
@@ -322,6 +336,7 @@ defmodule TigooServerWeb.PosLive do
          |> assign(:customer_form_status, "")
          |> assign(:saving_customer?, false)
          |> assign(:selected_customer, customer)
+         |> assign(:ecf_details, default_ecf_details())
          |> assign(:dialog, nil)
          |> load_customers()
          |> sync()}
@@ -451,9 +466,61 @@ defmodule TigooServerWeb.PosLive do
   def handle_event("change_credit_due_date", %{"credit_due_date" => value}, socket),
     do: {:noreply, socket |> assign(:credit_due_date, value) |> sync()}
 
-  def handle_event("select_sequence", %{"sequence" => sequence}, socket)
-      when sequence in ["CF", "VF", "DV"],
-      do: {:noreply, socket |> assign(:sequence, sequence) |> sync()}
+  def handle_event("close_ecf_test_modal", _, socket),
+    do: {:noreply, socket |> assign(:ecf_test_modal?, false) |> assign(:ecf_test_invoice, nil) |> assign(:ecf_test_print_prompt, nil)}
+
+  def handle_event("retry_ecf_test", %{"id" => id}, socket) do
+    case TestInvoices.retry(socket.assigns.scope, id) do
+      {:ok, invoice} ->
+        Process.send_after(self(), {:refresh_ecf_test, invoice.id}, 3_000)
+        {:noreply, assign(socket, ecf_test_invoice: invoice, ecf_test_modal?: true)}
+      {:error, reason} -> {:noreply, put_flash(socket, :error, checkout_error(reason))}
+    end
+  end
+
+  def handle_event("change_ecf_details", %{"ecf" => attrs}, socket) do
+    if socket.assigns.scope.ecf_test_enabled do
+      details = Map.merge(socket.assigns.ecf_details, Map.take(attrs, Map.keys(default_ecf_details())))
+      changed_buyer? = Enum.any?(~w(ecf_buyer_kind ecf_buyer_id ecf_buyer_name), &(details[&1] != socket.assigns.ecf_details[&1]))
+      details = if changed_buyer?, do: Map.merge(details, %{"ecf_buyer_confirmed" => "false", "ecf_export_confirmed" => "false"}), else: details
+      {:noreply, socket |> assign(:ecf_details, details) |> sync()}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("change_ecf_lines", %{"ecf_lines" => attrs}, socket) do
+    if socket.assigns.scope.ecf_test_enabled do
+      choices = Enum.reduce(socket.assigns.cart, socket.assigns.ecf_lines, fn line, result ->
+        key = to_string(line.id)
+        allowed = Map.take(Map.get(attrs, key, %{}), ["tax", "kind"])
+        allowed = Enum.filter(allowed, fn {name, value} -> if name == "tax", do: value in ~w(1 2 3 4), else: value in ~w(1 2) end) |> Map.new()
+        Map.put(result, key, Map.merge(Map.get(result, key, %{}), allowed))
+      end)
+      {:noreply, socket |> assign(:ecf_lines, choices) |> assign(:payments, []) |> sync()}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("select_sequence", %{"sequence" => sequence}, %{assigns: %{scope: %{ecf_test_enabled: false}}} = socket) do
+    if sequence in ["CF", "VF", "DV"],
+      do: {:noreply, socket |> assign(:sequence, sequence) |> sync()}, else: {:noreply, socket}
+  end
+
+  def handle_event("select_sequence", %{"sequence" => sequence}, socket) do
+    if Enum.any?(socket.assigns.sequences, &(&1.code == sequence)) do
+      details = Map.merge(socket.assigns.ecf_details, %{"ecf_buyer_confirmed" => "false", "ecf_export_confirmed" => "false"})
+      details = if sequence in ~w(TEST_E31 TEST_E45), do: Map.put(details, "ecf_buyer_kind", "domestic"), else: details
+      changed? = sequence != socket.assigns.sequence
+      socket = socket |> assign(:sequence, sequence) |> assign(:ecf_details, details)
+      socket = if socket.assigns.scope.ecf_test_enabled and changed?,
+        do: assign(socket, :payments, []), else: socket
+      {:noreply, sync(socket)}
+    else
+      {:noreply, socket}
+    end
+  end
 
   def handle_event("change_memo", params, socket) do
     value = Map.get(params, "additional_info", Map.get(params, "value", ""))
@@ -499,6 +566,7 @@ defmodule TigooServerWeb.PosLive do
   def handle_event("complete_sale", params, socket) do
     socket = assign_credit_due_date(socket, params)
     socket = assign_payments_from_params(socket, params)
+    socket = clear_flash(socket, :error)
 
     if socket.assigns.selected_customer &&
          payment_complete?(socket) do
@@ -535,6 +603,18 @@ defmodule TigooServerWeb.PosLive do
           )
       }
 
+      attrs = if socket.assigns.scope.ecf_test_enabled do
+        attrs |> Map.merge(socket.assigns.ecf_details)
+        |> Map.put("idempotency_key", socket.assigns.ecf_request_id)
+        |> Map.update!("lines", fn lines ->
+          Enum.zip(lines, socket.assigns.cart) |> Enum.map(fn {attrs, line} ->
+            Map.merge(attrs, %{"ecf_tax" => Map.get(line, :ecf_tax, "1"), "ecf_kind" => Map.get(line, :ecf_kind, "1")})
+          end)
+        end)
+      else
+        attrs
+      end
+
       # Tauri retains a zero-valued split row in the checkout UI, but omits it
       # from the completed sale payload (`.filter(line => line.amount)`).
       # Keep that distinction: the Cash row remains visible until completion,
@@ -547,6 +627,33 @@ defmodule TigooServerWeb.PosLive do
         )
 
       case Sales.create_sale(socket.assigns.scope, attrs) do
+        {:ok, %{ecf_test: true} = invoice} ->
+          receipt = invoice.receipt |> receipt_payload(current_store(socket)) |> Map.put(:ecf_test, true)
+          Process.send_after(self(), {:refresh_ecf_test, invoice.id}, 3_000)
+          {:noreply,
+           socket
+           |> assign(:ecf_test_invoice, invoice)
+           |> assign(:ecf_test_modal?, true)
+           |> assign(:print_prompt, nil)
+           |> assign(:ecf_test_print_prompt, print_prompt(:receipt, receipt))
+           |> assign(:cart, [])
+           |> assign(:checkout_stage, nil)
+           |> assign(:selected_customer, nil)
+           |> assign(:order_discount, 0.0)
+           |> assign(:order_discount_mode, "amount")
+           |> assign(:delivery, 0.0)
+           |> assign(:delivery_open, false)
+           |> assign(:delivery_custom_input, "")
+           |> assign(:delivery_custom_selected, false)
+           |> assign(:credit, false)
+           |> assign(:credit_due_date, "")
+           |> assign(:payments, [])
+           |> assign(:memo, "")
+           |> assign(:ecf_request_id, Ecto.UUID.generate())
+           |> assign(:ecf_details, default_ecf_details())
+           |> assign(:ecf_lines, %{})
+           |> sync()}
+
         {:ok, sale} ->
           receipt = receipt_payload(sale, current_store(socket))
           receipt = Map.put(receipt, :change_amount, change_amount)
@@ -570,7 +677,7 @@ defmodule TigooServerWeb.PosLive do
            |> sync()}
 
         {:error, reason} ->
-          {:noreply, put_flash(socket, :error, "Sale could not be completed: #{inspect(reason)}")}
+          {:noreply, put_flash(socket, :error, "Sale could not be completed: #{if socket.assigns.scope.ecf_test_enabled, do: checkout_error(reason), else: inspect(reason)}")}
       end
     else
       {:noreply,
@@ -608,6 +715,28 @@ defmodule TigooServerWeb.PosLive do
 
   def handle_event("product_image_persisted", _params, socket), do: {:noreply, socket}
 
+  def handle_event("confirm_ecf_test_print", _, socket) do
+    case socket.assigns.ecf_test_print_prompt do
+      nil -> {:noreply, socket}
+      %{printing: true} -> {:noreply, socket}
+      prompt ->
+        payload = Map.put(prompt.payload, :request_id, "ecf-test-" <> print_request_id())
+        prompt = Map.merge(prompt, %{payload: payload, status: "Printing…", printing: true})
+        {:noreply, socket |> assign(:ecf_test_print_prompt, prompt) |> push_event(prompt.event, payload)}
+    end
+  end
+
+  def handle_event("printer_result", %{"request_id" => "ecf-test-" <> _} = params, socket) do
+    prompt = socket.assigns.ecf_test_print_prompt
+    if prompt && prompt.payload.request_id == params["request_id"] do
+      status = if params["status"] == "success", do: "Test receipt printed.",
+        else: "Print failed: " <> (params["message"] || "Printer unavailable.")
+      {:noreply, assign(socket, :ecf_test_print_prompt, Map.merge(prompt, %{status: status, printing: false}))}
+    else
+      {:noreply, socket}
+    end
+  end
+
   def handle_event("printer_result", %{"status" => "success"}, socket),
     do: {:noreply, assign(socket, :print_prompt, nil)}
 
@@ -633,16 +762,53 @@ defmodule TigooServerWeb.PosLive do
   end
 
   @impl true
+  def handle_info({:ecf_test_mode, enabled}, %{assigns: %{scope: %{ecf_test_enabled: current}}} = socket) when enabled == current,
+    do: {:noreply, socket}
+
+  def handle_info({:ecf_test_mode, enabled}, socket) do
+    scope = %{socket.assigns.scope | ecf_test_enabled: enabled}
+    {:noreply,
+     socket |> assign(:scope, scope)
+     |> assign(:ecf_test_modal?, false)
+     |> assign(:ecf_test_invoice, nil)
+     |> assign(:ecf_test_print_prompt, nil)
+     |> assign(:print_prompt, nil)
+     |> assign(:sequences, sequence_options(scope))
+     |> assign(:sequence, if(enabled, do: "TEST_E32", else: "CF"))
+     |> assign(:ecf_details, default_ecf_details())
+     |> assign(:ecf_lines, %{})
+     |> assign(:checkout_stage, nil)
+     |> assign(:payments, [])
+     |> assign(:ecf_request_id, if(enabled, do: Ecto.UUID.generate()))
+     |> put_flash(:info, "eCF Test mode changed. Review the sequence and payment before completing checkout.")
+     |> restore_operational_cart()
+     |> sync()}
+  end
+
+  def handle_info({:refresh_ecf_test, id}, socket) do
+    case socket.assigns.ecf_test_invoice do
+      %{id: ^id} ->
+        case TestInvoices.get(socket.assigns.scope, id) do
+          {:ok, invoice} ->
+            if invoice.state in ["queued", "pending"],
+              do: Process.send_after(self(), {:refresh_ecf_test, id}, 3_000)
+            {:noreply, assign(socket, :ecf_test_invoice, invoice)}
+          _ -> {:noreply, socket}
+        end
+      _ -> {:noreply, socket}
+    end
+  end
+
   def handle_info({:inventory_changed, %{product_ids: product_ids}}, socket) do
     {:noreply, refresh_inventory_products(socket, product_ids)}
   end
 
   @impl true
   def render(assigns) do
-    # `@socket` is retained as a template-only compatibility alias. It must
-    # reflect the current render assigns (not the previous sync snapshot), so
-    # delivery changes recalculate checkout totals and payment balances at once.
-    assigns = Map.put(assigns, :socket, assigns)
+    # Register the current checkout snapshot through assign/3 so LiveView marks
+    # totals and payment controls dirty when cart, discounts or delivery change.
+    # Map.put/3 bypasses that tracking and leaves summary values at initial zero.
+    assigns = assign(assigns, :checkout_state, Map.drop(assigns, [:socket, :pos_state]))
 
     ~H"""
     <.pos_layout
@@ -1072,6 +1238,11 @@ defmodule TigooServerWeb.PosLive do
               <span data-i18n="pos.checkout.backToSale">Back to sale</span>
             </button>
           </header>
+          <p :if={message = Phoenix.Flash.get(@flash, :error)}
+            id="checkout-error" role="alert" aria-live="assertive"
+            style="padding: 1rem; border: 1px solid #b91c1c; border-radius: 0.5rem; background: #fef2f2; color: #991b1b;">
+            {message}
+          </p>
           <ol class="checkout-steps" aria-label="Checkout progress" data-i18n-aria-label="pos.checkout.progress">
             <li aria-current={if @checkout_stage == :customer, do: "step"} data-i18n="pos.checkout.stepCustomer">1. Customer</li>
             <li aria-current={if @checkout_stage == :payment, do: "step"} data-i18n="pos.checkout.stepPayment">2. Payment</li>
@@ -1126,7 +1297,7 @@ defmodule TigooServerWeb.PosLive do
                 <fieldset class="form-fieldset">
                   <legend data-i18n="pos.checkout.sequenceType">Sequence type</legend>
                   <div class="sequence-options" role="group">
-                    <div class="sequence-option-buttons">
+                    <div class={["sequence-option-buttons", @scope.ecf_test_enabled && "ecf-sequence-options"]}>
                       <button
                         :for={sequence <- @sequences}
                         class="btn"
@@ -1140,8 +1311,10 @@ defmodule TigooServerWeb.PosLive do
                     </div>
                   </div>
                 </fieldset>
+                <.ecf_sale_details :if={@scope.ecf_test_enabled} details={@ecf_details} sequence={@sequence}
+                  cart={@cart} line_options={@ecf_lines} customer={@selected_customer} />
                 <p class="checkout-total-due">
-                  <span data-i18n="common.total">Total</span><strong id="checkout-total" class="numeric">{money(total(@socket))}</strong>
+                  <span data-i18n="common.total">Total</span><strong id="checkout-total" class="numeric">{money(total(@checkout_state))}</strong>
                 </p>
                 <div class="form-group checkout-payment">
                   <button
@@ -1270,7 +1443,7 @@ defmodule TigooServerWeb.PosLive do
                         id="payment-lines"
                         class="payment-lines"
                         phx-hook="PaymentAmounts"
-                        data-sale-total={total(@socket)}
+                        data-sale-total={total(@checkout_state)}
                       >
                         <div
                           :for={payment <- @payments}
@@ -1321,15 +1494,15 @@ defmodule TigooServerWeb.PosLive do
                         <span data-i18n="pos.checkout.addPayment">Add payment</span>
                       </button>
                       <p id="payment-balance" class="field-description">
-                        <span data-i18n="pos.checkout.remaining">Remaining:</span> {money(remaining(@socket))}
+                        <span data-i18n="pos.checkout.remaining">Remaining:</span> {money(remaining(@checkout_state))}
                       </p>
                       <p
-                        :if={paid(@socket) > total(@socket)}
+                        :if={paid(@checkout_state) > total(@checkout_state)}
                         id="payment-change"
                         class="payment-change"
                         role="status"
                       >
-                        <span data-i18n="pos.checkout.change">Change:</span> {money(paid(@socket) - total(@socket))}
+                        <span data-i18n="pos.checkout.change">Change:</span> {money(paid(@checkout_state) - total(@checkout_state))}
                       </p>
                     </fieldset>
                   </div>
@@ -1349,7 +1522,7 @@ defmodule TigooServerWeb.PosLive do
                   type="button"
                   data-variant="default"
                   phx-click="complete_sale"
-                  disabled={!payment_complete?(@socket)}
+                  disabled={!payment_complete?(@checkout_state)}
                 ><span data-i18n="common.complete">Complete</span></button>
               </div>
               <div class="form-group checkout-memo">
@@ -1379,6 +1552,7 @@ defmodule TigooServerWeb.PosLive do
         data-order-discount={@order_discount}
         data-order-discount-type={@order_discount_type}
         data-delivery={@delivery}
+        data-ecf-test={if @scope.ecf_test_enabled, do: "true"}
         data-loading={if(pos_content_loading?(assigns), do: "true", else: "false")}
         aria-labelledby="order-title"
       >
@@ -1564,20 +1738,20 @@ defmodule TigooServerWeb.PosLive do
           <dl class="totals">
             <div>
               <dt data-i18n="common.items">Items</dt>
-              <dd>{items(@socket)}</dd>
+              <dd>{items(@checkout_state)}</dd>
             </div>
             <div>
               <dt data-i18n="common.subtotal">Subtotal</dt>
-              <dd class="numeric">{money(subtotal(@socket))}</dd>
+              <dd class="numeric">{money(subtotal(@checkout_state))}</dd>
             </div>
             <div>
-              <dt data-i18n="common.tax18">Tax (18%)</dt>
-              <dd class="numeric">{money(tax(@socket))}</dd>
+              <dt data-i18n={unless @scope.ecf_test_enabled, do: "common.tax18"}>{if @scope.ecf_test_enabled, do: "ITBIS", else: "Tax (18%)"}</dt>
+              <dd class="numeric">{money(tax(@checkout_state))}</dd>
             </div>
             <div>
               <dt data-i18n="common.discount">Discount</dt>
               <dd class="numeric discount-value">
-                −{money(line_discount_total(@socket) + order_discount_total(@socket))}
+                −{money(line_discount_total(@checkout_state) + order_discount_total(@checkout_state))}
               </dd>
             </div>
             <div :if={@delivery > 0}>
@@ -1596,11 +1770,11 @@ defmodule TigooServerWeb.PosLive do
               data-i18n-aria-label="pos.cart.applyOrderDiscount"
             >
               <dt data-i18n="common.total">Total</dt>
-              <dd class="numeric">{money(total(@socket))}</dd>
+              <dd class="numeric">{money(total(@checkout_state))}</dd>
             </div>
           </dl>
           <div class="payment-label">
-            <span data-i18n="pos.checkout.paymentMethod">Payment method</span><span id="payment-choice" class="payment-choice">{payment_choice(@socket)}</span>
+            <span data-i18n="pos.checkout.paymentMethod">Payment method</span><span id="payment-choice" class="payment-choice">{payment_choice(@checkout_state)}</span>
           </div>
           <button
             :if={is_nil(@checkout_stage)}
@@ -1860,7 +2034,48 @@ defmodule TigooServerWeb.PosLive do
           </div>
         </div>
       </dialog>
-      <.print_dialog :if={@print_prompt} prompt={@print_prompt} />
+      <dialog :if={@scope.ecf_test_enabled and @ecf_test_modal? and @ecf_test_invoice}
+        id="ecf-test-result-dialog" class="dialog" phx-hook="EcfTestDialog" open
+        aria-busy={@ecf_test_invoice.state in ["queued", "pending"]}
+        role="dialog" aria-modal="true" aria-labelledby="ecf-test-result-title">
+        <div class="dialog-content ecf-result-content">
+          <div class="dialog-header">
+            <h2 id="ecf-test-result-title" class="dialog-title">eCF Test · {@ecf_test_invoice.sequence}</h2>
+            <p class="ecf-result-status" role="status" aria-live="polite">
+              <span :if={@ecf_test_invoice.state in ["queued", "pending"]} class="ecf-spinner" aria-hidden="true"></span>
+              <span class="ecf-status-badge" data-state={@ecf_test_invoice.state}>{ecf_state_label(@ecf_test_invoice.state)}</span>
+            </p>
+          </div>
+          <p :if={@ecf_test_invoice.error} role="alert">{@ecf_test_invoice.error}</p>
+          <dl :if={ecf_response(@ecf_test_invoice)} class="ecf-result-meta">
+            <div><dt>Issuer RNC</dt><dd>{ecf_result_body(@ecf_test_invoice)["rnc"] || @ecf_test_invoice.issuer_rnc}</dd></div>
+            <div><dt>Received by DGII</dt><dd>{ecf_result_body(@ecf_test_invoice)["fechaRecepcion"] || "Awaiting result"}</dd></div>
+            <div class="ecf-result-track"><dt>Track ID</dt><dd>{TestInvoices.track_id(@ecf_test_invoice) || "No track ID"}</dd></div>
+          </dl>
+          <p :for={message <- ecf_result_messages(@ecf_test_invoice)} class="ecf-result-message">{message}</p>
+          <details :if={ecf_response(@ecf_test_invoice)} class="ecf-result-json">
+            <summary>View DGII response</summary><pre>{ecf_response(@ecf_test_invoice)}</pre>
+          </details>
+          <p :if={@ecf_test_invoice.state in ["queued", "pending"]}>The result will update here automatically.</p>
+          <p :if={@ecf_test_print_prompt && @ecf_test_print_prompt[:status]} role="status">{@ecf_test_print_prompt[:status]}</p>
+          <p :if={@ecf_test_invoice.state in ["accepted", "accepted_conditional"] and get_in(@ecf_test_invoice.report, ["entries", @ecf_test_invoice.sequence, "kind"]) == "rfce"}>
+            RFCE acceptance applies to the summary; the complete eCF remains saved with the invoice artifacts.
+          </p>
+          <div class="dialog-footer">
+            <button :if={@ecf_test_invoice.state == "failed"} class="btn" type="button"
+              phx-click="retry_ecf_test" phx-value-id={@ecf_test_invoice.id}>Retry eCF Test</button>
+            <button class="btn" type="button" data-variant="outline" phx-click="close_ecf_test_modal">Close</button>
+            <a class="btn" href={~p"/pos/ecf-tests"}>View history</a>
+            <a class="btn" href={~p"/pos/ecf-tests?inspect=#{@ecf_test_invoice.id}"}>Inspect request / response</a>
+            <button :if={@ecf_test_print_prompt} class="btn" type="button" phx-click="confirm_ecf_test_print"
+              disabled={@ecf_test_print_prompt[:printing] == true}>
+              <span :if={@ecf_test_print_prompt[:printing] == true} class="ecf-spinner" aria-hidden="true"></span>
+              {if @ecf_test_print_prompt[:printing] == true, do: "Printing…", else: "Print test receipt"}
+            </button>
+          </div>
+        </div>
+      </dialog>
+      <.print_dialog :if={@print_prompt && !@ecf_test_modal?} prompt={@print_prompt} />
     </.pos_layout>
     """
   end
@@ -1959,7 +2174,8 @@ defmodule TigooServerWeb.PosLive do
       |> assign(:credit, truthy?(Map.get(draft, "credit")))
       |> assign(:credit_due_date, text(Map.get(draft, "credit_due_date")))
       |> assign(:payments, restore_payments(Map.get(draft, "payments", [])))
-      |> assign(:sequence, sequence(Map.get(draft, "sequence")))
+      |> assign(:sequence, restored_sequence(socket, Map.get(draft, "sequence")))
+      |> restore_ecf_draft(draft)
       |> assign(:memo, String.slice(text(Map.get(draft, "memo")), 0, 1000))
       |> sync()
     else
@@ -2042,7 +2258,7 @@ defmodule TigooServerWeb.PosLive do
   defp restore_payments(_), do: []
 
   defp draft_payload(assigns) do
-    %{
+    payload = %{
       store_id: assigns.store_id,
       cart:
         Enum.map(assigns.cart, fn line ->
@@ -2068,6 +2284,9 @@ defmodule TigooServerWeb.PosLive do
       sequence: assigns.sequence,
       memo: assigns.memo
     }
+    if assigns.scope.ecf_test_enabled,
+      do: Map.merge(payload, %{ecf_request_id: assigns.ecf_request_id, ecf_details: assigns.ecf_details, ecf_lines: assigns.ecf_lines}),
+      else: payload
   end
 
   defp add_product(socket, p) do
@@ -2316,7 +2535,13 @@ defmodule TigooServerWeb.PosLive do
         else: (line_gross(line) - line_discount(line)) / line_gross(line)
       )
 
-  defp subtotal(state),
+  defp subtotal(state) do
+    if state(state).scope.ecf_test_enabled,
+      do: Decimal.to_float(fiscal_display_totals(state).sub),
+      else: operational_subtotal(state)
+  end
+
+  defp operational_subtotal(state),
     do:
       Enum.sum(
         Enum.map(state(state).cart, fn line ->
@@ -2348,7 +2573,13 @@ defmodule TigooServerWeb.PosLive do
         else: merchandise_total(state) / before_order_discount(state)
       )
 
-  defp tax(state),
+  defp tax(state) do
+    if state(state).scope.ecf_test_enabled,
+      do: Decimal.to_float(fiscal_display_totals(state).tax),
+      else: operational_tax(state)
+  end
+
+  defp operational_tax(state),
     do:
       Enum.sum(
         Enum.map(state(state).cart, fn line ->
@@ -2488,8 +2719,76 @@ defmodule TigooServerWeb.PosLive do
   defp payment_type("CC"), do: "CC"
   defp payment_type(_), do: "CASH"
 
-  defp sequence(sequence) when sequence in ["CF", "VF", "DV"], do: sequence
-  defp sequence(_), do: "CF"
+  defp restored_sequence(%{assigns: %{scope: %{ecf_test_enabled: false}}}, selected) do
+    if selected in ["CF", "VF", "DV"], do: selected, else: "CF"
+  end
+  defp restored_sequence(socket, selected) do
+    if Enum.any?(socket.assigns.sequences, &(&1.code == selected)),
+      do: selected, else: socket.assigns.sequence
+  end
+
+  defp restore_ecf_draft(%{assigns: %{scope: %{ecf_test_enabled: false}}} = socket, _draft), do: socket
+  defp restore_ecf_draft(socket, draft) do
+    details = if is_map(draft["ecf_details"]), do: draft["ecf_details"], else: %{}
+    socket
+    |> assign(:ecf_request_id, restored_ecf_request_id(draft, socket.assigns.ecf_request_id))
+    |> assign(:ecf_details, Map.merge(default_ecf_details(), Map.take(details, Map.keys(default_ecf_details()))))
+    |> assign(:ecf_lines, if(is_map(draft["ecf_lines"]), do: draft["ecf_lines"], else: %{}))
+  end
+
+  defp restored_ecf_request_id(draft, fallback) do
+    case Ecto.UUID.cast(draft["ecf_request_id"]) do
+      {:ok, id} -> id
+      _ -> fallback
+    end
+  end
+
+  defp ecf_result_body(invoice) do
+    entry = get_in(invoice.report, ["entries", invoice.sequence]) || %{}
+    entry["result"] || entry["upload_response"] || %{}
+  end
+
+  defp ecf_response(invoice) do
+    result = ecf_result_body(invoice)
+    if is_map(result) and map_size(result) > 0, do: Jason.encode!(result, pretty: true), else: nil
+  end
+
+  defp ecf_result_messages(invoice) do
+    (ecf_result_body(invoice)["mensajes"] || []) |> Enum.flat_map(fn
+      %{"valor" => value} when is_binary(value) -> if String.trim(value) == "", do: [], else: [value]
+      _ -> []
+    end)
+  end
+
+  defp ecf_state_label("queued"), do: "Queued for the eCF test endpoint"
+  defp ecf_state_label("pending"), do: "Received; awaiting DGII result"
+  defp ecf_state_label("accepted"), do: "Accepted"
+  defp ecf_state_label("accepted_conditional"), do: "Conditionally accepted"
+  defp ecf_state_label("failed"), do: "Not sent — correct the configuration before retrying"
+  defp ecf_state_label("rejected"), do: "Rejected — review the DGII response"
+  defp ecf_state_label(_), do: "Needs review — submission was not automatically repeated"
+
+  defp checkout_error({:ecf_document, message}), do: message
+  defp checkout_error({:ecf_test_not_configured, message}), do: message
+  defp checkout_error(:ecf_test_not_configured), do: "The tenant's eCF test credentials and sequences must be configured."
+  defp checkout_error(:ecf_mode_changed), do: "eCF Test mode changed. Reload and review checkout."
+  defp checkout_error(%Ecto.Changeset{} = changeset) do
+    labels = %{ecf_buyer_confirmed: "Buyer eligibility", ecf_export_confirmed: "Export eligibility",
+      ecf_buyer_country: "Buyer country", ecf_destination_country: "Destination country",
+      ecf_buyer_kind: "Buyer identification", ecf_income_type: "Income type"}
+    changeset |> Ecto.Changeset.traverse_errors(fn {message, opts} ->
+      Enum.reduce(opts, message, fn {key, value}, text -> String.replace(text, "%{#{key}}", inspect(value)) end)
+    end)
+    |> Enum.map_join("; ", fn {field, messages} ->
+      label = Map.get(labels, field, field |> to_string() |> String.replace("_", " ") |> String.capitalize())
+      label <> ": " <> Enum.map_join(List.wrap(messages), ", ", fn
+        message when is_binary(message) -> message
+        _ -> "review the item details"
+      end)
+    end)
+  end
+  defp checkout_error(reason), do: inspect(reason)
+
 
   defp discount_input_value(value, _mode, _base) when value == 0 or value == 0.0, do: ""
 
@@ -2516,7 +2815,8 @@ defmodule TigooServerWeb.PosLive do
     end
   end
 
-  defp sequence_options(tenant) do
+  defp sequence_options(%{ecf_test_enabled: true, tenant: tenant}), do: TestInvoices.options(tenant)
+  defp sequence_options(%{tenant: tenant}) do
     sequences =
       Repo.all(
         from(sequence in Sequence,
@@ -2754,7 +3054,7 @@ defmodule TigooServerWeb.PosLive do
       store: printable_store(store),
       lines:
         Enum.map(value(sale, :sale_lines) || value(sale, :lines) || [], fn line ->
-          %{
+          payload = %{
             product_id: value(line, :product_id),
             product: %{
               name: value(value(line, :product) || %{}, :name),
@@ -2768,6 +3068,8 @@ defmodule TigooServerWeb.PosLive do
             discount_input: value(line, :discount_input),
             total_amount: value(line, :total_amount)
           }
+          if value(sale, :ecf_test) == true,
+            do: Map.put(payload, :ecf_tax_indicator, value(line, :ecf_tax_indicator)), else: payload
         end),
       payments:
         Enum.map(value(sale, :sale_paids) || value(sale, :payments) || [], fn payment ->
@@ -2795,6 +3097,12 @@ defmodule TigooServerWeb.PosLive do
       company_id: value(store, :company_id),
       slogan: value(store, :slogan)
     }
+  end
+
+  defp print_prompt(:receipt, %{ecf_test: true} = receipt) do
+    %{title: "eCF Test prepared", description: "Print a test receipt? DGII status is shown separately.",
+      button: "Print test receipt", event: "printer:print-receipt",
+      payload: %{request_id: print_request_id(), receipt: receipt}}
   end
 
   defp print_prompt(:receipt, receipt) do
@@ -2896,8 +3204,56 @@ defmodule TigooServerWeb.PosLive do
 
   defp state(%{assigns: assigns}), do: assigns
   defp state(assigns), do: assigns
+  defp default_ecf_details do
+    %{"ecf_buyer_kind" => "domestic", "ecf_buyer_id" => "", "ecf_buyer_name" => "", "ecf_buyer_address" => "",
+      "ecf_buyer_country" => "", "ecf_destination_country" => "", "ecf_income_type" => "01",
+      "ecf_buyer_confirmed" => "false", "ecf_export_confirmed" => "false"}
+  end
+
+  defp fiscal_display_totals(state) do
+    s = state(state)
+    lines = Enum.map(s.cart, fn line ->
+      %{name: line.name, quantity: line.qty, price: line.price, discount: line_discount(line),
+        total: line_gross(line) - line_discount(line), tax: Map.get(line, :ecf_tax, "1"), kind: "1"}
+    end)
+    # Display arithmetic does not validate export goods eligibility; the checkout
+    # changeset/document adapter validates the real item types before allocation.
+    totals = TigooServer.Fe.TestInvoiceDocument.totals(%{sequence_type: s.sequence, lines: lines,
+      totals: %{discount: line_discount_total(s) + order_discount_total(s)},
+      delivery_charge: if(s.sequence == "TEST_E46", do: 0, else: s.delivery)})
+    if s.sequence == "TEST_E46",
+      do: %{totals | sub: Decimal.add(totals.sub, SaleFiscal.decimal(s.delivery)), amount: Decimal.add(totals.amount, SaleFiscal.decimal(s.delivery))},
+      else: totals
+  end
+
+  defp restore_operational_cart(%{assigns: %{scope: %{ecf_test_enabled: false}}} = socket) do
+    cart = Enum.map(socket.assigns.cart, fn line ->
+      if original = Map.get(line, :ecf_catalog),
+        do: line |> Map.merge(original) |> Map.drop([:ecf_catalog, :ecf_tax, :ecf_kind]), else: line
+    end)
+    assign(socket, :cart, cart)
+  end
+  defp restore_operational_cart(socket), do: socket
+
+  defp reprice_ecf_cart(%{assigns: %{scope: %{ecf_test_enabled: false}}} = socket), do: socket
+  defp reprice_ecf_cart(socket) do
+    cart = Enum.map(socket.assigns.cart, fn line ->
+      original = Map.get(line, :ecf_catalog, %{price: line.price, sub: line.sub, tax: line.tax})
+      options = Map.get(socket.assigns.ecf_lines, to_string(line.id), %{})
+      options = if is_map(options), do: options, else: %{}
+      indicator = SaleFiscal.indicator(socket.assigns.sequence, options["tax"])
+      price = SaleFiscal.price(original.price, socket.assigns.sequence, indicator)
+      sub = Decimal.div(price, SaleFiscal.factor(indicator))
+      line |> Map.put(:ecf_catalog, original) |> Map.put(:price, Decimal.to_float(price))
+        |> Map.put(:sub, Decimal.to_float(sub)) |> Map.put(:tax, Decimal.to_float(Decimal.sub(price, sub)))
+        |> Map.put(:ecf_tax, indicator) |> Map.put(:ecf_kind, options["kind"] || "1")
+    end)
+    assign(socket, :cart, cart)
+  end
+
   defp sync(socket) do
     socket
+    |> reprice_ecf_cart()
     |> assign(:pos_state, Map.drop(socket.assigns, [:pos_state]))
     |> push_event("pos:draft-changed", %{draft: draft_payload(socket.assigns)})
   end

@@ -15,7 +15,7 @@ defmodule TigooServer.Retaily.Sequence do
     sequence
     |> cast(attrs, [:name, :code, :prefix, :fill, :increment_by, :current_seq])
     |> validate_required([:name, :code, :prefix, :fill, :increment_by, :current_seq])
-    |> validate_inclusion(:code, ["CF", "VF", "DV"])
+    |> validate_inclusion(:code, ["CF", "VF", "DV"] ++ TigooServer.Fe.TestInvoices.sequence_codes())
     |> validate_number(:fill, greater_than: 0)
     |> validate_number(:increment_by, greater_than: 0)
     |> validate_number(:current_seq, greater_than_or_equal_to: 0)

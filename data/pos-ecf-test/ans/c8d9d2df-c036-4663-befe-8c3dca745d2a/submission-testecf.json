@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-10-27T00:24:52Z",
+  "entries": {
+    "E320000000001": {
+      "file": "rfce/131362702E320000000001.xml",
+      "kind": "rfce",
+      "result": {
+        "codigo": 1,
+        "encf": "E320000000001",
+        "estado": "Aceptado",
+        "mensajes": null,
+        "secuenciaUtilizada": true
+      },
+      "sha256": "cc43f2ba8f7a083169fa2ce80164902f54c1865d92872b639354d5a89b082c00",
+      "started_at": "2026-10-27T00:24:52Z",
+      "state": "accepted",
+      "updated_at": "2026-10-27T00:24:54Z"
+    }
+  },
+  "environment": "testecf",
+  "issuer_rnc": "131362702",
+  "manifest_sha256": "1034ee423311eac4cb1e0cd0f09b806c5a561adca323ddcb248e04d5d829d3b1",
+  "portal_uploads": [
+    "ecf/consumo-menor-250000/131362702E320000000001.xml"
+  ],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/c8d9d2df-c036-4663-befe-8c3dca745d2a/submission-testecf.json",
+  "status": "complete",
+  "updated_at": "2026-10-27T00:24:54Z",
+  "version": 1
+}

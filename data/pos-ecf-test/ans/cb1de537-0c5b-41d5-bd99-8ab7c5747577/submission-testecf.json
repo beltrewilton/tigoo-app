@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-10-27T01:46:15Z",
+  "entries": {
+    "E450000000001": {
+      "file": "ecf/recepcion/131362702E450000000001.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "1",
+        "encf": "E450000000001",
+        "estado": "Aceptado",
+        "fechaRecepcion": "10/26/2026 9:46:15 PM",
+        "mensajes": [
+          {
+            "codigo": 0,
+            "valor": ""
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "2f76bfae-1fed-4515-aba1-665df6ae8376"
+      },
+      "sha256": "9db812d6663ce1c672a9a6c620bbe4215b694d38c25326420bbc86be8356d6c6",
+      "started_at": "2026-10-27T01:46:15Z",
+      "state": "accepted",
+      "track_id": "2f76bfae-1fed-4515-aba1-665df6ae8376",
+      "updated_at": "2026-10-27T01:46:21Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "2f76bfae-1fed-4515-aba1-665df6ae8376"
+      }
+    }
+  },
+  "environment": "testecf",
+  "issuer_rnc": "131362702",
+  "manifest_sha256": "b6e6e31950064c0b68cf545cb984d22d0f729bd7659840c9fe90da3a8ac63ec9",
+  "portal_uploads": [],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/cb1de537-0c5b-41d5-bd99-8ab7c5747577/submission-testecf.json",
+  "status": "complete",
+  "updated_at": "2026-10-27T01:46:21Z",
+  "version": 1
+}

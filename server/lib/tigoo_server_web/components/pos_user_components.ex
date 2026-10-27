@@ -89,6 +89,14 @@ defmodule TigooServerWeb.PosUserComponents do
             </dl>
           </div>
           <div class="card-footer">
+            <button type="button" class="btn" role="switch"
+              aria-checked={to_string(user.ecf_test_enabled)}
+              aria-label={"eCF Test for #{user.username}"}
+              data-variant={if user.ecf_test_enabled, do: "destructive", else: "outline"}
+              phx-click="set_ecf_test" phx-value-id={user.id}
+              phx-value-enabled={to_string(!user.ecf_test_enabled)}>
+              eCF Test: {if user.ecf_test_enabled, do: "On", else: "Off"}
+            </button>
             <button
               class="btn"
               type="button"

@@ -1,0 +1,199 @@
+{
+  "purpose": "pos_ecf_test",
+  "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+  "source_sha256": "73de9d05499bc35cfbc916a8c27cb6f82f1d33523cf375e0d04a51cad47f5306",
+  "source_metadata": {},
+  "authorized_issuer_rnc": "131362702",
+  "counts": {
+    "ecf": 1,
+    "rfce": 0,
+    "low_consumption": 0,
+    "normal_reception": 1
+  },
+  "dependency_order": [
+    "E310000000005"
+  ],
+  "dgii_acceptance": "not_evaluated",
+  "dgii_submitted": false,
+  "documents": [
+    {
+      "type": "31",
+      "case": null,
+      "issuer_rnc": "131362702",
+      "encf": "E310000000005",
+      "delivery": "normal_ecf_reception",
+      "certificate_sha256": "de586cc9fc27342b3a44b44b1e5c08fcd1fbf331e346f1b65d9d1cf52352cda0",
+      "signature_timestamp": "26-10-2026 21:49:57",
+      "amount_dop": "240.00",
+      "certificate_chain_valid": true,
+      "ecf_file": "ecf/recepcion/131362702E310000000005.xml",
+      "ecf_schema": "/Users/beltre.wilton/apps/tigoo-app/server/_build/dev/lib/tigoo_server/priv/fe/xsd/e-CF 31 v.1.0.xsd",
+      "ecf_schema_sha256": "a7d60a64bda4a9846ce5729f1de21be3f35031229db7aed2407fe84811f6081b",
+      "ecf_sha256": "55f96cf7bf0cfe59d140cc46133b0b9cdd851bf24a301949ea216c77a318b4b2",
+      "field_mappings": [
+        {
+          "header": "CantidadItem[1]",
+          "cell": "POS:CantidadItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/CantidadItem"
+        },
+        {
+          "header": "DireccionComprador",
+          "cell": "POS:DireccionComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/DireccionComprador"
+        },
+        {
+          "header": "DireccionEmisor",
+          "cell": "POS:DireccionEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/DireccionEmisor"
+        },
+        {
+          "header": "ENCF",
+          "cell": "POS:ENCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/eNCF"
+        },
+        {
+          "header": "FechaEmision",
+          "cell": "POS:FechaEmision",
+          "xml_path": "/ECF/Encabezado/Emisor/FechaEmision"
+        },
+        {
+          "header": "FechaVencimientoSecuencia",
+          "cell": "POS:FechaVencimientoSecuencia",
+          "xml_path": "/ECF/Encabezado/IdDoc/FechaVencimientoSecuencia"
+        },
+        {
+          "header": "FormaPago[1]",
+          "cell": "POS:FormaPago[1]",
+          "xml_path": "/ECF/Encabezado/IdDoc/TablaFormasPago/FormaDePago[1]/FormaPago"
+        },
+        {
+          "header": "ITBIS1",
+          "cell": "POS:ITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/ITBIS1"
+        },
+        {
+          "header": "IndicadorBienoServicio[1]",
+          "cell": "POS:IndicadorBienoServicio[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorBienoServicio"
+        },
+        {
+          "header": "IndicadorFacturacion[1]",
+          "cell": "POS:IndicadorFacturacion[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/IndicadorFacturacion"
+        },
+        {
+          "header": "IndicadorMontoGravado",
+          "cell": "POS:IndicadorMontoGravado",
+          "xml_path": "/ECF/Encabezado/IdDoc/IndicadorMontoGravado"
+        },
+        {
+          "header": "MontoGravadoI1",
+          "cell": "POS:MontoGravadoI1",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoI1"
+        },
+        {
+          "header": "MontoGravadoTotal",
+          "cell": "POS:MontoGravadoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoGravadoTotal"
+        },
+        {
+          "header": "MontoItem[1]",
+          "cell": "POS:MontoItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/MontoItem"
+        },
+        {
+          "header": "MontoPago[1]",
+          "cell": "POS:MontoPago[1]",
+          "xml_path": "/ECF/Encabezado/IdDoc/TablaFormasPago/FormaDePago[1]/MontoPago"
+        },
+        {
+          "header": "MontoTotal",
+          "cell": "POS:MontoTotal",
+          "xml_path": "/ECF/Encabezado/Totales/MontoTotal"
+        },
+        {
+          "header": "NombreItem[1]",
+          "cell": "POS:NombreItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NombreItem"
+        },
+        {
+          "header": "NumeroLinea[1]",
+          "cell": "POS:NumeroLinea[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/NumeroLinea"
+        },
+        {
+          "header": "PrecioUnitarioItem[1]",
+          "cell": "POS:PrecioUnitarioItem[1]",
+          "xml_path": "/ECF/DetallesItems/Item[1]/PrecioUnitarioItem"
+        },
+        {
+          "header": "RNCComprador",
+          "cell": "POS:RNCComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RNCComprador"
+        },
+        {
+          "header": "RNCEmisor",
+          "cell": "POS:RNCEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RNCEmisor"
+        },
+        {
+          "header": "RazonSocialComprador",
+          "cell": "POS:RazonSocialComprador",
+          "xml_path": "/ECF/Encabezado/Comprador/RazonSocialComprador"
+        },
+        {
+          "header": "RazonSocialEmisor",
+          "cell": "POS:RazonSocialEmisor",
+          "xml_path": "/ECF/Encabezado/Emisor/RazonSocialEmisor"
+        },
+        {
+          "header": "TipoIngresos",
+          "cell": "POS:TipoIngresos",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoIngresos"
+        },
+        {
+          "header": "TipoPago",
+          "cell": "POS:TipoPago",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoPago"
+        },
+        {
+          "header": "TipoeCF",
+          "cell": "POS:TipoeCF",
+          "xml_path": "/ECF/Encabezado/IdDoc/TipoeCF"
+        },
+        {
+          "header": "TotalITBIS",
+          "cell": "POS:TotalITBIS",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS"
+        },
+        {
+          "header": "TotalITBIS1",
+          "cell": "POS:TotalITBIS1",
+          "xml_path": "/ECF/Encabezado/Totales/TotalITBIS1"
+        },
+        {
+          "header": "Version",
+          "cell": "POS:Version",
+          "xml_path": "/ECF/Encabezado/Version"
+        }
+      ],
+      "reference_encf": null,
+      "schema_valid": true,
+      "signature_valid": true,
+      "small_consumption": false,
+      "source_arithmetic_observations": [],
+      "source_field_count": 29,
+      "source_fields_preserved": true,
+      "source_row": 1
+    }
+  ],
+  "external_reference_encfs": [],
+  "generated_at": "2026-10-27T01:49:57Z",
+  "normal_reception_order": [
+    "E310000000005"
+  ],
+  "source_file": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/af6af4eb-9ac8-4daf-af05-cd484c7daa3c.source.json",
+  "source_format": "pos",
+  "source_workbook": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/af6af4eb-9ac8-4daf-af05-cd484c7daa3c.source.json",
+  "worksheet": "ECF"
+}

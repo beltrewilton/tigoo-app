@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-10-27T01:49:57Z",
+  "entries": {
+    "E310000000005": {
+      "file": "ecf/recepcion/131362702E310000000005.xml",
+      "kind": "ecf",
+      "result": {
+        "codigo": "4",
+        "encf": "E310000000005",
+        "estado": "Aceptado Condicional",
+        "fechaRecepcion": "10/26/2026 9:49:59 PM",
+        "mensajes": [
+          {
+            "codigo": 1385,
+            "valor": "El campo RNCComprador del área Comprador de la sección Encabezado no es válido."
+          }
+        ],
+        "rnc": "131362702",
+        "secuenciaUtilizada": true,
+        "trackId": "4371c34f-b4e1-4e1e-94ab-abffe1c29f90"
+      },
+      "sha256": "55f96cf7bf0cfe59d140cc46133b0b9cdd851bf24a301949ea216c77a318b4b2",
+      "started_at": "2026-10-27T01:49:59Z",
+      "state": "accepted_conditional",
+      "track_id": "4371c34f-b4e1-4e1e-94ab-abffe1c29f90",
+      "updated_at": "2026-10-27T01:50:05Z",
+      "upload_response": {
+        "error": null,
+        "mensaje": null,
+        "trackId": "4371c34f-b4e1-4e1e-94ab-abffe1c29f90"
+      }
+    }
+  },
+  "environment": "testecf",
+  "issuer_rnc": "131362702",
+  "manifest_sha256": "2c270ca190d25e5c396e77d271903bd6a768519318089d6250dc69f81b338456",
+  "portal_uploads": [],
+  "report_path": "/Users/beltre.wilton/apps/tigoo-app/data/pos-ecf-test/ans/af6af4eb-9ac8-4daf-af05-cd484c7daa3c/submission-testecf.json",
+  "status": "complete",
+  "updated_at": "2026-10-27T01:50:05Z",
+  "version": 1
+}

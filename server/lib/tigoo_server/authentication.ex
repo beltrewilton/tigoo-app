@@ -323,6 +323,7 @@ defmodule TigooServer.Authentication do
       actor_id: employee.id,
       login: employee.username,
       pic: employee.pic,
+      ecf_test_enabled: employee.ecf_test_enabled,
       scopes: scopes,
       store_ids: store_ids
     }

@@ -25,6 +25,7 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/tigoo_server"
 import topbar from "../vendor/topbar"
 import {receiptPrinter} from "./receipt_printer/service"
+import {XmlViewer, EcfRowInspector} from "./xml_viewer"
 import {initI18n, money, t, translatePage} from "./i18n"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -53,6 +54,29 @@ function liveSocketParams() {
 }
 
 const hooks = {
+  XmlViewer,
+  EcfRowInspector,
+  DgiiPopup: {
+    mounted() {
+      this.openPopup = event => {
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+        const width = Math.min(800, window.screen.availWidth)
+        const height = Math.min(650, window.screen.availHeight)
+        const left = Math.max(0, window.screenX + (window.outerWidth - width) / 2)
+        const top = Math.max(0, window.screenY + (window.outerHeight - height) / 2)
+        const popup = window.open("about:blank", "_blank", `popup=yes,width=${width},height=${height},left=${Math.round(left)},top=${Math.round(top)},resizable=yes,scrollbars=yes`)
+        if (!popup) return
+        event.preventDefault()
+        popup.opener = null
+        popup.location.replace(this.el.href)
+        popup.focus()
+      }
+      this.el.addEventListener("click", this.openPopup)
+    },
+    destroyed() {
+      this.el.removeEventListener("click", this.openPopup)
+    }
+  },
   LoginScreen: window.LoginScreenHook,
   CompanySettings: window.CompanySettingsHook,
   Sequences: {
@@ -71,6 +95,19 @@ const hooks = {
     }
   },
   CustomerDialog: dialogHook(),
+  EcfTestDialog: {
+    mounted() {
+      // The server renders `open` so patches preserve visibility. Promote the
+      // initial nonmodal dialog into the browser's modal top layer once.
+      if (this.el.open) this.el.close()
+      this.el.showModal()
+      this.el.addEventListener("cancel", event => event.preventDefault())
+    },
+    updated() {
+      // LiveView patches must not dismiss the result while its status changes.
+      if (!this.el.open) this.el.showModal()
+    }
+  },
   ProductDialog: productDialogHook(),
   CustomerScreen: {
     mounted() {
@@ -1334,6 +1371,10 @@ function discountInputHelp(type, lineLevel) {
 }
 
 function calculateCart(panel) {
+  // Fiscal pricing and mixed-rate rounding use the shared server-side adapter.
+  // Avoid replacing those amounts with the ordinary 18% cart preview.
+  if (panel.dataset.ecfTest === "true") return
+
   const number = value => Number.parseFloat(value) || 0
   const lines = [...panel.querySelectorAll(".cart-line")].map(element => {
     const price = number(element.dataset.price)

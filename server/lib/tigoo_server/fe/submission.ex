@@ -31,6 +31,9 @@ defmodule TigooServer.Fe.Submission do
     if expected_type && Map.get(manifest, "document_type", "ECF") != expected_type do
       fail!("Expected a #{expected_type} batch; refusing to use another reception service")
     end
+    if manifest["purpose"] == "pos_ecf_test" and client.environment != "testecf" do
+      fail!("POS test invoices may only be submitted to testecf")
+    end
     jobs = preflight!(batch, manifest, client, opts)
     report_path = Keyword.get(opts, :report, Path.join(batch, "submission-#{client.environment}.json")) |> Path.expand()
     if report_path == Path.join(batch, "manifest.json"), do: fail!("Report must not replace the generation manifest")

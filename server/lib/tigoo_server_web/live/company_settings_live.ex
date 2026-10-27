@@ -65,6 +65,16 @@ defmodule TigooServerWeb.CompanySettingsLive do
     end
   end
 
+  def handle_event("save_ecf_test_settings", %{"ecf_test" => attrs}, socket) do
+    case safe_company_settings(fn -> CompanySettings.update_ecf_test_settings(socket.assigns.scope, attrs) end) do
+      {:ok, settings} ->
+        overview = Map.put(socket.assigns.overview, :ecf_test, settings)
+        {:noreply, socket |> assign(:overview, overview) |> assign(:status, "eCF Test company settings saved.")}
+      {:error, _} ->
+        {:noreply, assign(socket, :status, "Review the issuer address, sequence expiry and active company before saving.")}
+    end
+  end
+
   def handle_event("save", %{"kind" => kind} = params, socket) when kind in @kinds do
     result =
       case {kind, socket.assigns.editing} do
@@ -186,6 +196,30 @@ defmodule TigooServerWeb.CompanySettingsLive do
             </p>
           </div>
           <div class="company-settings-cards">
+            <article :if={@overview.ecf_test} class="card company-settings-card">
+              <div class="card-header">
+                <h3 class="card-title">eCF Test issuer settings</h3>
+                <p class="card-description">Issuer name and RNC come from this tenant's active company.</p>
+              </div>
+              <div class="card-content">
+                <form id="ecf-test-company-settings" class="form" phx-submit="save_ecf_test_settings">
+                  <label class="label" for="ecf-test-address">Issuer address</label>
+                  <input id="ecf-test-address" class="input" name="ecf_test[address]" maxlength="100"
+                    value={@overview.ecf_test.address} />
+                  <label class="label" for="ecf-test-expiry">Test sequence expiry</label>
+                  <input id="ecf-test-expiry" class="input" type="date" name="ecf_test[ecf_test_sequence_expiry]"
+                    value={@overview.ecf_test.ecf_test_sequence_expiry} />
+                  <input type="hidden" name="ecf_test[ecf_test_sequences_ready]" value="false" />
+                  <label for="ecf-test-ready">
+                    <input id="ecf-test-ready" type="checkbox" name="ecf_test[ecf_test_sequences_ready]"
+                      value="true" checked={@overview.ecf_test.ecf_test_sequences_ready} />
+                    Test sequence counters reconciled and ready
+                  </label>
+                  <p class="field-description">Check existing test numbers in Sequences before enabling readiness. Never reset a used counter.</p>
+                  <button class="btn" type="submit" data-variant="default" phx-disable-with="Saving…">Save eCF Test settings</button>
+                </form>
+              </div>
+            </article>
             <.settings_card
               kind="price-list"
               title="Price lists"

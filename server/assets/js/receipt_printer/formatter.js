@@ -72,6 +72,8 @@ export class ReceiptFormatter {
     const sequence = str(sale.sequence || sale.id || "-")
 
     const lines = [
+      sale.ecf_test === true ? {align: "center", bold: true, text: "eCF Test"} : null,
+      sale.ecf_test === true ? {align: "center", text: "TEST RECEIPT - NO COMMERCIAL SALE"} : null,
       store.logo ? {type: "image", image: store.logo, align: "center", width: 286} : null,
       store.address ? {align: "center", text: wrap(str(store.address).toUpperCase(), columns)} : null,
       store.slogan ? {align: "center", text: wrap(str(store.slogan).toUpperCase(), columns)} : null,
@@ -98,7 +100,7 @@ export class ReceiptFormatter {
       const qty = number(item.quantity || item.qty || 1)
       const unit = number(item.amount || item.price || product.price || 0)
       const total = lineQuotedTotal(item)
-      const tax = itemTax(item, total)
+      const tax = itemTax(item, total, sale.ecf_test === true)
       lines.push({text: wrap(name, columns)})
       if (sku) lines.push({text: `SKU: ${sku}`.slice(0, columns)})
       lines.push({text: itemLine(qty, unit, tax, total, columns)})
@@ -146,7 +148,11 @@ function itemLine(qty, unit, tax, total, columns) {
   return `${left}`.padEnd(Math.max(1, columns - taxColumn.length - rightColumn.length)).slice(0, columns - taxColumn.length - rightColumn.length) + taxColumn + rightColumn
 }
 
-function itemTax(item, total) {
+function itemTax(item, total, ecfTest = false) {
+  if (ecfTest && item.ecf_tax_indicator != null) {
+    const factor = {"1": 1.18, "2": 1.16, "3": 1, "4": 1}[item.ecf_tax_indicator] || 1
+    return Math.max(0, total - total / factor)
+  }
   const explicit = number(item.tax_amount || item.tax)
   if (explicit > 0) return explicit
   const subtotal = number(item.sub || item.subtotal || 0)
@@ -162,7 +168,8 @@ function lineQuotedTotal(item) {
 
 function receiptTotals(sale) {
   const total = number(sale.amount || sale.total)
-  const delivery = number(sale.delivery_charge || sale.delivery)
+  // Test receipts include delivery as its own fiscal item and in tax totals.
+  const delivery = sale.ecf_test === true ? 0 : number(sale.delivery_charge || sale.delivery)
   const subtotal = number(sale.sub || sale.subtotal)
   const tax = number(sale.tax_amount || sale.tax)
   const discount = number(sale.discount || 0)

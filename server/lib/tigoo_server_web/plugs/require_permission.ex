@@ -62,6 +62,9 @@ defmodule TigooServerWeb.Plugs.RequirePermission do
       path == "/api/inventory/adjustments" and method == "POST" ->
         "inventory.view"
 
+      String.starts_with?(path, "/api/sales/ecf-tests/") and method == "GET" ->
+        ["sales.pos", "sales.view"]
+
       String.starts_with?(path, "/api/sales") and method == "GET" ->
         "sales.view"
 

@@ -8,6 +8,9 @@ defmodule TigooServer.Accounts.Company do
   schema "company" do
     field :rnc, :string
     field :company_name, :string
+    field :address, :string, default: "AVE ITALIA 54"
+    field :ecf_test_sequence_expiry, :date, default: ~D[2028-12-31]
+    field :ecf_test_sequences_ready, :boolean, default: true
     field :access_token, :string
     field :active, :boolean, default: true
     field :connected, :boolean, default: false
