@@ -22,7 +22,7 @@ defmodule TigooServer.FeSignature do
          :ok <- diagnostic(:seed_schema, fn -> validate_schema(seed) end),
          {:ok, identity} <- diagnostic(:certificate_identity, fn -> certificate_identity(certificate) end),
          {:ok, executable, config} <- diagnostic(:verifier_configuration, fn -> verifier_config() end),
-         :ok <- diagnostic(:cryptographic_verification, fn -> verify_signature(xml, executable, config) end) do
+         :ok <- diagnostic(:cryptographic_verification, fn -> verify_seed_signature(xml, certificate, executable, config) end) do
       Logger.info("FE authentication stage=signed_seed result=ok certificate_sha256=#{identity.certificate_sha256}")
       {:ok, seed, identity}
     else
@@ -228,7 +228,21 @@ defmodule TigooServer.FeSignature do
       _ -> []
     end)
 
-    Logger.info("FE authentication stage=presented_certificate trust=unverified certificate_sha256=#{fingerprint} issuer=#{inspect(issuer, limit: 20, printable_limit: 2048)} ca_issuers_urls=#{inspect(urls, limit: 10, printable_limit: 2048)}")
+    authority_key_id = Enum.find_value(extensions, fn
+      {:Extension, {2, 5, 29, 35}, _, value} ->
+        decoded = if is_binary(value), do: :public_key.der_decode(:AuthorityKeyIdentifier, value), else: value
+        case decoded do
+          {:AuthorityKeyIdentifier, key, _, _} when is_binary(key) -> Base.encode16(key)
+          _ -> nil
+        end
+      _ -> nil
+    end)
+    subject_key_id = Enum.find_value(extensions, fn
+      {:Extension, {2, 5, 29, 14}, _, value} when is_binary(value) -> Base.encode16(value)
+      _ -> nil
+    end)
+
+    Logger.info("FE authentication stage=presented_certificate trust=unverified certificate_sha256=#{fingerprint} issuer=#{inspect(issuer, limit: 20, printable_limit: 2048)} ca_issuers_urls=#{inspect(urls, limit: 10, printable_limit: 2048)} authority_key_identifier=#{inspect(authority_key_id)} subject_key_identifier=#{inspect(subject_key_id)}")
   rescue
     exception ->
       # Diagnostics must not change certificate acceptance or rejection.
@@ -240,6 +254,51 @@ defmodule TigooServer.FeSignature do
   defp attribute_text(text) when is_binary(text), do: text
   defp attribute_text(text) when is_list(text), do: List.to_string(text)
   defp attribute_text(_), do: nil
+
+  defp verify_seed_signature(xml, certificate, executable, config) do
+    result = verify_signature(xml, executable, config)
+    if result != :ok, do: capture_failed_seed(xml, certificate, config)
+    result
+  end
+
+  # Explicitly enabled for investigation only. Capture the original bytes, not
+  # a parsed/reformatted XML, and never include tokens or private keys.
+  defp capture_failed_seed(xml, certificate, config) do
+    case Keyword.get(config, :diagnostic_directory) do
+      root when is_binary(root) and root != "" ->
+        root = Path.expand(root)
+        File.mkdir_p!(root)
+        File.chmod!(root, 0o700)
+        directory = Path.join(root, "failed-seed-" <> Base.url_encode64(:crypto.strong_rand_bytes(18), padding: false))
+        File.mkdir!(directory)
+        File.chmod!(directory, 0o700)
+        try do
+          pem = :public_key.pem_encode([{:Certificate, certificate, :not_encrypted}])
+          metadata = %{
+            captured_at: DateTime.to_iso8601(DateTime.utc_now()),
+            request_id: to_string(Logger.metadata()[:request_id] || ""),
+            xml_sha256: :crypto.hash(:sha256, xml) |> Base.encode16(case: :lower),
+            certificate_sha256: :crypto.hash(:sha256, certificate) |> Base.encode16(case: :lower),
+            trust: "unverified"
+          }
+          for {filename, bytes} <- [{"signed-seed.xml", xml}, {"dgii-signer.pem", pem},
+              {"metadata.json", Jason.encode!(metadata, pretty: true)}] do
+            path = Path.join(directory, filename)
+            File.write!(path, bytes, [:binary, :exclusive])
+            File.chmod!(path, 0o600)
+          end
+          Logger.warning("FE authentication stage=diagnostic_capture result=saved directory=#{inspect(directory)}")
+        rescue
+          exception ->
+            File.rm_rf(directory)
+            reraise exception, __STACKTRACE__
+        end
+      _ -> :ok
+    end
+  rescue
+    exception ->
+      Logger.warning("FE authentication stage=diagnostic_capture result=unavailable exception=#{inspect(exception.__struct__)}")
+  end
 
   defp verifier_config do
     config = Application.get_env(:tigoo_server, :fe_authentication, [])
