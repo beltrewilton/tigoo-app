@@ -50,10 +50,14 @@ defmodule TigooServerWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
+  plug TigooServerWeb.Plugs.FeRequestCapture
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Phoenix.json_library()
+    json_decoder: Phoenix.json_library(),
+    body_reader: {TigooServerWeb.Plugs.FeRequestCapture, :read_body, []},
+    multipart_to_params: {TigooServerWeb.Plugs.FeRequestCapture, :multipart_to_params, []}
 
   plug Plug.MethodOverride
   plug Plug.Head

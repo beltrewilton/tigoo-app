@@ -84,3 +84,8 @@ server/semilla.xml
 server/signed-seed.xml
 
 p12_companies/
+
+# Private FE communication captures (XML may contain customer data).
+/fe/diagnostics/
+/data/fe-auth-diagnostics/
+/data/fe-request-capture/

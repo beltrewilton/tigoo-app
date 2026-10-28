@@ -11,6 +11,7 @@ config :tigoo_server, :fe_receivers_directory,
 # Comma-separated PEM paths; never trust CA certificates supplied by a request.
 config :tigoo_server, :fe_authentication,
   diagnostic_directory: System.get_env("FE_AUTH_DIAGNOSTIC_DIRECTORY"),
+  capture_directory: System.get_env("FE_REQUEST_CAPTURE_DIRECTORY"),
   xmlsec_path: System.get_env("FE_XMLSEC_PATH", "xmlsec1"),
   openssl_path: System.get_env("FE_OPENSSL_PATH", "openssl"),
   trusted_certificates: String.split(System.get_env("FE_TRUSTED_CERTIFICATES", ""), ",", trim: true),
