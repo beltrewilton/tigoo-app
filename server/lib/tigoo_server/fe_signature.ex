@@ -187,6 +187,7 @@ defmodule TigooServer.FeSignature do
   defp certificate_identity(der) do
     cert = :public_key.pkix_decode_cert(der, :otp)
     tbs = certificate(cert, :tbsCertificate)
+    log_certificate_details(tbs, der)
     {:rdnSequence, rdns} = tbs_certificate(tbs, :subject)
 
     serials = for rdn <- rdns,
@@ -200,6 +201,38 @@ defmodule TigooServer.FeSignature do
 
       _ -> {:error, :invalid_signature}
     end
+  end
+
+  # These details describe the presented certificate, not an authenticated
+  # identity. Never download or trust a CA automatically from these URLs.
+  defp log_certificate_details(tbs, der) do
+    fingerprint = :crypto.hash(:sha256, der) |> Base.encode16(case: :lower)
+    {:rdnSequence, issuer_rdns} = tbs_certificate(tbs, :issuer)
+    issuer = for rdn <- issuer_rdns,
+                 {:AttributeTypeAndValue, oid, value} <- rdn,
+                 do: {oid, attribute_text(value)}
+
+    extensions = case tbs_certificate(tbs, :extensions) do
+      values when is_list(values) -> values
+      _ -> []
+    end
+
+    urls = Enum.flat_map(extensions, fn
+      {:Extension, {1, 3, 6, 1, 5, 5, 7, 1, 1}, _, value} ->
+        descriptions = if is_binary(value),
+          do: :public_key.der_decode(:AuthorityInfoAccessSyntax, value), else: value
+
+        for {:AccessDescription, {1, 3, 6, 1, 5, 5, 7, 48, 2}, {:uniformResourceIdentifier, uri}} <- descriptions,
+            is_binary(uri) or is_list(uri),
+            do: to_string(uri)
+      _ -> []
+    end)
+
+    Logger.info("FE authentication stage=presented_certificate trust=unverified certificate_sha256=#{fingerprint} issuer=#{inspect(issuer, limit: 20, printable_limit: 2048)} ca_issuers_urls=#{inspect(urls, limit: 10, printable_limit: 2048)}")
+  rescue
+    exception ->
+      # Diagnostics must not change certificate acceptance or rejection.
+      Logger.warning("FE authentication stage=certificate_details result=unavailable exception=#{inspect(exception.__struct__)}")
   end
 
   defp attribute_text({_encoding, text}) when is_binary(text), do: text
@@ -288,6 +321,7 @@ defmodule TigooServer.FeSignature do
     result = operation.()
     elapsed = System.monotonic_time(:millisecond) - started
     case result do
+      true -> Logger.info("FE authentication stage=#{stage} result=ok duration_ms=#{elapsed}")
       :ok -> Logger.info("FE authentication stage=#{stage} result=ok duration_ms=#{elapsed}")
       tuple when is_tuple(tuple) and elem(tuple, 0) == :ok ->
         Logger.info("FE authentication stage=#{stage} result=ok duration_ms=#{elapsed}")
