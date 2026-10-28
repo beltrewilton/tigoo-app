@@ -2,6 +2,7 @@ defmodule TigooServer.FeSignature do
   @moduledoc false
 
   import Saxy.XML, only: [element: 3]
+  require Logger
   require Record
 
   Record.defrecordp(:certificate, Record.extract(:OTPCertificate, from_lib: "public_key/include/public_key.hrl"))
@@ -15,23 +16,29 @@ defmodule TigooServer.FeSignature do
   @max_bytes 65_536
 
   def verify(xml) when is_binary(xml) and byte_size(xml) <= @max_bytes do
-    with true <- String.valid?(xml) and not String.contains?(xml, ["\0", "<!DOCTYPE", "<!ENTITY"]),
-         {:ok, document} <- Saxy.SimpleForm.parse_string(xml),
-         {:ok, seed, certificate} <- signed_seed(expand(document, %{})),
-         :ok <- validate_schema(seed),
-         {:ok, identity} <- certificate_identity(certificate),
-         {:ok, executable, config} <- verifier_config(),
-         :ok <- verify_signature(xml, executable, config) do
+    with true <- diagnostic(:xml_safety, fn -> String.valid?(xml) and not String.contains?(xml, ["\0", "<!DOCTYPE", "<!ENTITY"]) end),
+         {:ok, document} <- diagnostic(:xml_parse, fn -> Saxy.SimpleForm.parse_string(xml) end),
+         {:ok, seed, certificate} <- diagnostic(:seed_envelope, fn -> signed_seed(expand(document, %{})) end),
+         :ok <- diagnostic(:seed_schema, fn -> validate_schema(seed) end),
+         {:ok, identity} <- diagnostic(:certificate_identity, fn -> certificate_identity(certificate) end),
+         {:ok, executable, config} <- diagnostic(:verifier_configuration, fn -> verifier_config() end),
+         :ok <- diagnostic(:cryptographic_verification, fn -> verify_signature(xml, executable, config) end) do
+      Logger.info("FE authentication stage=signed_seed result=ok certificate_sha256=#{identity.certificate_sha256}")
       {:ok, seed, identity}
     else
       {:error, :verifier_unavailable} = error -> error
       _ -> {:error, :invalid_signature}
     end
   rescue
-    _ -> {:error, :invalid_signature}
+    exception ->
+      Logger.warning("FE authentication stage=signed_seed result=exception exception=#{inspect(exception.__struct__)}")
+      {:error, :invalid_signature}
   end
 
-  def verify(_), do: {:error, :invalid_signature}
+  def verify(_) do
+    Logger.warning("FE authentication stage=xml_size result=rejected limit_bytes=#{@max_bytes}")
+    {:error, :invalid_signature}
+  end
 
   @doc "Verifies the enveloped RSA-SHA256 signature and trusted certificate of an e-CF."
   def verify_ecf(xml) when is_binary(xml) and byte_size(xml) <= 5_000_000 do
@@ -59,7 +66,7 @@ defmodule TigooServer.FeSignature do
     with [{{"", "valor"}, [], [value]}, {{"", "fecha"}, [], [date]}, signature] <- elements(children),
          true <- is_binary(value) and is_binary(date),
          {:ok, _} <- Base.decode64(value),
-         {:ok, certificate} <- signature_profile(signature) do
+         {:ok, certificate} <- diagnostic(:signature_profile, fn -> signature_profile(signature) end) do
       {:ok, %{valor: value, fecha: date}, certificate}
     else
       _ -> {:error, :invalid_signature}
@@ -207,6 +214,8 @@ defmodule TigooServer.FeSignature do
     roots = Keyword.get(config, :trusted_certificates, [])
     files = roots ++ Keyword.get(config, :intermediate_certificates, []) ++ Keyword.get(config, :crls, [])
 
+    Logger.info("FE authentication stage=verifier_configuration xmlsec_available=#{not is_nil(executable)} trusted_count=#{length(roots)} intermediate_count=#{length(Keyword.get(config, :intermediate_certificates, []))} crl_count=#{length(Keyword.get(config, :crls, []))} missing_files=#{inspect(Enum.reject(files, &File.regular?/1))}")
+
     if executable && roots != [] && Enum.all?(files, &File.regular?/1) do
       {:ok, executable, config}
     else
@@ -247,15 +256,47 @@ defmodule TigooServer.FeSignature do
     config |> Keyword.get(key, []) |> Enum.flat_map(&[flag, &1])
   end
 
-  defp await_verification(port, deadline) do
+  # Keep bounded diagnostics; never enable xmlsec's XML/key debug dumps.
+  defp await_verification(port, deadline, output \\ "") do
     receive do
-      {^port, {:data, _output}} -> await_verification(port, deadline)
+      {^port, {:data, chunk}} ->
+        remaining = max(8192 - byte_size(output), 0)
+        output = output <> binary_part(chunk, 0, min(byte_size(chunk), remaining))
+        await_verification(port, deadline, output)
       {^port, {:exit_status, 0}} -> :ok
-      {^port, {:exit_status, _}} -> {:error, :invalid_signature}
+      {^port, {:exit_status, status}} ->
+        Logger.warning("FE authentication stage=xmlsec result=rejected exit_status=#{status} diagnostic=#{safe_diagnostic(output)}")
+        {:error, :invalid_signature}
     after
       max(deadline - System.monotonic_time(:millisecond), 0) ->
         Port.close(port)
+        Logger.warning("FE authentication stage=xmlsec result=timeout diagnostic=#{safe_diagnostic(output)}")
         {:error, :verifier_unavailable}
     end
+  end
+
+  defp safe_diagnostic(output) do
+    output
+    |> String.replace(~r/[^\x20-\x7E\r\n\t]/, "?")
+    |> String.replace(~r/<[^>]*>/, "[XML redacted]")
+    |> String.replace(~r/[A-Za-z0-9+\/=]{64,}/, "[encoded value redacted]")
+    |> inspect(limit: :infinity, printable_limit: 8192)
+  end
+
+  defp diagnostic(stage, operation) do
+    started = System.monotonic_time(:millisecond)
+    result = operation.()
+    elapsed = System.monotonic_time(:millisecond) - started
+    case result do
+      :ok -> Logger.info("FE authentication stage=#{stage} result=ok duration_ms=#{elapsed}")
+      tuple when is_tuple(tuple) and elem(tuple, 0) == :ok ->
+        Logger.info("FE authentication stage=#{stage} result=ok duration_ms=#{elapsed}")
+      _ -> Logger.warning("FE authentication stage=#{stage} result=rejected duration_ms=#{elapsed}")
+    end
+    result
+  rescue
+    exception ->
+      Logger.warning("FE authentication stage=#{stage} result=exception exception=#{inspect(exception.__struct__)}")
+      reraise exception, __STACKTRACE__
   end
 end

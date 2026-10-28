@@ -1,27 +1,33 @@
 defmodule TigooServerWeb.FeAuthenticationController do
   use TigooServerWeb, :controller
 
+  require Logger
+
   import Saxy.XML, only: [element: 3]
 
   alias TigooServer.FeAuthentication
 
   def semilla(conn, _params) do
     case FeAuthentication.new_seed() do
-      {:ok, seed} -> respond(conn, "SemillaModel", seed, [:valor, :fecha])
+      {:ok, seed} ->
+        Logger.info("FE authentication stage=seed_issue result=ok host=#{inspect(conn.host)}")
+        respond(conn, "SemillaModel", seed, [:valor, :fecha])
       {:error, :seed_capacity} -> error(conn, :service_unavailable, "Servicio temporalmente no disponible")
     end
   end
 
   def validacioncertificado(conn, %{"xml" => %Plug.Upload{path: path}}) do
-    with {:ok, %{size: size}} when size <= 65_536 <- File.stat(path),
-         {:ok, xml} <- File.read(path),
+    Logger.info("FE authentication stage=upload result=received host=#{inspect(conn.host)}")
+    with {:ok, xml} <- read_upload(path),
          {:ok, response} <- FeAuthentication.validate_certificate(xml) do
+      Logger.info("FE authentication stage=token_issue result=ok")
       respond(conn, "RespuestaAutenticacion", response, [:token, :expira, :expedido])
     else
       {:error, :verifier_unavailable} ->
         error(conn, :service_unavailable, "Verificador de certificados no configurado o no disponible")
 
       {:error, :invalid_seed} ->
+        Logger.warning("FE authentication stage=seed_consume result=rejected reason=unknown_expired_or_used")
         error(conn, :unauthorized, "Semilla desconocida, vencida o utilizada")
 
       _ ->
@@ -30,10 +36,32 @@ defmodule TigooServerWeb.FeAuthenticationController do
   end
 
   def validacioncertificado(conn, _params) do
+    Logger.warning("FE authentication stage=upload result=rejected reason=missing_multipart_xml host=#{inspect(conn.host)}")
     error(conn, :bad_request, "Se requiere el archivo XML firmado en el campo xml (multipart/form-data)")
   end
 
+  defp read_upload(path) do
+    case File.stat(path) do
+      {:ok, %{size: size}} when size <= 65_536 ->
+        case File.read(path) do
+          {:ok, xml} ->
+            Logger.info("FE authentication stage=upload_read result=ok bytes=#{size}")
+            {:ok, xml}
+          {:error, reason} = error ->
+            Logger.warning("FE authentication stage=upload_read result=rejected reason=#{inspect(reason)}")
+            error
+        end
+      {:ok, %{size: size}} ->
+        Logger.warning("FE authentication stage=upload_size result=rejected bytes=#{size} limit_bytes=65536")
+        {:error, :too_large}
+      {:error, reason} = error ->
+        Logger.warning("FE authentication stage=upload_stat result=rejected reason=#{inspect(reason)}")
+        error
+    end
+  end
+
   defp error(conn, status, message) do
+    Logger.warning("FE authentication stage=http_response status=#{status}")
     conn |> put_status(status) |> respond("ErrorAutenticacion", %{mensaje: message}, [:mensaje])
   end
 
