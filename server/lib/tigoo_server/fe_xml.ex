@@ -4,6 +4,8 @@ defmodule TigooServer.FeXml do
   import Saxy.XML, only: [element: 3, characters: 1]
   require Logger
 
+  alias TigooServer.Fe.Generation.{Command, Error}
+
   @types ~w(31 32 33 34 41 43 44 45 46 47)
   @ds "http://www.w3.org/2000/09/xmldsig#"
 
@@ -58,67 +60,51 @@ defmodule TigooServer.FeXml do
   defp value(_, _), do: nil
 
   defp validate_schema(document, filename) do
-    task = Task.Supervisor.async_nolink(TigooServer.TaskSupervisor, fn ->
-      try do
-        schema = Application.app_dir(:tigoo_server, "priv/fe/xsd/" <> filename)
-        # Only schema-defined element names reach xmerl, which creates atoms.
-        # XMLDSig is checked against the original bytes by xmlsec1 separately.
-        names = Regex.scan(~r/\bname\s*=\s*["']([^"']+)["']/, File.read!(schema), capture: :all_but_first)
-          |> List.flatten() |> MapSet.new()
-        projection = project_root(document, names) |> Saxy.encode!()
-        {parsed, []} = :xmerl_scan.string(String.to_charlist(projection), quiet: true)
-
-        case :xmerl_xsd.process_validate(String.to_charlist(schema), parsed) do
-          {:error, errors} ->
-            log_schema_failure(filename, :validation, errors)
-            {:error, :invalid_schema}
-          {_validated, _state} -> :ok
-        end
-      rescue
-        exception in File.Error ->
-          Logger.error("FE XSD failed schema=#{filename} reason=schema_file_unavailable action=#{exception.action}")
-          {:error, :verifier_unavailable}
-        exception ->
-          location = case __STACKTRACE__ do
-            [{module, function, _arity, metadata} | _] ->
-              "#{inspect(module)}.#{function}:#{Keyword.get(metadata, :line, 0)}"
-            _ -> "unknown"
-          end
-
-          Logger.error("FE XSD failed schema=#{filename} exception=#{inspect(exception.__struct__)} at=#{location}")
-          {:error, :invalid_schema}
-      catch
-        :exit, reason ->
-          log_schema_failure(filename, :exit, reason)
-          {:error, :invalid_schema}
+    schema = Application.app_dir(:tigoo_server, "priv/fe/xsd/" <> filename)
+    # Preserve the existing strict element/attribute checks and signature
+    # placeholder. Verify the digital signature separately on original bytes.
+    names = Regex.scan(~r/\bname\s*=\s*["']([^"']+)["']/, File.read!(schema), capture: :all_but_first)
+      |> List.flatten() |> MapSet.new()
+    projection = project_root(document, names) |> Saxy.encode!()
+    validate_projection(projection, schema)
+    :ok
+  rescue
+    exception in Error ->
+      # xmllint exit 3 means the document violates its XSD. Dependency errors,
+      # schema loading failures and timeouts are service failures, not evidence
+      # that an otherwise valid incoming invoice should be rejected.
+      if exception.stage == :validation and String.contains?(exception.message, "Native command exited 3:") do
+        Logger.error("FE XSD failed schema=#{filename} validator=xmllint reason=invalid_schema")
+        {:error, :invalid_schema}
+      else
+        Logger.error("FE XSD failed schema=#{filename} validator=xmllint reason=verifier_unavailable stage=#{exception.stage}")
+        {:error, :verifier_unavailable}
       end
-    end)
+    exception in File.Error ->
+      Logger.error("FE XSD failed schema=#{filename} reason=validation_file_unavailable action=#{exception.action}")
+      {:error, :verifier_unavailable}
+    exception ->
+      Logger.error("FE XSD failed schema=#{filename} exception=#{inspect(exception.__struct__)}")
+      {:error, :invalid_schema}
+  end
 
-    case Task.yield(task, 5000) || Task.shutdown(task, :brutal_kill) do
-      {:ok, result} -> result
-      _ -> {:error, :verifier_unavailable}
+  defp validate_projection(projection, schema) do
+    config = Application.get_env(:tigoo_server, :fe_authentication, [])
+    executable = Keyword.get(config, :xmllint_path, "xmllint")
+    directory = Path.join(System.tmp_dir!(), "tigoo-fe-xsd-" <> Base.url_encode64(:crypto.strong_rand_bytes(18), padding: false))
+    File.mkdir!(directory)
+    try do
+      File.chmod!(directory, 0o700)
+      path = Path.join(directory, "document.xml")
+      File.write!(path, projection, [:exclusive])
+      File.chmod!(path, 0o600)
+      # xmerl's regexp engine does not implement the XSD \w class used by
+      # DGII's email type. libxml2 handles the official schema unchanged.
+      Command.run!(executable, ["--nonet", "--noout", "--schema", schema, path], 5000)
+    after
+      File.rm_rf(directory)
     end
   end
-
-  defp log_schema_failure(filename, stage, reason) do
-    # Keep only diagnostic atoms; xmerl errors can embed the original XML tree
-    # and values, which must not be written to the application log.
-    codes = reason |> error_codes() |> Enum.uniq() |> Enum.take(20)
-    Logger.error("FE XSD failed schema=#{filename} stage=#{stage} codes=#{inspect(codes)}")
-    Enum.each(pattern_errors(reason), fn pattern ->
-      Logger.error("FE XSD pattern mismatch schema=#{filename} pattern=#{inspect(pattern)}")
-    end)
-  end
-
-  defp pattern_errors({:pattern_mismatch, _value, pattern}), do: [to_string(pattern)]
-  defp pattern_errors(value) when is_tuple(value), do: value |> Tuple.to_list() |> Enum.flat_map(&pattern_errors/1)
-  defp pattern_errors(value) when is_list(value), do: Enum.flat_map(value, &pattern_errors/1)
-  defp pattern_errors(_), do: []
-
-  defp error_codes(value) when is_atom(value), do: [value]
-  defp error_codes(value) when is_tuple(value), do: value |> Tuple.to_list() |> Enum.flat_map(&error_codes/1)
-  defp error_codes(value) when is_list(value), do: Enum.flat_map(value, &error_codes/1)
-  defp error_codes(_), do: []
 
   defp project_root({name, attrs, children}, names) do
     children = Enum.map(children, fn

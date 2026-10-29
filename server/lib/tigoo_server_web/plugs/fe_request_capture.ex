@@ -75,6 +75,7 @@ defmodule TigooServerWeb.Plugs.FeRequestCapture do
     end
     write_json(directory, "verifier-resources.json", %{
       xmlsec_path: Keyword.get(config, :xmlsec_path, "xmlsec1"),
+      xmllint_path: Keyword.get(config, :xmllint_path, "xmllint"),
       openssl_path: Keyword.get(config, :openssl_path, "openssl"), files: resources
     })
   end

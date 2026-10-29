@@ -231,3 +231,41 @@ its capture. Live token issuance and subsequent invoice reception remain to be
 confirmed; offline success does not establish that the full certification step
 has passed. These test CAs are for the certification deployment, not normal
 production invoicing trust.
+
+## Reception failure after authentication succeeded
+
+The capture `3ca8e6b5-26a0-4bf8-9343-f0d9bcc4b164` contains E31
+`E310000000001`. Its incoming XML passes the unchanged official E31 XSD under
+`xmllint`, and its signature verifies with the recovered Viafirma test chain.
+Both email fields were falsely rejected by xmerl's unimplemented XSD `\w`
+character class. Our returned ARECF was structurally valid and correctly signed
+with the receiver's Digifirma identity, but reported `Estado=1` and
+`CodigoMotivoNoRecibido=1` (specification error). Authentication was no longer the
+blocking step.
+
+Inbound invoice/ARECF XSD validation now uses the same native `xmllint` tool as
+the existing eCF generation flow. Official schemas are unchanged; digital
+signatures still use the original uploaded bytes. Validation uses a private
+temporary directory, `--nonet` and a five-second command timeout. A missing tool
+or unavailable schema returns service-unavailable rather than a false invoice
+rejection. Native validation errors are not logged with customer field values.
+Seed authentication and POS checkout are not changed by this fix.
+
+Before restarting the updated service, confirm the binary on production:
+
+```bash
+command -v xmllint
+```
+
+If missing on Ubuntu, install `libxml2-utils`. Set the executable path in
+`.env-prod` if needed:
+
+```dotenv
+FE_XMLLINT_PATH=/usr/bin/xmllint
+```
+
+Deploy, restart, then select **Enviar prueba de comprobantes** again. Keep request
+capture enabled. A fresh request is required because seeds/tokens are temporary.
+The next capture should show whether the valid invoice was persisted and an
+`Estado=0` ARECF returned. Full live completion still requires confirmation from
+DGII.
