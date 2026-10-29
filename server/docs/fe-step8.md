@@ -172,9 +172,62 @@ certificate matches the required key. `DGIIRootCertificateAuthority.zip`,
 `camaracomercio.crt` and `camaracomercio 2.crt` contain the already-configured
 Digifirma intermediate, not this Viafirma issuer.
 
-No URL for the matching issuer has been verified. Do not relabel an existing
-certificate, trust the incoming leaf automatically, disable verification, or
-interpret DGII's optional authentication wording as permission to issue tokens
-without completing the configured authentication flow. On the fresh Step 8 run,
-inspect the newly captured signer and any additional certificates/parts before
-deciding the next correction. Step 8 is not proven passing by these changes.
+## Matching 2024 chain recovered from Viafirma OCSP
+
+The CRLs in `certs_content.txt` carry the same authority key identifier as
+Pedro's certificate. Querying the official **HTTPS** OCSP service for that CertID
+returns the matching intermediate inside the signed OCSP response. Querying the
+intermediate's CertID returns the matching root, also inside a signed response.
+The old static `subcatest.crt` and `rootcatest.crt` downloads are a different test
+hierarchy; they must not be confused with these recovered certificates.
+
+Recovered public certificates:
+
+| File | Subject | Subject Key Identifier | SHA-256 fingerprint |
+| --- | --- | --- | --- |
+| `fe/viafirma-test-intermediate-2024.pem` | VIAFIRMA QUALIFIED CERTIFICATES TEST | `33CD2BC1F3C3DA701C6A3A256233E4AE080AB288` | `61AB86DBC7C7D25BADDFAF40804A2E55CB90A43F3575F03BD41184E281111453` |
+| `fe/viafirma-test-root-2024.pem` | VIAFIRMA CERTIFICATION - TEST | `5ADE45CC2B655CF9BC15ABF03AE86495B6A0CEC7` | `FBF85AFCA27F80B6F9F10AFCB15B2A3F229DC22DDE338A8C9C998D0216EB211F` |
+
+The intermediate is valid April 26, 2024–April 26, 2034. The root is valid
+April 26, 2024–April 26, 2054. Root self-signature, Pedro's certificate chain,
+CRL signature/revocation check, OCSP response signature, and full `xmlsec1`
+verification of the captured seed all pass with this chain. This is not
+integrity-only verification or automatic trust in an incoming leaf certificate.
+
+Evidence, exact OCSP requests/responses and report are saved locally under
+`fe/diagnostics/issuer-discovery-20261028/`. From the repository root, the
+following commands re-download the response resources using the saved requests:
+
+```bash
+wget --header='Content-Type: application/ocsp-request' --header='Accept: application/ocsp-response' --post-file=fe/diagnostics/issuer-discovery-20261028/signer-status-request.der -O /tmp/viafirma-signer-status.der https://ocsptest.viafirma.do/ocsp
+wget --header='Content-Type: application/ocsp-request' --header='Accept: application/ocsp-response' --post-file=fe/diagnostics/issuer-discovery-20261028/issuer-status-request.der -O /tmp/viafirma-issuer-status.der https://ocsptest.viafirma.do/ocsp
+```
+
+Decode the response resources (this parse operation alone does not verify trust):
+
+```bash
+openssl ocsp -respin /tmp/viafirma-signer-status.der -text -noverify | sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' > /tmp/viafirma-test-intermediate-2024.pem
+openssl ocsp -respin /tmp/viafirma-issuer-status.der -text -noverify | sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' > /tmp/viafirma-test-root-2024.pem
+```
+
+Compare their fingerprints against the recorded values above before provisioning
+trust. The root was obtained through the provider's authenticated HTTPS endpoint.
+Validate the chain and signed OCSP response independently:
+
+```bash
+openssl verify -check_ss_sig -CAfile fe/viafirma-test-root-2024.pem fe/viafirma-test-root-2024.pem
+openssl verify -CAfile fe/viafirma-test-root-2024.pem -untrusted fe/viafirma-test-intermediate-2024.pem fe/diagnostics/dgii-signer.pem
+openssl ocsp -respin /tmp/viafirma-signer-status.der -CAfile fe/viafirma-test-root-2024.pem -verify_other fe/viafirma-test-intermediate-2024.pem
+xmlsec1 --verify --enabled-reference-uris empty --enabled-key-data x509 --trusted-pem fe/viafirma-test-root-2024.pem --untrusted-pem fe/viafirma-test-intermediate-2024.pem fe/diagnostics/signed-seed.xml
+```
+
+For production's certification deployment, copy the two recovered files into
+`/opt/tigoo-app/fe/`. Replace only the old `rootcatest.pem` entry in
+`FE_TRUSTED_CERTIFICATES` with `/opt/tigoo-app/fe/viafirma-test-root-2024.pem`, and
+replace only the old `subcatest.pem` entry in `FE_INTERMEDIATE_CERTIFICATES` with
+`/opt/tigoo-app/fe/viafirma-test-intermediate-2024.pem`. Preserve the other
+configured provider entries. Restart, request a fresh Step 8 attempt, and inspect
+its capture. Live token issuance and subsequent invoice reception remain to be
+confirmed; offline success does not establish that the full certification step
+has passed. These test CAs are for the certification deployment, not normal
+production invoicing trust.
