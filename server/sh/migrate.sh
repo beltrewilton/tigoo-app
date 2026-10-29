@@ -40,7 +40,7 @@ fi
 
 # Tenant migrations only run against schemas that already exist. Create the
 # Retaily import schema on first use; Triplex.create also applies its tenant
-# migrations, while the task below brings existing schemas up to date.
+# migrations, while the targeted task below brings existing schemas up to date.
 TENANT_SCHEMA="$tenant_schema" mix run -e '
 tenant = System.fetch_env!("TENANT_SCHEMA")
 
@@ -49,4 +49,7 @@ unless Triplex.exists?(tenant, TigooServer.Repo) do
 end
 '
 
-mix triplex.migrate "$@"
+# The installed Triplex task visits every tenant and defaults to --step 1.
+# Ecto's prefixed runner targets this tenant and defaults to all pending
+# migrations, while preserving explicit --step/--to options.
+mix ecto.migrate "$@" --migrations-path priv/repo/tenant_migrations --prefix "$tenant_schema"

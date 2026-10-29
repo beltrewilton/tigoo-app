@@ -69,5 +69,17 @@ handled like the authentication and invoice-reception paths.
    `evofitdb.fe_received_approvals`. HTTP 200 confirms receipt of the approval,
    not independent completion of the DGII certification workflow.
 
+From `server/`, the corrected migration wrapper targets the requested tenant:
+
+```bash
+bash sh/migrate.sh .env-prod evofitdb
+```
+
+It runs public migrations and then all pending tenant migrations only for
+`evofitdb`. The previous wrapper ended with `mix triplex.migrate`, which ignored
+the requested tenant and, with the installed Triplex version, ran only one
+pending migration per tenant by default. Confirm the new table afterward with
+`\d evofitdb.fe_received_approvals` in psql before restarting certification.
+
 The code has not been compiled, tested or formatted during this implementation.
 Live certification readiness must be confirmed after deployment and migration.
