@@ -4,20 +4,25 @@ defmodule TigooServerWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  @session_cookie_domain System.get_env("SESSION_COOKIE_DOMAIN")
   @session_options [
-                     store: :cookie,
-                     key: "_pos_server_key",
-                     signing_salt: "XQ2PO7ap",
-                     same_site: "Lax"
-                   ] ++
-                     if @session_cookie_domain in [nil, ""],
-                       do: [],
-                       else: [domain: @session_cookie_domain]
+    store: :cookie,
+    key: "_pos_server_key",
+    signing_salt: "XQ2PO7ap",
+    same_site: "Lax"
+  ]
+
+  # Resolve the domain at runtime so build-time environment values cannot
+  # leave production with host-only cookies. Share these options with LiveView.
+  def session_options do
+    case System.get_env("SESSION_COOKIE_DOMAIN") do
+      domain when domain in [nil, ""] -> @session_options
+      domain -> Keyword.put(@session_options, :domain, domain)
+    end
+  end
 
   socket "/live", Phoenix.LiveView.Socket,
-    websocket: [connect_info: [session: @session_options]],
-    longpoll: [connect_info: [session: @session_options]]
+    websocket: [connect_info: [session: {__MODULE__, :session_options, []}]],
+    longpoll: [connect_info: [session: {__MODULE__, :session_options, []}]]
 
   socket "/socket", TigooServerWeb.UserSocket,
     websocket: true,
@@ -61,7 +66,11 @@ defmodule TigooServerWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
-  plug Plug.Session, @session_options
+  plug :runtime_session
   plug TigooServerWeb.Plugs.NormalizeFePath
   plug TigooServerWeb.Router
+
+  defp runtime_session(conn, _opts) do
+    Plug.Session.call(conn, Plug.Session.init(session_options()))
+  end
 end
