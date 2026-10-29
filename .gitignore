@@ -40,6 +40,7 @@ server/priv/static/assets/**
 !server/priv/static/assets/phoenix.js
 !server/priv/static/assets/phoenix_live_view.esm.js
 !server/priv/static/assets/purchase-orders-live.css
+!server/priv/static/assets/ecf-test.css
 !server/priv/static/assets/receipt_printer/
 !server/priv/static/assets/receipt_printer/**
 !server/priv/static/assets/shadcn-html/
