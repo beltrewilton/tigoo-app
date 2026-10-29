@@ -1,13 +1,11 @@
 defmodule TigooServerWeb.FeReceptionController do
   use TigooServerWeb, :controller
 
-  alias TigooServer.{FeAuthentication, FeReception, TenantContext, Tenants}
-  alias TigooServerWeb.Plugs.ResolveTenant
+  alias TigooServer.FeReception
+  alias TigooServerWeb.FeRequest
 
   def create(conn, params) do
-    with {:ok, identity} <- authenticate(conn),
-         {:ok, tenant} <- tenant(conn.host),
-         {:ok, xml} <- upload(params),
+    with {:ok, tenant, xml, identity} <- FeRequest.read(conn, params),
          {:ok, acknowledgement} <- FeReception.receive_ecf(tenant, xml, identity) do
       conn = headers(conn)
 
@@ -26,38 +24,6 @@ defmodule TigooServerWeb.FeReceptionController do
         error(conn, :service_unavailable, "Recepcion o firma del receptor no disponible")
     end
   end
-
-  defp authenticate(conn) do
-    with [header] <- get_req_header(conn, "authorization"),
-         [_, token] <- Regex.run(~r/\ABearer[ \t]+([^\s]+)\z/i, header) do
-      FeAuthentication.verify_token(token)
-    else
-      _ -> {:error, :invalid_token}
-    end
-  end
-
-  defp tenant(host) do
-    with {:tenant, tenant} <- ResolveTenant.tenant_from_host(host),
-         true <- Tenants.exists?(tenant) do
-      TenantContext.put_tenant(tenant)
-      {:ok, tenant}
-    else
-      _ -> {:error, :invalid_tenant}
-    end
-  end
-
-  defp upload(%{"xml" => %Plug.Upload{path: path}}) do
-    with {:ok, %{size: size}} <- File.stat(path),
-         true <- size <= 5_000_000,
-         {:ok, xml} <- File.read(path) do
-      {:ok, xml}
-    else
-      false -> {:error, :too_large}
-      _ -> {:error, :invalid_xml}
-    end
-  end
-
-  defp upload(_), do: {:error, :invalid_xml}
 
   defp headers(conn) do
     conn |> put_resp_header("cache-control", "no-store")

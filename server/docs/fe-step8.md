@@ -66,8 +66,9 @@ bounded to 8 MB per body/part/response. No body changes are made to live request
 or responses. JSON/XML token responses are redacted only in the archived copy.
 
 Only the FE authentication/reception/commercial-approval path prefixes are
-captured. POS checkout and non-FE requests are excluded. Capture does not implement
-the later commercial-approval endpoint. Directories use `0700`, files `0600`;
+captured. POS checkout and non-FE requests are excluded. Commercial-approval
+reception is documented separately in [fe-step10.md](fe-step10.md).
+Directories use `0700`, files `0600`;
 bearer/cookie headers and token/password multipart fields are omitted/redacted.
 Captures are not public static assets. Disable the environment setting after the
 investigation and remove/archive old runs deliberately; there is no automatic

@@ -4,7 +4,8 @@ defmodule TigooServerWeb.Plugs.NormalizeFePath do
   @paths [
     ["fe", "autenticacion", "api", "semilla"],
     ["fe", "autenticacion", "api", "validacioncertificado"],
-    ["fe", "recepcion", "api", "ecf"]
+    ["fe", "recepcion", "api", "ecf"],
+    ["fe", "aprobacioncomercial", "api", "ecf"]
   ]
 
   def init(opts), do: opts

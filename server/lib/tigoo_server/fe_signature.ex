@@ -41,11 +41,16 @@ defmodule TigooServer.FeSignature do
   end
 
   @doc "Verifies the enveloped RSA-SHA256 signature and trusted certificate of an e-CF."
-  def verify_ecf(xml) when is_binary(xml) and byte_size(xml) <= 5_000_000 do
+  def verify_ecf(xml), do: verify_document(xml, "ECF")
+
+  @doc "Verifies an inbound signed commercial approval with the same trust policy."
+  def verify_approval(xml), do: verify_document(xml, "ACECF")
+
+  defp verify_document(xml, root) when is_binary(xml) and byte_size(xml) <= 5_000_000 do
     with true <- String.valid?(xml) and not String.contains?(xml, ["\0", "<!DOCTYPE", "<!ENTITY"]),
          {:ok, document} <- Saxy.SimpleForm.parse_string(xml,
            expand_entity: {TigooServer.Sign, :reject_entity, []}),
-         {{"", "ECF"}, [], children} <- expand(document, %{}),
+         {{"", ^root}, [], children} <- expand(document, %{}),
          signature when is_tuple(signature) <- List.last(elements(children)),
          {:ok, certificate} <- signature_profile(signature),
          {:ok, identity} <- certificate_identity(certificate),
@@ -60,7 +65,7 @@ defmodule TigooServer.FeSignature do
     _ -> {:error, :invalid_signature}
   end
 
-  def verify_ecf(_), do: {:error, :invalid_signature}
+  defp verify_document(_, _), do: {:error, :invalid_signature}
 
   defp signed_seed({{"", "SemillaModel"}, [], children}) do
     with [{{"", "valor"}, [], [value]}, {{"", "fecha"}, [], [date]}, signature] <- elements(children),

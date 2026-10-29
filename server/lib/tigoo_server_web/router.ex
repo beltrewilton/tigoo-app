@@ -65,6 +65,12 @@ defmodule TigooServerWeb.Router do
     post "/ecf", FeReceptionController, :create
   end
 
+  scope "/fe/aprobacioncomercial/api", TigooServerWeb do
+    pipe_through :fe_api
+
+    post "/ecf", FeCommercialApprovalController, :create
+  end
+
   scope "/", TigooServerWeb do
     pipe_through :browser
 

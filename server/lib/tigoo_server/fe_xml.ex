@@ -31,6 +31,28 @@ defmodule TigooServer.FeXml do
 
   def parse(_), do: {:error, :invalid_xml}
 
+  def parse_approval(xml) when is_binary(xml) and byte_size(xml) <= 5_000_000 do
+    with true <- String.valid?(xml) and not String.contains?(xml, ["\0", "<!DOCTYPE", "<!ENTITY"]),
+         false <- Regex.match?(~r/<\?(?!xml\s)/, xml),
+         {:ok, {"ACECF", _, _} = document} <- Saxy.SimpleForm.parse_string(xml,
+           expand_entity: {TigooServer.Sign, :reject_entity, []}),
+         :ok <- validate_schema(document, "ACECF v.1.0.xsd"),
+         buyer when is_binary(buyer) <- value(document, ~w(DetalleAprobacionComercial RNCComprador)) do
+      approval = TigooServer.Fe.CommercialApproval.Document.validate!(document, buyer)
+      {:ok, Map.merge(approval, %{
+        emission_date: value(document, ~w(DetalleAprobacionComercial FechaEmision)),
+        rejection_reason: value(document, ~w(DetalleAprobacionComercial DetalleMotivoRechazo))
+      })}
+    else
+      {:error, reason} = error when reason in [:invalid_schema, :verifier_unavailable] -> error
+      _ -> {:error, :invalid_xml}
+    end
+  rescue
+    _ -> {:error, :invalid_xml}
+  end
+
+  def parse_approval(_), do: {:error, :invalid_xml}
+
   def validate(document, type) when type in @types do
     encf = value(document, ~w(Encabezado IdDoc eNCF))
 
