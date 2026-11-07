@@ -13,6 +13,7 @@ defmodule TigooServer.Accounts.Company do
     field :ecf_test_sequences_ready, :boolean, default: true
     field :access_token, :string
     field :active, :boolean, default: true
+    field :is_test, :boolean, default: false
     field :connected, :boolean, default: false
     field :odoo_url, :string
     field :odoo_db, :string

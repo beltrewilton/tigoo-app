@@ -4,7 +4,7 @@ defmodule TigooServerWeb.CompanySettingsLive do
 
   import TigooServerWeb.PosLayoutComponents
 
-  alias TigooServer.{Authentication, TenantContext}
+  alias TigooServer.{Authentication, TenantContext, TenantCopy}
   alias TigooServer.Accounts.Scope
   alias TigooServer.Retaily.CompanySettings
 
@@ -25,6 +25,10 @@ defmodule TigooServerWeb.CompanySettingsLive do
        |> assign(:stores, overview.stores)
        |> assign(:store_id, selected_store_id(overview.stores, Map.get(params, "store_id") || session["store_id"]))
        |> assign(:editing, nil)
+       |> assign(:copying, false)
+       |> assign(:copy_destination, scope.tenant <> "-test")
+       |> assign(:copied_tenant, nil)
+       |> assign(:copied_tenant_url, nil)
        |> assign(:status, "")}
     else
       {:error, :load_failed} ->
@@ -42,6 +46,30 @@ defmodule TigooServerWeb.CompanySettingsLive do
   end
 
   @impl true
+  def handle_event("copy_tenant", %{"destination" => destination, "confirm_source" => confirmation}, socket) do
+    scope = socket.assigns.scope
+
+    cond do
+      socket.assigns.copying ->
+        {:noreply, socket}
+
+      socket.assigns.overview.is_test ->
+        {:noreply, assign(socket, :status, copy_error(:test_tenant))}
+
+      confirmation != scope.tenant ->
+        {:noreply, assign(socket, :status, "Enter the current tenant name to confirm the copy.")}
+
+      true ->
+        {:noreply,
+         socket
+         |> assign(:copying, true)
+         |> assign(:copy_destination, destination)
+         |> assign(:copied_tenant, nil)
+         |> assign(:status, "Copying tenant. This may take several minutes.")
+         |> start_async(:copy_tenant, fn -> TenantCopy.copy(scope, destination) end)}
+    end
+  end
+
   def handle_event("add", %{"kind" => kind}, socket) when kind in @kinds,
     do: {:noreply, assign(socket, :editing, {kind, :new})}
 
@@ -148,6 +176,39 @@ defmodule TigooServerWeb.CompanySettingsLive do
   end
 
   @impl true
+  def handle_async(:copy_tenant, {:ok, {:ok, tenant}}, socket) do
+    {:noreply,
+     socket
+     |> assign(:copying, false)
+     |> assign(:copied_tenant, tenant)
+     |> assign(:copied_tenant_url, tenant_login_url(tenant))
+     |> assign(:status, "Tenant #{tenant} created. Sign in with a copied employee username and password.")}
+  end
+
+  def handle_async(:copy_tenant, {:ok, {:error, reason}}, socket) do
+    {:noreply, socket |> assign(:copying, false) |> assign(:status, copy_error(reason))}
+  end
+
+  def handle_async(:copy_tenant, {:exit, _reason}, socket) do
+    {:noreply, socket |> assign(:copying, false) |> assign(:status, copy_error(:copy_failed))}
+  end
+
+  defp copy_error(:destination_exists), do: "That tenant already exists. Choose another name; existing tenants are never overwritten."
+  defp copy_error(:invalid_destination), do: "Use 3–63 lowercase letters, numbers, hyphens or underscores, starting with a letter. Reserved tenant names are unavailable."
+  defp copy_error(:same_tenant), do: "Choose a different tenant name for the copy."
+  defp copy_error(:test_tenant), do: "Test tenants cannot be copied."
+  defp copy_error(:forbidden), do: "Company settings access is required to copy a tenant."
+  defp copy_error(:source_unavailable), do: "The source tenant is unavailable or missing required tables."
+  defp copy_error(:no_active_employees), do: "Create an active employee with store access before copying. The copy uses employee login."
+  defp copy_error(:unsupported_schema), do: "This tenant contains database objects that cannot be copied automatically. No copy was created."
+  defp copy_error(_), do: "The tenant copy could not be completed. Check whether the destination exists before retrying."
+
+  defp tenant_login_url(tenant) do
+    uri = URI.parse(TigooServerWeb.Endpoint.url())
+    URI.to_string(%{uri | host: tenant <> "." <> uri.host, path: "/pos/login", query: nil, fragment: nil})
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <.pos_layout
@@ -196,6 +257,32 @@ defmodule TigooServerWeb.CompanySettingsLive do
             </p>
           </div>
           <div class="company-settings-cards">
+            <article class="card company-settings-card">
+              <div class="card-header">
+                <h3 class="card-title">Copy tenant</h3>
+                <p class="card-description">Create an independent test copy of {@scope.tenant}, including products, inventory, sales and employee access.</p>
+              </div>
+              <div class="card-content">
+                <form id="copy-tenant-form" class="form" phx-submit="copy_tenant">
+                  <label class="label" for="copy-tenant-destination">New tenant name</label>
+                  <input id="copy-tenant-destination" class="input" name="destination" required
+                    minlength="3" maxlength="63" pattern="[a-z][a-z0-9_-]{2,62}"
+                    value={@copy_destination} disabled={@copying or @overview.is_test} />
+                  <label class="label" for="copy-tenant-confirm">Type {@scope.tenant} to confirm</label>
+                  <input id="copy-tenant-confirm" class="input" name="confirm_source" required
+                    autocomplete="off" disabled={@copying or @overview.is_test} />
+                  <p :if={@overview.is_test} class="field-description">Test tenants cannot be copied.</p>
+                  <p class="field-description">Employees keep their usernames, passwords, permissions and stores. Administrator accounts, sessions, addons and signing files are not copied. Odoo connections and fiscal submissions are disabled in the copy. Existing tenants cannot be overwritten.</p>
+                  <p class="field-description">Keep this page open until the copy finishes.</p>
+                  <button class="btn" type="submit" data-variant="default" disabled={@copying or @overview.is_test}
+                    phx-disable-with="Copying…">{if @copying, do: "Copying…", else: "Copy tenant"}</button>
+                </form>
+                <p :if={@copied_tenant} class="field-description">
+                  <a href={@copied_tenant_url} target="_blank" rel="noopener">Sign in to {@copied_tenant}</a>
+                  with a copied employee account.
+                </p>
+              </div>
+            </article>
             <article :if={@overview.ecf_test} class="card company-settings-card">
               <div class="card-header">
                 <h3 class="card-title">eCF Test issuer settings</h3>
