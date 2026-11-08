@@ -2801,7 +2801,7 @@ defmodule TigooServerWeb.PosLive do
     end)
   end
 
-  defp ecf_state_label("not_submitted"), do: "Sale completed — rotation does not require DGII submission"
+  defp ecf_state_label("not_submitted"), do: "Sale completed"
   defp ecf_state_label("queued"), do: "Queued for DGII submission"
   defp ecf_state_label("pending"), do: "Received; awaiting DGII result"
   defp ecf_state_label("accepted"), do: "Accepted"
