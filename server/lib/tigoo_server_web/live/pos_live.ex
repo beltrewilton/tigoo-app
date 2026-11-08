@@ -25,6 +25,7 @@ defmodule TigooServerWeb.PosLive do
         |> assign(:page_title, gettext("Point of Sale"))
         |> assign(:print_relay_token, token)
         |> assign(:scope, scope)
+       |> assign(:ui_receipt, TigooServer.Retaily.CompanySettings.ui_receipt_enabled?(scope))
         |> assign(:stores, stores)
         |> assign(:store_id, store && store.id)
         |> assign(:products, [])
@@ -686,6 +687,16 @@ defmodule TigooServerWeb.PosLive do
          :error,
          "Select a customer, cover the total, and choose a future due date for credit sales."
        )}
+    end
+  end
+
+  def handle_event("view_receipt", params, socket) do
+    prompt = if params["kind"] == "ecf_test", do: socket.assigns[:ecf_test_print_prompt], else: socket.assigns.print_prompt
+
+    if socket.assigns.ui_receipt && prompt do
+      {:noreply, push_event(socket, "receipt:preview", prompt.payload)}
+    else
+      {:noreply, socket}
     end
   end
 
@@ -2067,6 +2078,7 @@ defmodule TigooServerWeb.PosLive do
             <button class="btn" type="button" data-variant="outline" phx-click="close_ecf_test_modal">Close</button>
             <a class="btn" href={~p"/pos/ecf-tests"}>View history</a>
             <a class="btn" href={~p"/pos/ecf-tests?inspect=#{@ecf_test_invoice.id}"}>Inspect request / response</a>
+            <button :if={@ui_receipt && @ecf_test_print_prompt} class="btn" type="button" phx-click="view_receipt" phx-value-kind="ecf_test">Ver Recibo</button>
             <button :if={@ecf_test_print_prompt} class="btn" type="button" phx-click="confirm_ecf_test_print"
               disabled={@ecf_test_print_prompt[:printing] == true}>
               <span :if={@ecf_test_print_prompt[:printing] == true} class="ecf-spinner" aria-hidden="true"></span>
@@ -2075,7 +2087,7 @@ defmodule TigooServerWeb.PosLive do
           </div>
         </div>
       </dialog>
-      <.print_dialog :if={@print_prompt && !@ecf_test_modal?} prompt={@print_prompt} />
+      <.print_dialog :if={@print_prompt && !@ecf_test_modal?} prompt={@print_prompt} ui_receipt={@ui_receipt} />
     </.pos_layout>
     """
   end
@@ -3149,6 +3161,7 @@ defmodule TigooServerWeb.PosLive do
     _ -> 0
   end
 
+  attr :ui_receipt, :boolean, default: false
   attr :prompt, :map, required: true
 
   defp print_dialog(assigns) do
@@ -3156,7 +3169,8 @@ defmodule TigooServerWeb.PosLive do
     <dialog
       id="receipt-dialog"
       class="dialog"
-      data-size="sm"
+      data-size="lg"
+      style="width: calc(100vw - 2rem); max-width: 40rem;"
       open
       role="dialog"
       aria-modal="true"
@@ -3168,7 +3182,7 @@ defmodule TigooServerWeb.PosLive do
           <p id="receipt-print-description" class="dialog-description">{@prompt.description}</p>
         </div>
         <p id="receipt-print-status" class="print-status" role="status">{@prompt[:status] || ""}</p>
-        <div class="dialog-footer">
+        <div class="dialog-footer" style="flex-wrap: wrap; gap: 0.75rem;">
           <button
             id="skip-print"
             class="btn"
@@ -3178,7 +3192,9 @@ defmodule TigooServerWeb.PosLive do
             disabled={@prompt[:printing] == true}
           >
             No, return to POS
-          </button><button
+          </button>
+          <button :if={@ui_receipt} class="btn" type="button" phx-click="view_receipt">Ver Recibo</button>
+          <button
             id="print-receipt"
             class="btn"
             type="button"

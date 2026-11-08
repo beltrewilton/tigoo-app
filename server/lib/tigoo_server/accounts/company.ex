@@ -14,6 +14,7 @@ defmodule TigooServer.Accounts.Company do
     field :access_token, :string
     field :active, :boolean, default: true
     field :is_test, :boolean, default: false
+    field :ui_receipt, :boolean, default: false
     field :connected, :boolean, default: false
     field :odoo_url, :string
     field :odoo_db, :string
@@ -27,7 +28,7 @@ defmodule TigooServer.Accounts.Company do
 
   def changeset(company, attrs) do
     company
-    |> cast(attrs, [:company_name, :rnc, :brand_logo, :timezone_offset])
+    |> cast(attrs, [:company_name, :rnc, :brand_logo, :timezone_offset, :ui_receipt])
     |> validate_required([:company_name])
     |> validate_number(:timezone_offset, greater_than_or_equal_to: -12, less_than_or_equal_to: 14)
     |> validate_format(:brand_logo, ~r/^data:image\/[a-zA-Z0-9.+-]+;base64,/,

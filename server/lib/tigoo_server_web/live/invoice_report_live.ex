@@ -26,6 +26,7 @@ defmodule TigooServerWeb.InvoiceReportLive do
        |> assign(:page_title, gettext("Invoice Report"))
        |> assign(:print_relay_token, token)
        |> assign(:scope, scope)
+       |> assign(:ui_receipt, TigooServer.Retaily.CompanySettings.ui_receipt_enabled?(scope))
        |> assign(:stores, stores)
        |> assign(:store_id, store_id)
        |> assign(:entries, [])
@@ -239,6 +240,16 @@ defmodule TigooServerWeb.InvoiceReportLive do
        )}
     else
       _ -> {:noreply, put_flash(socket, :error, "Payment details could not be loaded.")}
+    end
+  end
+
+  def handle_event("view_receipt", params, socket) do
+    prompt = if params["kind"] == "ecf_test", do: socket.assigns[:ecf_test_print_prompt], else: socket.assigns.print_prompt
+
+    if socket.assigns.ui_receipt && prompt do
+      {:noreply, push_event(socket, "receipt:preview", prompt.payload)}
+    else
+      {:noreply, socket}
     end
   end
 
@@ -795,7 +806,7 @@ defmodule TigooServerWeb.InvoiceReportLive do
         :if={@cancel_id}
         invoice={Enum.find(@entries, &(integer(value(&1, "id")) == @cancel_id))}
       />
-      <.print_dialog :if={@print_prompt} prompt={@print_prompt} />
+      <.print_dialog :if={@print_prompt} prompt={@print_prompt} ui_receipt={@ui_receipt} />
     </.pos_layout>
     """
   end
@@ -1479,6 +1490,7 @@ defmodule TigooServerWeb.InvoiceReportLive do
   defp update_print_prompt(socket, status, printing),
     do: update(socket, :print_prompt, &Map.merge(&1, %{status: status, printing: printing}))
 
+  attr :ui_receipt, :boolean, default: false
   attr :prompt, :map, required: true
 
   defp print_dialog(assigns) do
@@ -1486,7 +1498,8 @@ defmodule TigooServerWeb.InvoiceReportLive do
     <dialog
       id="receipt-dialog"
       class="dialog"
-      data-size="sm"
+      data-size="lg"
+      style="width: calc(100vw - 2rem); max-width: 40rem;"
       open
       role="dialog"
       aria-modal="true"
@@ -1506,7 +1519,7 @@ defmodule TigooServerWeb.InvoiceReportLive do
           </p>
         </div>
         <p id="receipt-print-status" class="print-status" role="status">{@prompt[:status] || ""}</p>
-        <div class="dialog-footer">
+        <div class="dialog-footer" style="flex-wrap: wrap; gap: 0.75rem;">
           <button
             id="skip-print"
             class="btn"
@@ -1517,6 +1530,7 @@ defmodule TigooServerWeb.InvoiceReportLive do
           >
             <span data-i18n="invoice.noReturnToPos">No, return to POS</span>
           </button>
+          <button :if={@ui_receipt} class="btn" type="button" phx-click="view_receipt">Ver Recibo</button>
           <button
             id="print-receipt"
             class="btn"

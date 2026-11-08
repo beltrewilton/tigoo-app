@@ -93,6 +93,15 @@ defmodule TigooServerWeb.CompanySettingsLive do
     end
   end
 
+  def handle_event("save_ui_receipt", %{"company" => attrs}, socket) do
+    case safe_company_settings(fn -> CompanySettings.update_ui_receipt(socket.assigns.scope, attrs) end) do
+      {:ok, company} ->
+        {:noreply, socket |> assign(:overview, Map.put(socket.assigns.overview, :ui_receipt, company.ui_receipt)) |> assign(:status, "Receipt settings saved.")}
+      {:error, _} ->
+        {:noreply, assign(socket, :status, "Receipt settings could not be saved.")}
+    end
+  end
+
   def handle_event("save_ecf_test_settings", %{"ecf_test" => attrs}, socket) do
     case safe_company_settings(fn -> CompanySettings.update_ecf_test_settings(socket.assigns.scope, attrs) end) do
       {:ok, settings} ->
@@ -281,6 +290,19 @@ defmodule TigooServerWeb.CompanySettingsLive do
                   <a href={@copied_tenant_url} target="_blank" rel="noopener">Sign in to {@copied_tenant}</a>
                   with a copied employee account.
                 </p>
+              </div>
+            </article>
+            <article class="card company-settings-card">
+              <div class="card-header"><h3 class="card-title">Recibo en pantalla</h3></div>
+              <div class="card-content">
+                <form id="ui-receipt-settings" class="form" phx-submit="save_ui_receipt">
+                  <label class="label" for="company-ui-receipt">Ver Recibo</label>
+                  <select id="company-ui-receipt" class="input" name="company[ui_receipt]">
+                    <option value="false" selected={!@overview.ui_receipt}>Off</option>
+                    <option value="true" selected={@overview.ui_receipt}>On</option>
+                  </select>
+                  <button class="btn" type="submit">Guardar</button>
+                </form>
               </div>
             </article>
             <article :if={@overview.ecf_test} class="card company-settings-card">

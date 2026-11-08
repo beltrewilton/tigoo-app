@@ -25,6 +25,7 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/tigoo_server"
 import topbar from "../vendor/topbar"
 import {receiptPrinter} from "./receipt_printer/service"
+import {showReceiptPreview} from "./receipt_printer/preview"
 import {XmlViewer, EcfRowInspector} from "./xml_viewer"
 import {initI18n, money, t, translatePage} from "./i18n"
 
@@ -705,6 +706,9 @@ function uninstallNetworkStatus(element) {
 }
 
 function installPrinterEvents(hook) {
+  hook.handleEvent("receipt:preview", payload => {
+    showReceiptPreview(preparePrintPayload(payload).local, receiptPrinter.printConfig())
+  })
   syncPrintLogoCache(hook.el)
   hook.handleEvent("printer:print-receipt", payload => {
     const prepared = preparePrintPayload(payload)

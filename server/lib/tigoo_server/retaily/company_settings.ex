@@ -14,6 +14,7 @@ defmodule TigooServer.Retaily.CompanySettings do
     {:ok,
      %{
        company: company(scope),
+       ui_receipt: ui_receipt_enabled?(scope),
        is_test: Repo.exists?(from(c in Company, where: c.is_test == true), prefix: tenant),
        ecf_test: ecf_test_settings(tenant),
        price_lists: list_price_lists(tenant),
@@ -58,6 +59,27 @@ defmodule TigooServer.Retaily.CompanySettings do
           {:error, changeset} -> Repo.rollback(changeset)
         end
       end)
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  def ui_receipt_enabled?(scope) do
+    case editable_company(scope, scope.tenant) do
+      %Company{ui_receipt: enabled} -> enabled
+      _ -> false
+    end
+  end
+
+  def update_ui_receipt(scope, attrs) do
+    if TigooServer.Accounts.Scope.allowed?(scope, "company.settings") do
+      case editable_company(scope, scope.tenant) do
+        %Company{} = company ->
+          company
+          |> Ecto.Changeset.cast(attrs, [:ui_receipt])
+          |> Repo.update(prefix: scope.tenant)
+        _ -> {:error, :not_found}
+      end
     else
       {:error, :forbidden}
     end
