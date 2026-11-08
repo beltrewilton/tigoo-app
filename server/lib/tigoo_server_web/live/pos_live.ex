@@ -2100,8 +2100,8 @@ defmodule TigooServerWeb.PosLive do
             <button :if={@ecf_test_invoice.state == "failed"} class="btn" type="button"
               phx-click="retry_ecf_test" phx-value-id={@ecf_test_invoice.id}>Retry submission</button>
             <button class="btn" type="button" data-variant="outline" phx-click="close_ecf_test_modal">Close</button>
-            <a class="btn" href={~p"/pos/ecf-tests"}>View history</a>
-            <a class="btn" href={~p"/pos/ecf-tests?inspect=#{@ecf_test_invoice.id}"}>Inspect request / response</a>
+            <a :if={Scope.allowed?(@scope, "ecf.view")} class="btn" href={~p"/pos/ecf-tests"}>View history</a>
+            <a :if={Scope.allowed?(@scope, "ecf.view")} class="btn" href={~p"/pos/ecf-tests?inspect=#{@ecf_test_invoice.id}"}>Inspect request / response</a>
             <button :if={@ui_receipt && @ecf_test_print_prompt} class="btn" type="button" phx-click="view_receipt" phx-value-kind="ecf_test">Ver Recibo</button>
             <button :if={@ecf_test_print_prompt} class="btn" type="button" phx-click="confirm_ecf_test_print"
               disabled={@ecf_test_print_prompt[:printing] == true}>

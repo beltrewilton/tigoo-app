@@ -41,6 +41,13 @@ cannot cross modes while completing an invoice.
 
 ## Deployment configuration
 
+Apply `20261108070000_add_ecf_view_permission` to register `ecf.view`, then assign
+it through Users permissions to employees who need eCF history and XML inspection.
+The permission is not automatically granted. History routes, navigation and the
+POS modal's View history / Inspect request-response buttons require it; the
+existing enabled-environment and invoice ownership restrictions still apply.
+Checkout and its status updates do not require this viewing permission.
+
 Apply `20261108030000_remove_sale_identifier_uniqueness` before running the updated
 checkout. It removes identifier uniqueness for all sales and eCF documents,
 retaining ordinary search indexes. Generated identifiers remain in `sale.sequence`

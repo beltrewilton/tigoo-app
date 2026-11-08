@@ -8,7 +8,7 @@ defmodule TigooServerWeb.EcfTestXmlLive do
   def mount(%{"id" => id}, session, socket) do
     with token when is_binary(token) <- session["user_token"],
          {:ok, scope} <- Authentication.authenticate(token),
-         true <- TestInvoices.enabled?(scope),
+         true <- TestInvoices.view_allowed?(scope),
          _ <- TenantContext.put_tenant(scope.tenant),
          {:ok, stores} <- InventoryContext.stores(scope) do
       if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")

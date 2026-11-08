@@ -8,7 +8,7 @@ defmodule TigooServerWeb.EcfTestLive do
   def mount(_params, session, socket) do
     with token when is_binary(token) <- session["user_token"],
          {:ok, scope} <- Authentication.authenticate(token),
-         true <- TestInvoices.enabled?(scope),
+         true <- TestInvoices.view_allowed?(scope),
          _ <- TenantContext.put_tenant(scope.tenant),
          {:ok, stores} <- InventoryContext.stores(scope) do
       if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
@@ -16,7 +16,7 @@ defmodule TigooServerWeb.EcfTestLive do
         store_id: session["store_id"] || (List.first(stores) && hd(stores).id),
         invoices: [], next: nil, before_id: nil, refreshing: nil, inspection: nil, history_timer: nil, status: "")}
     else
-      _ -> {:ok, socket |> put_flash(:error, "An eCF environment must be enabled to view this page.") |> redirect(to: ~p"/pos")}
+      _ -> {:ok, socket |> put_flash(:error, "The ecf.view permission and an enabled eCF environment are required to view this page.") |> redirect(to: ~p"/pos")}
     end
   end
 
@@ -259,7 +259,7 @@ defmodule TigooServerWeb.EcfTestLive do
   end
 
   defp inspect_invoice(socket, id) do
-    with true <- TestInvoices.enabled?(socket.assigns.scope),
+    with true <- TestInvoices.view_allowed?(socket.assigns.scope),
          "ecf-test-" <> number <- id,
          {number, ""} <- Integer.parse(number),
          true <- number > 0,

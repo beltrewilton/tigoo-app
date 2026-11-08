@@ -228,8 +228,11 @@ defmodule TigooServer.Fe.TestInvoices do
   end
   def enabled?(_), do: false
 
+  def view_allowed?(scope),
+    do: TigooServer.Accounts.Scope.allowed?(scope, "ecf.view") and enabled?(scope)
+
   def history(scope, before_id \\ nil) do
-    if enabled?(scope) do
+    if view_allowed?(scope) do
       query = from(i in TestInvoice, where: i.user_id == ^scope.actor_id, order_by: [desc: i.id], limit: 51)
       query = if is_integer(before_id), do: from(i in query, where: i.id < ^before_id), else: query
       records = Repo.all(query, prefix: scope.tenant)
@@ -305,7 +308,7 @@ defmodule TigooServer.Fe.TestInvoices do
 
   def posted_xml(scope, "ecf-test-" <> id), do: posted_xml(scope, id)
   def posted_xml(scope, id) do
-    with true <- enabled?(scope),
+    with true <- view_allowed?(scope),
          {id, ""} <- Integer.parse(to_string(id)),
          %TestInvoice{} = invoice <- Repo.get_by(TestInvoice, [id: id, user_id: scope.actor_id], prefix: scope.tenant),
          {:ok, entry} <- submission_entry(invoice),
