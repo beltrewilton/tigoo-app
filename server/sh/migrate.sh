@@ -26,8 +26,10 @@ set -a
 . "$env_file"
 set +a
 
-if [[ -n "$tenant_schema" && ! "$tenant_schema" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-  echo "TENANT_SCHEMA must be a PostgreSQL identifier" >&2
+# Hyphenated tenant names are passed as data to Triplex and as a quoted
+# --prefix argument to Ecto; they are not interpolated into SQL here.
+if [[ -n "$tenant_schema" && ! "$tenant_schema" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]]; then
+  echo "TENANT_SCHEMA must start with a letter or underscore and contain only letters, digits, underscores, or hyphens" >&2
   exit 1
 fi
 
