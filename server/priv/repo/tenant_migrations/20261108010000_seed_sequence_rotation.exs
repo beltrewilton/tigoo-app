@@ -33,7 +33,7 @@ defmodule TigooServer.Repo.Migrations.SeedSequenceRotation do
       'E32',
       10,
       NULL,
-      1,
+      2,
       NULL,
       NULL,
       NULL
