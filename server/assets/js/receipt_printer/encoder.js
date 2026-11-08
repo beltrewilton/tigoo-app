@@ -1,3 +1,5 @@
+import {receiptText} from "./text.js"
+
 const DEFAULT_CONFIG = {
   printerModel: null,
   language: "esc-pos",
@@ -42,7 +44,7 @@ export class ReceiptEncoder {
   }
 
   text(value = "") {
-    this.bytes.push(...new TextEncoder().encode(String(value)))
+    this.bytes.push(...new TextEncoder().encode(receiptText(value)))
     return this
   }
 

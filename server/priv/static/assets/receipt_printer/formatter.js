@@ -1,9 +1,11 @@
+import {receiptText} from "./text.js"
+
 const money = value => {
   const amount = Number(value || 0)
   const formatted = Math.abs(amount).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})
   return `${amount < 0 ? "-" : ""}$${formatted}`
 }
-const str = value => value == null ? "" : String(value)
+const str = value => receiptText(value)
 
 export class ReceiptFormatter {
   constructor(config = {}) {
@@ -88,7 +90,7 @@ export class ReceiptFormatter {
     lines.push({text: rule(columns)})
     lines.push({align: "center", text: "Gracias por su compra"})
     lines.push({align: "center", text: `Recibo: ${sequence}`})
-    return lines
+    return lines.map(line => line.type === "image" ? line : {...line, text: receiptText(line.text)})
   }
 }
 

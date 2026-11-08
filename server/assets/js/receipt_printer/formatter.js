@@ -1,8 +1,11 @@
+import {receiptText} from "./text.js"
+
 import {LANGUAGES, getLanguage, money, t} from "../i18n"
 
-const str = value => value == null ? "" : String(value)
+const str = value => receiptText(value)
 
 function receiptDescription(sale) {
+  const portuguese = getLanguage() === "pt"
   const code = str(sale.sequence_type).toUpperCase().replace(/^TEST_/, "")
   const electronicCode = /^E\d{2}$/.test(code) ? code
     : str(sale.sequence).toUpperCase().match(/^E\d{2}/)?.[0]
@@ -18,11 +21,26 @@ function receiptDescription(sale) {
     E46: "EXPORTACIONES ELECTRÓNICO",
     E47: "PAGOS AL EXTERIOR ELECTRÓNICO"
   }
-  if (electronicCode) return `${electronicCode} - ${descriptions[electronicCode] || "COMPROBANTE ELECTRÓNICO"}`
-  if (code === "DV") return "DIARIO DE VENTAS"
+  const portugueseDescriptions = {
+    E31: "CRÉDITO FISCAL ELETRÔNICO",
+    E32: "CONSUMO ELETRÔNICO",
+    E33: "NOTA DE DÉBITO ELETRÔNICA",
+    E34: "NOTA DE CRÉDITO ELETRÔNICA",
+    E41: "COMPRAS ELETRÔNICO",
+    E43: "DESPESAS MENORES ELETRÔNICO",
+    E44: "REGIMES ESPECIAIS ELETRÔNICO",
+    E45: "GOVERNAMENTAL ELETRÔNICO",
+    E46: "EXPORTAÇÕES ELETRÔNICO",
+    E47: "PAGAMENTOS AO EXTERIOR ELETRÔNICO"
+  }
+  if (electronicCode) {
+    const description = portuguese ? portugueseDescriptions[electronicCode] : descriptions[electronicCode]
+    return `${electronicCode} - ${description || (portuguese ? "COMPROVANTE ELETRÔNICO" : "COMPROBANTE ELECTRÓNICO")}`
+  }
+  if (code === "DV") return portuguese ? "DIÁRIO DE VENDAS" : "DIARIO DE VENTAS"
   if (code === "CF") return "CONSUMIDOR FINAL"
   if (code === "VF") return "CRÉDITO FISCAL"
-  return "COMPROBANTE DE VENTA"
+  return portuguese ? "COMPROVANTE DE VENDA" : "COMPROBANTE DE VENTA"
 }
 
 export class ReceiptFormatter {
@@ -79,7 +97,7 @@ export class ReceiptFormatter {
     lines.push({bold: true, text: reconciliationAmountLine("Expected drawer", report.expected_cash, columns)})
     lines.push({text: rule(columns)})
     lines.push({align: "center", text: "END OF REPORT"})
-    return lines
+    return lines.map(line => line.type === "image" ? line : {...line, text: receiptText(line.text)})
   }
 
   document(copyLabel, sale, payment = null) {
@@ -155,7 +173,7 @@ export class ReceiptFormatter {
     lines.push({text: rule(columns)})
     lines.push({align: "center", text: t("receipts.thanks")})
     lines.push({align: "center", text: `${t("receipts.receipt")}: ${sequence}`})
-    return lines
+    return lines.map(line => line.type === "image" ? line : {...line, text: receiptText(line.text)})
   }
 }
 
@@ -206,7 +224,7 @@ function amountLine(label, value, columns) {
 }
 
 function receiptMoney(value) {
-  if (getLanguage() !== "pt") return money(value)
+  if (getLanguage() !== "pt") return receiptText(money(value))
   const amount = number(value)
   const formatted = Math.abs(amount).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})
   return `${amount < 0 ? "-" : ""}$${formatted}`
@@ -282,7 +300,7 @@ function shortDate(value) {
 }
 
 function columnAmountLine(label, value, columns) {
-  const amount = money(value)
+  const amount = receiptText(money(value))
   const amountColumn = amount.padStart(12)
   return str(label).padEnd(columns - amountColumn.length).slice(0, columns - amountColumn.length) + amountColumn
 }
