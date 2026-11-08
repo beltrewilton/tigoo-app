@@ -14,7 +14,9 @@ income type 02, N/A for blank buyer addresses, rotation precedence, and the
 `actionable` submission gate. Sales, payments and inventory commit in all modes.
 
 Production reads legal name, RNC and address from the active company, and E31
-uses `company.ecf_sequence_expiry` (never the test expiry). Company settings and
+uses `company.ecf_sequence_expiry` when set, otherwise `company.ecf_test_sequence_expiry`.
+E32 omits `FechaVencimientoSecuencia` from its generated document and does not
+require a production expiry. Company settings and
 Users report missing data/signing files. Production checkout ignores the test
 readiness flag and does not require manually supplied signing settings or a
 request key. POS generates a stable request UUID; direct production requests

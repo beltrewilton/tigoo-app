@@ -332,7 +332,7 @@ defmodule TigooServerWeb.CompanySettingsLive do
                   <label>Company address
                     <input class="input" name="fiscal_company[address]" value={@overview.fiscal_company.address} maxlength="100" required />
                   </label>
-                  <label>Production sequence expiry (required for E31)
+                  <label>Production sequence expiry (optional override; E31 defaults to Test expiry)
                     <input class="input" type="date" name="fiscal_company[ecf_sequence_expiry]" value={@overview.fiscal_company.ecf_sequence_expiry} />
                   </label>
                   <button class="btn" type="submit" phx-disable-with="Saving…">Save company fiscal data</button>

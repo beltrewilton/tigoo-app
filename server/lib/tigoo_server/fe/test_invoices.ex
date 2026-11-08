@@ -33,7 +33,7 @@ defmodule TigooServer.Fe.TestInvoices do
            where: c.active == true, limit: 2), prefix: tenant),
          :ok <- validate_issuer(company, operation, environment),
          {:ok, signing} <- signing_settings(tenant, company, operation, environment) do
-      expiry = if environment == "ecf", do: company.ecf_sequence_expiry, else: company.ecf_test_sequence_expiry
+      expiry = if environment == "ecf", do: production_expiry(company), else: company.ecf_test_sequence_expiry
       {:ok, Map.merge(%{"issuer_rnc" => String.trim(company.rnc), "issuer_name" => String.trim(company.company_name),
         "issuer_address" => String.trim(company.address || ""),
         "sequence_expiry" => if(expiry, do: Date.to_iso8601(expiry)),
@@ -57,8 +57,8 @@ defmodule TigooServer.Fe.TestInvoices do
 
   defp validate_issuer(company, operation, "ecf") do
     missing = production_company_missing(company)
-    missing = if match?({:checkout, "E31"}, operation) and not valid_sequence_expiry?(company.ecf_sequence_expiry),
-      do: missing ++ ["Set an unexpired production sequence expiry for E31"], else: missing
+    missing = if match?({:checkout, "E31"}, operation) and not valid_sequence_expiry?(production_expiry(company)),
+      do: missing ++ ["Set an unexpired sequence expiry for E31 (production override or Test expiry)"], else: missing
     if missing == [], do: :ok, else: issuer_error("ecf", Enum.join(missing, "; "))
   end
   defp validate_issuer(company, operation, _environment), do: validate_company(company, operation)
@@ -72,8 +72,8 @@ defmodule TigooServer.Fe.TestInvoices do
         codes = options(tenant) |> Enum.map(& &1.code)
         missing = production_company_missing(company)
         missing = if "E32" in codes, do: missing, else: missing ++ ["Configure an E32 sequence"]
-        missing = if "E31" in codes and not valid_sequence_expiry?(company.ecf_sequence_expiry),
-          do: missing ++ ["Set an unexpired production sequence expiry for E31"], else: missing
+        missing = if "E31" in codes and not valid_sequence_expiry?(production_expiry(company)),
+          do: missing ++ ["Set an unexpired sequence expiry for E31 (production override or Test expiry)"], else: missing
         missing = case TigooServer.Fe.Credentials.for_tenant(signing_tenant(tenant, company)) do
           {:ok, _} -> missing
           _ -> missing ++ ["Signing certificate or credentials file is unavailable"]
@@ -131,6 +131,9 @@ defmodule TigooServer.Fe.TestInvoices do
   end
 
   defp configuration_error(message), do: {:error, {:ecf_test_not_configured, message}}
+
+  defp production_expiry(company),
+    do: company.ecf_sequence_expiry || company.ecf_test_sequence_expiry
 
   defp valid_sequence_expiry?(%Date{} = expiry) do
     today = DateTime.utc_now() |> DateTime.add(-14_400) |> DateTime.to_date()
