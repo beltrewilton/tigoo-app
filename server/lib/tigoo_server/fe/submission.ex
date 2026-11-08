@@ -34,6 +34,9 @@ defmodule TigooServer.Fe.Submission do
     if manifest["purpose"] == "pos_ecf_test" and client.environment != "testecf" do
       fail!("POS test invoices may only be submitted to testecf")
     end
+    if manifest["purpose"] == "pos_ecf_certification" and client.environment != "certecf" do
+      fail!("POS certification invoices may only be submitted to CerteCF")
+    end
     jobs = preflight!(batch, manifest, client, opts)
     report_path = Keyword.get(opts, :report, Path.join(batch, "submission-#{client.environment}.json")) |> Path.expand()
     if report_path == Path.join(batch, "manifest.json"), do: fail!("Report must not replace the generation manifest")

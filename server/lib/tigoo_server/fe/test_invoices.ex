@@ -7,6 +7,12 @@ defmodule TigooServer.Fe.TestInvoices do
 
   @types ~w(31 32 33 34 41 43 44 45 46 47)
   @checkout_codes ~w(E31 E32 E44 E45 E46)
+  def environment_label("certecf"), do: "eCF Certification"
+  def environment_label("testecf"), do: "eCF Test"
+  def environment_label("ecf"), do: "eCF Production"
+  def environment_label(_), do: "eCF"
+  def submission_purpose("certecf"), do: "pos_ecf_certification"
+  def submission_purpose("testecf"), do: "pos_ecf_test"
   def sequence_codes, do: Enum.map(@types, &("E" <> &1))
   def checkout_codes, do: @checkout_codes
 
