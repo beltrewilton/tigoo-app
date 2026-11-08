@@ -64,7 +64,7 @@ defmodule TigooServerWeb.PosLive do
         |> assign(:ecf_test_invoice, nil)
         |> assign(:ecf_test_modal?, false)
         |> assign(:ecf_test_print_prompt, nil)
-        |> assign(:sequence, if(scope.ecf_test_enabled, do: "TEST_E32", else: "CF"))
+        |> assign(:sequence, if(scope.ecf_test_enabled, do: "E32", else: "CF"))
         |> assign(:sequences, sequence_options(scope))
         |> assign(:memo, "")
         |> assign(:print_prompt, nil)
@@ -512,7 +512,7 @@ defmodule TigooServerWeb.PosLive do
   def handle_event("select_sequence", %{"sequence" => sequence}, socket) do
     if Enum.any?(socket.assigns.sequences, &(&1.code == sequence)) do
       details = Map.merge(socket.assigns.ecf_details, %{"ecf_buyer_confirmed" => "false", "ecf_export_confirmed" => "false"})
-      details = if sequence in ~w(TEST_E31 TEST_E45), do: Map.put(details, "ecf_buyer_kind", "domestic"), else: details
+      details = if sequence in ~w(E31 E45), do: Map.put(details, "ecf_buyer_kind", "domestic"), else: details
       changed? = sequence != socket.assigns.sequence
       socket = socket |> assign(:sequence, sequence) |> assign(:ecf_details, details)
       socket = if socket.assigns.scope.ecf_test_enabled and changed?,
@@ -785,7 +785,7 @@ defmodule TigooServerWeb.PosLive do
      |> assign(:ecf_test_print_prompt, nil)
      |> assign(:print_prompt, nil)
      |> assign(:sequences, sequence_options(scope))
-     |> assign(:sequence, if(enabled, do: "TEST_E32", else: "CF"))
+     |> assign(:sequence, if(enabled, do: "E32", else: "CF"))
      |> assign(:ecf_details, default_ecf_details())
      |> assign(:ecf_lines, %{})
      |> assign(:checkout_stage, nil)
@@ -3236,8 +3236,8 @@ defmodule TigooServerWeb.PosLive do
     # changeset/document adapter validates the real item types before allocation.
     totals = TigooServer.Fe.TestInvoiceDocument.totals(%{sequence_type: s.sequence, lines: lines,
       totals: %{discount: line_discount_total(s) + order_discount_total(s)},
-      delivery_charge: if(s.sequence == "TEST_E46", do: 0, else: s.delivery)})
-    if s.sequence == "TEST_E46",
+      delivery_charge: if(s.sequence == "E46", do: 0, else: s.delivery)})
+    if s.sequence == "E46",
       do: %{totals | sub: Decimal.add(totals.sub, SaleFiscal.decimal(s.delivery)), amount: Decimal.add(totals.amount, SaleFiscal.decimal(s.delivery))},
       else: totals
   end

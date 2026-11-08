@@ -6,8 +6,8 @@ defmodule TigooServer.Fe.TestInvoices do
   alias TigooServer.Retaily.{Sequence, User}
 
   @types ~w(31 32 33 34 41 43 44 45 46 47)
-  @checkout_codes ~w(TEST_E31 TEST_E32 TEST_E44 TEST_E45 TEST_E46)
-  def sequence_codes, do: Enum.map(@types, &("TEST_E" <> &1))
+  @checkout_codes ~w(E31 E32 E44 E45 E46)
+  def sequence_codes, do: Enum.map(@types, &("E" <> &1))
   def checkout_codes, do: @checkout_codes
 
   def options(tenant) do
@@ -76,7 +76,7 @@ defmodule TigooServer.Fe.TestInvoices do
           sequence = Repo.one(from(s in Sequence, where: s.code == ^checkout.sequence_type, lock: "FOR UPDATE"), prefix: scope.tenant)
           unless sequence && sequence.code in @checkout_codes && sequence.increment_by == 1 &&
               sequence.fill == 10 && sequence.current_seq >= 0 && sequence.current_seq < 9_999_999_999 &&
-              sequence.prefix == String.replace_prefix(sequence.code, "TEST_", ""),
+              sequence.prefix == sequence.code,
             do: Repo.rollback(:invalid_ecf_test_sequence)
           next = sequence.current_seq + 1
           encf = sequence.prefix <> String.pad_leading(Integer.to_string(next), 10, "0")

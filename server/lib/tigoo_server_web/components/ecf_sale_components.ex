@@ -16,7 +16,7 @@ defmodule TigooServerWeb.EcfSaleComponents do
           <label>Buyer identification
             <select class="input" name="ecf[ecf_buyer_kind]">
               <option value="domestic" selected={@details["ecf_buyer_kind"] == "domestic"}>RNC / Cédula</option>
-              <option :if={@sequence not in ~w(TEST_E31 TEST_E45)} value="foreign" selected={@details["ecf_buyer_kind"] == "foreign"}>Foreign identifier</option>
+              <option :if={@sequence not in ~w(E31 E45)} value="foreign" selected={@details["ecf_buyer_kind"] == "foreign"}>Foreign identifier</option>
             </select>
           </label>
           <label>Buyer identifier
@@ -37,21 +37,21 @@ defmodule TigooServerWeb.EcfSaleComponents do
                 value={code} selected={@details["ecf_income_type"] == code}>{code} · {label}</option>
             </select>
           </label>
-          <label :if={@sequence == "TEST_E46"}>Buyer country
+          <label :if={@sequence == "E46"}>Buyer country
             <input class="input" name="ecf[ecf_buyer_country]" maxlength="60" phx-debounce="300" value={@details["ecf_buyer_country"]} required />
           </label>
-          <label :if={@sequence == "TEST_E46"}>Destination country
+          <label :if={@sequence == "E46"}>Destination country
             <input class="input" name="ecf[ecf_destination_country]" maxlength="60" phx-debounce="300" value={@details["ecf_destination_country"]} required />
           </label>
         </div>
-        <div :if={@sequence in ~w(TEST_E44 TEST_E45)}>
+        <div :if={@sequence in ~w(E44 E45)}>
           <input type="hidden" name="ecf[ecf_buyer_confirmed]" value="false" />
           <label><input type="checkbox" name="ecf[ecf_buyer_confirmed]" value="true"
             checked={@details["ecf_buyer_confirmed"] == "true"} />
-            {if @sequence == "TEST_E44", do: "I confirm this buyer qualifies for the special-regime exemption (including an eligible foreign diplomatic buyer).", else: "I confirm this buyer is an eligible government entity."}
+            {if @sequence == "E44", do: "I confirm this buyer qualifies for the special-regime exemption (including an eligible foreign diplomatic buyer).", else: "I confirm this buyer is an eligible government entity."}
           </label>
         </div>
-        <div :if={@sequence == "TEST_E46"}>
+        <div :if={@sequence == "E46"}>
           <input type="hidden" name="ecf[ecf_export_confirmed]" value="false" />
           <label><input type="checkbox" name="ecf[ecf_export_confirmed]" value="true"
             checked={@details["ecf_export_confirmed"] == "true"} />
@@ -66,7 +66,7 @@ defmodule TigooServerWeb.EcfSaleComponents do
           <div :for={line <- @cart} class="ecf-sale-line">
             <span>{line.name}</span>
             <label>ITBIS
-              <select class="input" name={"ecf_lines[#{line.id}][tax]"} disabled={@sequence in ~w(TEST_E44 TEST_E46)}>
+              <select class="input" name={"ecf_lines[#{line.id}][tax]"} disabled={@sequence in ~w(E44 E46)}>
                 <option :for={{code, label} <- [{"1", "18%"}, {"2", "16%"}, {"3", "0%"}, {"4", "Exempt"}]}
                   value={code} selected={SaleFiscal.indicator(@sequence, get_in(@line_options, [to_string(line.id), "tax"]) || "1") == code}>{label}</option>
               </select>

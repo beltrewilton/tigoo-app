@@ -1,9 +1,9 @@
 defmodule TigooServer.Fe.SaleFiscal do
   @moduledoc "Fiscal pricing for the existing 18%-inclusive POS catalog."
-  @codes ~w(TEST_E31 TEST_E32 TEST_E44 TEST_E45 TEST_E46)
+  @codes ~w(E31 E32 E44 E45 E46)
   def codes, do: @codes
-  def indicator("TEST_E44", _), do: "4"
-  def indicator("TEST_E46", _), do: "3"
+  def indicator("E44", _), do: "4"
+  def indicator("E46", _), do: "3"
   def indicator(_, requested), do: requested || "1"
   def factor("1"), do: Decimal.new("1.18")
   def factor("2"), do: Decimal.new("1.16")

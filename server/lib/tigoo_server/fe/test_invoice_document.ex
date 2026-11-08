@@ -26,7 +26,7 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
   def row(invoice) do
     s = invoice.snapshot
     type = String.slice(invoice.encf, 1, 2)
-    unless ("TEST_E" <> type) in Fiscal.codes(), do: raise(ArgumentError, "Unsupported POS sale type")
+    unless ("E" <> type) in Fiscal.codes(), do: raise(ArgumentError, "Unsupported POS sale type")
     details = s["ecf"] || %{}
     lines = document_lines(s)
     amounts = Fiscal.amounts(lines)
@@ -127,10 +127,10 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
   end
 
   defp document_lines(s) do
-    code = s["sequence_type"] || "TEST_E32"
+    code = String.replace_prefix(s["sequence_type"] || "E32", "TEST_", "")
     lines = Enum.map(s["lines"], fn l ->
       service = l["kind"] || "1"
-      if code == "TEST_E46" and service != "1", do: raise(ArgumentError, "Export eCF checkout supports goods; invoice services separately")
+      if code == "E46" and service != "1", do: raise(ArgumentError, "Export eCF checkout supports goods; invoice services separately")
       %{name: l["name"], quantity: l["quantity"], price: Fiscal.decimal(l["price"]),
         discount: Fiscal.decimal(l["discount"]), net: Fiscal.decimal(l["total"]),
         tax: Fiscal.indicator(code, l["tax"]), service: service}
@@ -150,7 +150,7 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
       end
     end)
     if Decimal.positive?(Fiscal.decimal(s["delivery_charge"])) do
-      if code == "TEST_E46", do: raise(ArgumentError, "Separate delivery services must be invoiced separately from exported goods")
+      if code == "E46", do: raise(ArgumentError, "Separate delivery services must be invoiced separately from exported goods")
       lines ++ [%{name: "Entrega", quantity: 1, price: Fiscal.decimal(s["delivery_charge"]),
         discount: Decimal.new(0), tax: Fiscal.indicator(code, "1"), service: "2"}]
     else

@@ -98,7 +98,7 @@ defmodule TigooServer.Retaily.SaleRequests.Checkout do
   end
 
   def changeset(checkout, attrs, sequence_codes \\ ["CF", "VF", "DV"]) do
-    ecf_test? = Enum.any?(sequence_codes, &String.starts_with?(&1, "TEST_E"))
+    ecf_test? = Enum.any?(sequence_codes, &String.starts_with?(&1, "E"))
     fields = [:store_id, :client_id, :sequence_type, :status, :sale_type, :due_date,
       :delivery_charge, :discount, :discount_type, :discount_input, :additional_info]
     fields = if ecf_test?, do: fields ++ [:ecf_buyer_kind, :ecf_buyer_id, :ecf_buyer_name,
@@ -146,11 +146,11 @@ defmodule TigooServer.Retaily.SaleRequests.Checkout do
         |> validate_length(:ecf_buyer_address, max: 100)
         |> validate_length(:ecf_buyer_country, max: 60)
         |> validate_length(:ecf_destination_country, max: 60)
-      changeset = if code in ~w(TEST_E31 TEST_E45) and get_field(changeset, :ecf_buyer_kind) == "foreign",
+      changeset = if code in ~w(E31 E45) and get_field(changeset, :ecf_buyer_kind) == "foreign",
         do: add_error(changeset, :ecf_buyer_kind, "requires a domestic buyer RNC/cédula"), else: changeset
-      changeset = if code in ~w(TEST_E44 TEST_E45),
+      changeset = if code in ~w(E44 E45),
         do: validate_acceptance(changeset, :ecf_buyer_confirmed, message: "confirm buyer eligibility"), else: changeset
-      if code == "TEST_E46" do
+      if code == "E46" do
         changeset
         |> validate_required([:ecf_buyer_country, :ecf_destination_country])
         |> validate_acceptance(:ecf_export_confirmed, message: "confirm export eligibility")

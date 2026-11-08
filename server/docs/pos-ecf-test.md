@@ -20,7 +20,7 @@ process before starting this version. No migrations are run automatically.
 Issuer identity comes from the single active `[tenant].company` record:
 `company_name`, `rnc`, and `address`. In Company settings, save the issuer address,
 `ecf_test_sequence_expiry`, and `ecf_test_sequences_ready`. Check the tenant's
-`TEST_E*` counters in Sequences against previously consumed test numbers before
+`E*` counters in Sequences against previously consumed test numbers before
 marking them ready. New seed counters start at zero; never reset used counters.
 The existing legal name and RNC are preserved.
 
