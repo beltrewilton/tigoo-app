@@ -58,6 +58,11 @@ rotation configuration fails checkout rather than falling back to a standard
 counter. Rotation advancement commits or rolls back with the sale.
 
 The invoice snapshot retains `sequence_source`, `sequence_code` and `actionable`.
+For actionable rotation calls, checkout uses the formatted `current_seq` returned
+by that same `SequenceRotation.next/1` call as the fiscal identifier. Otherwise it
+uses the returned rotating `identifier`. The selected value is stored in
+`sale.sequence` and the invoice eNCF, keeping receipts, history and posted XML
+consistent. Checkout does not calculate a replacement number or issue twice.
 Non-actionable rotating invoices finish as `not_submitted`: the sale, payments
 and inventory still commit, but the worker does not generate or post a DGII batch.
 Retries also enforce this rule. Standard eCF counters remain actionable. DV sales

@@ -17,7 +17,8 @@ defmodule TigooServer.Retaily.SequenceIssuer do
 
       try do
         with {:ok, result} <- SequenceRotation.next(rotation.code) do
-          {:ok, %{identifier: result.identifier, actionable: result.actionable,
+          identifier = if result.actionable, do: result.current_seq, else: result.identifier
+          {:ok, %{identifier: identifier, actionable: result.actionable,
             source: "rotation", code: result.code}}
         end
       after
