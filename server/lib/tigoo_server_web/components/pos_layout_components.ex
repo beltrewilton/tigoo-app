@@ -668,7 +668,11 @@ defmodule TigooServerWeb.PosLayoutComponents do
         </details>
       </nav>
       <div class="status-strip" aria-label="System status" data-i18n-aria-label="layout.status.system"
-        style={if TigooServer.Fe.TestInvoices.scope_ecf?(@scope), do: "background: #b91c1c; color: white;", else: nil}>
+        style={cond do
+          Map.get(@scope, :ecf_production_enabled, false) -> "background: #15803d; color: white;"
+          Map.get(@scope, :ecf_test_enabled, false) -> "background: #b91c1c; color: white;"
+          true -> nil
+        end}>
         <strong :if={TigooServer.Fe.TestInvoices.scope_ecf?(@scope)}>{TigooServer.Fe.TestInvoices.environment_label(TigooServer.Fe.TestInvoices.environment(@scope))}</strong>
         <span class="session-store-status" aria-live="polite">{@scope.login}</span>
         <details class="language-switcher">
