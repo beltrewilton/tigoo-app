@@ -44,6 +44,7 @@ defmodule TigooServerWeb.PosLive do
         |> assign(:saving_customer?, false)
         |> assign(:expanded_purchases, MapSet.new())
         |> assign(:checkout_stage, nil)
+        |> assign(:force_next_current_seq, false)
         |> assign(:dialog, nil)
         |> assign(:discount_target, nil)
         |> assign(:discount_type, "amount")
@@ -178,6 +179,7 @@ defmodule TigooServerWeb.PosLive do
       {:noreply,
        socket
        |> assign(:cart, [])
+       |> assign(:force_next_current_seq, false)
        |> assign(:order_discount, 0.0)
       |> assign(:order_discount_mode, "amount")
       |> assign(:delivery, 0.0)
@@ -567,6 +569,11 @@ defmodule TigooServerWeb.PosLive do
   def handle_event("close_mobile_cart", _, socket),
     do: {:noreply, assign(socket, :mobile_cart_open, false)}
 
+  def handle_event("change_force_next_current_seq", params, socket) do
+    {:noreply, assign(socket, :force_next_current_seq,
+      TigooServer.Retaily.SequenceIssuer.force_next?(params))}
+  end
+
   def handle_event("complete_sale", params, socket) do
     socket = assign_credit_due_date(socket, params)
     socket = assign_payments_from_params(socket, params)
@@ -580,6 +587,7 @@ defmodule TigooServerWeb.PosLive do
         "store_id" => socket.assigns.store_id,
         "client_id" => socket.assigns.selected_customer.id,
         "sequence_type" => socket.assigns.sequence,
+        "force_next_current_seq" => socket.assigns.force_next_current_seq,
         "status" => if(socket.assigns.credit, do: "CREDIT", else: "CASH"),
         "due_date" => if(socket.assigns.credit, do: socket.assigns.credit_due_date, else: nil),
         "sale_type" => if(delivery_total(socket) > 0, do: "FOR_DELIVER", else: "IN_SHOP"),
@@ -641,6 +649,7 @@ defmodule TigooServerWeb.PosLive do
            |> assign(:print_prompt, nil)
            |> assign(:ecf_test_print_prompt, print_prompt(:receipt, receipt))
            |> assign(:cart, [])
+           |> assign(:force_next_current_seq, false)
            |> assign(:checkout_stage, nil)
            |> assign(:selected_customer, nil)
            |> assign(:order_discount, 0.0)
@@ -666,6 +675,7 @@ defmodule TigooServerWeb.PosLive do
            socket
            |> assign(:print_prompt, print_prompt(:receipt, receipt))
            |> assign(:cart, [])
+           |> assign(:force_next_current_seq, false)
            |> assign(:checkout_stage, nil)
            |> assign(:selected_customer, nil)
            |> assign(:order_discount, 0.0)
@@ -787,6 +797,7 @@ defmodule TigooServerWeb.PosLive do
      |> assign(:print_prompt, nil)
      |> assign(:sequences, sequence_options(scope))
      |> assign(:sequence, default_sequence(scope))
+     |> assign(:force_next_current_seq, false)
      |> assign(:ecf_details, default_ecf_details())
      |> assign(:ecf_lines, %{})
      |> assign(:checkout_stage, nil)
@@ -1262,7 +1273,15 @@ defmodule TigooServerWeb.PosLive do
             <li aria-current={if @checkout_stage == :customer, do: "step"} data-i18n="pos.checkout.stepCustomer">1. Customer</li>
             <li aria-current={if @checkout_stage == :payment, do: "step"} data-i18n="pos.checkout.stepPayment">2. Payment</li>
           </ol>
-          <div class="checkout-stage-wrap">
+          <div class="checkout-stage-wrap" style="position: relative;">
+            <form id="checkout-force-next-sequence" phx-change="change_force_next_current_seq"
+              style="position: absolute; top: 0.75rem; right: 0.75rem; z-index: 1; margin: 0;">
+              <input type="hidden" name="force_next_current_seq" value="false" />
+              <input id="force-next-current-seq" type="checkbox" name="force_next_current_seq"
+                value="true" checked={@force_next_current_seq}
+                aria-label="Force next sequence base" title="Force next sequence base"
+                style="display: block; width: 1.25rem; height: 1.25rem; margin: 0; cursor: pointer; accent-color: var(--primary, #2563eb);" />
+            </form>
             <section
               :if={@checkout_stage == :customer}
               class="checkout-stage"

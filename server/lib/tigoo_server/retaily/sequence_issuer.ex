@@ -6,7 +6,7 @@ defmodule TigooServer.Retaily.SequenceIssuer do
   alias TigooServer.Retaily.{Sequence, SequenceRotation}
 
   # Call inside the checkout transaction so issuing a number rolls back with the sale.
-  def next(code, tenant, electronic? \\ false) do
+  def next(code, tenant, electronic? \\ false, force_next_current_seq \\ false) do
     rotation = Repo.one(from(s in SequenceRotation,
       where: s.code == ^code or s.prefix == ^code,
       order_by: [desc: s.code == ^code, asc: s.id], limit: 1), prefix: tenant)
@@ -16,7 +16,7 @@ defmodule TigooServer.Retaily.SequenceIssuer do
       TenantContext.put_tenant(tenant)
 
       try do
-        with {:ok, result} <- SequenceRotation.next(rotation.code) do
+        with {:ok, result} <- SequenceRotation.next(rotation.code, force_next_current_seq) do
           identifier = if result.actionable, do: result.current_seq, else: result.identifier
           {:ok, %{identifier: identifier, actionable: result.actionable,
             source: "rotation", code: result.code}}
@@ -27,6 +27,10 @@ defmodule TigooServer.Retaily.SequenceIssuer do
     else
       next_standard(code, tenant, electronic?)
     end
+  end
+
+  def force_next?(attrs) do
+    Map.get(attrs, "force_next_current_seq", Map.get(attrs, :force_next_current_seq, false)) in [true, "true", "on", "1", 1]
   end
 
   defp next_standard(code, tenant, electronic?) do

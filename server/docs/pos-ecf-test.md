@@ -63,6 +63,12 @@ by that same `SequenceRotation.next/1` call as the fiscal identifier. Otherwise 
 uses the returned rotating `identifier`. The selected value is stored in
 `sale.sequence` and the invoice eNCF, keeping receipts, history and posted XML
 consistent. Checkout does not calculate a replacement number or issue twice.
+The unlabeled checkbox at the top-right of checkout optionally sends
+`force_next_current_seq: true`. For configured rotations, issuance passes this
+as the second argument to `SequenceRotation.next/2`; unchecked defaults to false.
+Standard counters ignore the flag. The checkbox resets after successful checkout,
+clearing a sale, or changing environments. Existing rotation window validation
+still applies, and duplicate checkout requests do not issue another value.
 Non-actionable rotating invoices finish as `not_submitted`: the sale, payments
 and inventory still commit, but the worker does not generate or post a DGII batch.
 Retries also enforce this rule. Standard eCF counters remain actionable. DV sales

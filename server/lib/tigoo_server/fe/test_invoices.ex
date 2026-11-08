@@ -162,7 +162,7 @@ defmodule TigooServer.Fe.TestInvoices do
           {response(existing), nil}
         else
           unless checkout.sequence_type in @checkout_codes, do: Repo.rollback(:invalid_ecf_test_sequence)
-          issuance = case SequenceIssuer.next(checkout.sequence_type, scope.tenant, true) do
+          issuance = case SequenceIssuer.next(checkout.sequence_type, scope.tenant, true, SequenceIssuer.force_next?(attrs)) do
             {:ok, issuance} -> issuance
             {:error, reason} -> Repo.rollback(reason)
           end

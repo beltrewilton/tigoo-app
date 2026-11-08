@@ -108,7 +108,7 @@ defmodule TigooServer.Retaily.Sales do
                with :ok <- lock_operational_mode(scope, tenant, checkout.sequence_type),
                     :ok <- cashier_store?(cashier, checkout.store_id, tenant),
                     %Client{} = client <- Repo.get(Client, checkout.client_id, prefix: tenant),
-                    {:ok, issuance} <- SequenceIssuer.next(checkout.sequence_type, tenant),
+                    {:ok, issuance} <- SequenceIssuer.next(checkout.sequence_type, tenant, false, SequenceIssuer.force_next?(attrs)),
                     {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant),
                     totals <- totals(lines, checkout),
                     :ok <- valid_payments?(checkout.payments, totals.amount),
