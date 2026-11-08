@@ -2,6 +2,29 @@ import {LANGUAGES, getLanguage, money, t} from "../i18n"
 
 const str = value => value == null ? "" : String(value)
 
+function receiptDescription(sale) {
+  const code = str(sale.sequence_type).toUpperCase().replace(/^TEST_/, "")
+  const electronicCode = /^E\d{2}$/.test(code) ? code
+    : str(sale.sequence).toUpperCase().match(/^E\d{2}/)?.[0]
+  const descriptions = {
+    E31: "CRÉDITO FISCAL ELECTRÓNICO",
+    E32: "CONSUMO ELECTRÓNICO",
+    E33: "NOTA DE DÉBITO ELECTRÓNICA",
+    E34: "NOTA DE CRÉDITO ELECTRÓNICA",
+    E41: "COMPRAS ELECTRÓNICO",
+    E43: "GASTOS MENORES ELECTRÓNICO",
+    E44: "REGÍMENES ESPECIALES ELECTRÓNICO",
+    E45: "GUBERNAMENTAL ELECTRÓNICO",
+    E46: "EXPORTACIONES ELECTRÓNICO",
+    E47: "PAGOS AL EXTERIOR ELECTRÓNICO"
+  }
+  if (electronicCode) return `${electronicCode} - ${descriptions[electronicCode] || "COMPROBANTE ELECTRÓNICO"}`
+  if (code === "DV") return "DIARIO DE VENTAS"
+  if (code === "CF") return "CONSUMIDOR FINAL"
+  if (code === "VF") return "CRÉDITO FISCAL"
+  return "COMPROBANTE DE VENTA"
+}
+
 export class ReceiptFormatter {
   constructor(config = {}) {
     this.config = {columns: 48, ...config}
@@ -87,7 +110,8 @@ export class ReceiptFormatter {
       {text: twoCol(t("receipts.celphone"), str(sale.client_celphone || client.celphone || client.phone || ""), columns)},
       {text: twoCol(t("receipts.salesperson"), str(sale.login || ""), columns)},
       copyLabel ? {align: "center", text: copyLabel} : null,
-      {align: "center", text: sale.status === "CREDIT" ? t("receipts.creditInvoice") : t("receipts.salesJournal")},
+      {align: "center", text: receiptDescription(sale)},
+      sale.status === "CREDIT" ? {align: "center", text: t("receipts.creditInvoice")} : null,
       {text: rule(columns)},
       {text: columnsHeader(columns)},
       {text: rule(columns)}
