@@ -90,7 +90,7 @@ defmodule TigooServer.Retaily.SaleRequests.Checkout do
     field :ecf_buyer_address, :string
     field :ecf_buyer_country, :string
     field :ecf_destination_country, :string
-    field :ecf_income_type, :string, default: "01"
+    field :ecf_income_type, :string, default: "02"
     field :ecf_buyer_confirmed, :boolean, default: false
     field :ecf_export_confirmed, :boolean, default: false
     embeds_many :lines, Line
@@ -98,7 +98,7 @@ defmodule TigooServer.Retaily.SaleRequests.Checkout do
   end
 
   def changeset(checkout, attrs, sequence_codes \\ ["CF", "VF", "DV"]) do
-    ecf_test? = Enum.any?(sequence_codes, &String.starts_with?(&1, "E"))
+    ecf_test? = Enum.any?(sequence_codes, &(&1 in TigooServer.Fe.SaleFiscal.codes()))
     fields = [:store_id, :client_id, :sequence_type, :status, :sale_type, :due_date,
       :delivery_charge, :discount, :discount_type, :discount_input, :additional_info]
     fields = if ecf_test?, do: fields ++ [:ecf_buyer_kind, :ecf_buyer_id, :ecf_buyer_name,
@@ -138,6 +138,9 @@ defmodule TigooServer.Retaily.SaleRequests.Checkout do
     if code in TigooServer.Fe.SaleFiscal.codes() do
       changeset = Enum.reduce([:ecf_buyer_id, :ecf_buyer_name, :ecf_buyer_address, :ecf_buyer_country, :ecf_destination_country],
         changeset, fn field, acc -> update_change(acc, field, &String.trim/1) end)
+      address = get_field(changeset, :ecf_buyer_address)
+      changeset = if is_nil(address) or address == "",
+        do: put_change(changeset, :ecf_buyer_address, "N/A"), else: changeset
       changeset = changeset
         |> validate_inclusion(:ecf_buyer_kind, ~w(domestic foreign))
         |> validate_inclusion(:ecf_income_type, ~w(01 02 03 04 05 06))

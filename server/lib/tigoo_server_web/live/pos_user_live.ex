@@ -155,6 +155,13 @@ defmodule TigooServerWeb.PosUserLive do
     end
   end
 
+  def handle_event("set_ecf_production", %{"id" => id, "enabled" => enabled}, socket) when enabled in ["true", "false"] do
+    case Users.set_ecf_production(socket.assigns.scope, id, enabled == "true") do
+      {:ok, _} -> {:noreply, load_users(socket)}
+      {:error, reason} -> {:noreply, assign(socket, :status, error_message(reason))}
+    end
+  end
+
   def handle_event("deactivate_user", %{"id" => id}, socket) do
     if Scope.allowed?(socket.assigns.scope, "user.view") do
       case Users.deactivate(socket.assigns.scope, id) do
@@ -167,7 +174,13 @@ defmodule TigooServerWeb.PosUserLive do
   end
 
   @impl true
+  def handle_info({:ecf_environment, test, production}, socket) do
+    scope = %{socket.assigns.scope | ecf_test_enabled: test, ecf_production_enabled: production}
+    {:noreply, socket |> assign(:scope, scope) |> load_users()}
+  end
+
   def handle_info({:ecf_test_mode, enabled}, socket) do
+    enabled = enabled and TigooServer.Fe.TestInvoices.test_company?(socket.assigns.scope.tenant)
     {:noreply, socket |> assign(:scope, %{socket.assigns.scope | ecf_test_enabled: enabled}) |> load_users()}
   end
 

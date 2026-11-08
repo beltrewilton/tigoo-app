@@ -15,13 +15,49 @@ defmodule TigooServer.Retaily.CompanySettings do
      %{
        company: company(scope),
        ui_receipt: ui_receipt_enabled?(scope),
-       is_test: Repo.exists?(from(c in Company, where: c.is_test == true), prefix: tenant),
+       is_test: TigooServer.Fe.TestInvoices.test_company?(tenant),
        ecf_test: ecf_test_settings(tenant),
+       fiscal_company: fiscal_company(tenant),
+       production: TigooServer.Fe.TestInvoices.production_readiness(tenant),
        price_lists: list_price_lists(tenant),
        stores: list_stores(tenant),
        sequence_sets: list_sequence_sets(tenant),
        providers: list_providers(tenant)
      }}
+  end
+
+  defp fiscal_company(tenant) do
+    case Repo.all(from(c in Company, where: c.active == true, limit: 2), prefix: tenant) do
+      [company] -> Map.take(company, [:company_name, :rnc, :address, :ecf_sequence_expiry])
+      _ -> nil
+    end
+  end
+
+  def update_fiscal_company(scope, attrs) do
+    if TigooServer.Accounts.Scope.allowed?(scope, "company.settings") do
+      Repo.transaction(fn ->
+        company = case Repo.all(from(c in Company, where: c.active == true, limit: 2,
+                         lock: "FOR UPDATE"), prefix: scope.tenant) do
+          [company] -> company
+          _ -> Repo.rollback(:company_unavailable)
+        end
+        changeset = company
+          |> Ecto.Changeset.cast(attrs, [:company_name, :rnc, :address, :ecf_sequence_expiry])
+          |> Ecto.Changeset.update_change(:company_name, &String.trim/1)
+          |> Ecto.Changeset.update_change(:rnc, &String.trim/1)
+          |> Ecto.Changeset.update_change(:address, &String.trim/1)
+          |> Ecto.Changeset.validate_required([:company_name, :rnc, :address])
+          |> Ecto.Changeset.validate_format(:rnc, ~r/\A(?:[0-9]{9}|[0-9]{11})\z/)
+          |> Ecto.Changeset.validate_length(:company_name, max: 150)
+          |> Ecto.Changeset.validate_length(:address, max: 100)
+        case Repo.update(changeset, prefix: scope.tenant) do
+          {:ok, company} -> company
+          {:error, changeset} -> Repo.rollback(changeset)
+        end
+      end)
+    else
+      {:error, :forbidden}
+    end
   end
 
   defp ecf_test_settings(tenant) do
@@ -38,6 +74,7 @@ defmodule TigooServer.Retaily.CompanySettings do
           [company] -> company
           _ -> Repo.rollback(:company_unavailable)
         end
+        unless company.is_test, do: Repo.rollback(:forbidden)
         changeset = company
           |> Ecto.Changeset.cast(attrs, [:address, :ecf_test_sequence_expiry, :ecf_test_sequences_ready])
           |> Ecto.Changeset.update_change(:address, &String.trim/1)

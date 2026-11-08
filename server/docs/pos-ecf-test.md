@@ -1,15 +1,65 @@
 # POS eCF Test
 
-Users with eCF Test off retain CF/DV/VF, ordinary sales, inventory movement,
-payments, addon events and receipt printing. Tenant administrators retain that
-normal behavior; the switch belongs to the tenant's employee (`app_users`).
+With both eCF switches off, Payment & completion defaults to DIARIO DE VENTAS
+and also offers configured CF (CONSUMIDOR FINAL) and VF (CRÉDITO FISCAL) counters
+from `app_sequence`. These sales do not enter the DGII queue. Tenant
+administrators retain this ordinary flow; switches belong to employees.
 
-The `/pos/users` card switch changes only the fiscal flag and writes a tenant
+Test mode is available only for a single active company with `is_test: true`.
+Production mode is available for either value of `is_test`. Enabling either mode
+atomically disables the other; a database constraint enforces exclusivity.
+Production defaults to E32 and offers configured E32/E31 only. Test defaults to
+DV and also offers configured E32/E31. Both electronic modes use fiscal details,
+income type 02, N/A for blank buyer addresses, rotation precedence, and the
+`actionable` submission gate. Sales, payments and inventory commit in all modes.
+
+Production reads legal name, RNC and address from the active company, and E31
+uses `company.ecf_sequence_expiry` (never the test expiry). Company settings and
+Users report missing data/signing files. Production checkout ignores the test
+readiness flag and does not require manually supplied signing settings or a
+request key. POS generates a stable request UUID; direct production requests
+without a key receive a generated UUID and cannot deduplicate independent HTTP
+retries unless the caller retains a request key. Signing files are resolved
+automatically when the worker submits; missing files leave the sale recorded
+and the document in a controlled failure state. Company fiscal data and the
+production E31 expiry can be maintained in Company settings.
+
+Each document retains its original environment for processing, status queries,
+receipts and retries, even if its employee switches modes. Production batches
+use purpose `pos_ecf_production` and the existing `ecf` client endpoints; test
+batches remain restricted to `testecf`. No migration enables production or sends
+a document. Apply `20261108050000_add_ecf_production_mode` before loading the
+updated code. It adds the production employee flag, audit flag, exclusivity
+constraint and company production expiry, without setting an expiry by default.
+
+The `/pos/users` card switches update the environment flags and write a tenant
 audit record. POS sessions receive the change and return to sequence/payment
 review. Checkout rechecks the employee under a row lock, so a stale session
 cannot cross modes while completing an invoice.
 
 ## Deployment configuration
+
+Apply `20261108030000_remove_sale_identifier_uniqueness` before running the updated
+checkout. It removes identifier uniqueness for all sales and eCF documents,
+retaining ordinary search indexes. Generated identifiers remain in `sale.sequence`
+for compatibility with reports, receipts and existing sale relationships.
+Primary keys and `(user_id, request_id)` invoice idempotency remain unique.
+Repeated identifiers must be distinguished by record ID; the DGII submission
+batch still rejects duplicate eNCFs within a single batch. The POS creates a
+separate batch per request, and rotation `actionable` still gates submission.
+Removing database uniqueness does not change DGII's handling of reused numbers.
+
+Checkout first looks for a rotation whose code or prefix matches the selected
+sequence, preferring an exact code match. It calls `SequenceRotation.next/1`
+with that row's code. If no rotation exists, it uses `app_sequence`. Invalid
+rotation configuration fails checkout rather than falling back to a standard
+counter. Rotation advancement commits or rolls back with the sale.
+
+The invoice snapshot retains `sequence_source`, `sequence_code` and `actionable`.
+Non-actionable rotating invoices finish as `not_submitted`: the sale, payments
+and inventory still commit, but the worker does not generate or post a DGII batch.
+Retries also enforce this rule. Standard eCF counters remain actionable. DV sales
+continue to bypass the DGII queue regardless of their sequence source.
 
 Apply tenant migrations `20261026000000_add_pos_ecf_test` and
 `20261026010000_add_company_ecf_test_settings`, followed by
@@ -92,12 +142,18 @@ from reported amounts. Card payments cannot exceed the invoice total. Credit
 sales retain the required future due date. XSD/signature/chain checks remain in
 the existing generation pipeline before any POST.
 
-Checkout shares catalog validation and pricing without locking/changing
-inventory. It stores only a test invoice snapshot and reserves a test counter.
-No operational sale/line/payment, inventory/product mutation, trace, inventory
-broadcast or addon event occurs. The existing printer flow offers a receipt
-explicitly marked “eCF Test” and “NO COMMERCIAL SALE”; DGII status is shown
-separately in the result panel.
+eCF Test controls are available only when the tenant's single active company has
+`is_test: true`. Other companies show disabled issuer settings and hide the user
+switch; the server also rejects changes to these settings and user flags.
+
+eCF checkout locks inventory and uses the same sale, line, payment, product trace,
+inventory broadcast and addon-event path as ordinary checkout. Its eCF document,
+sequence reservation and operational writes commit in one transaction. Repeated
+requests with the same idempotency key return the existing invoice without
+repeating inventory movements or post-sale events. DGII submission remains
+asynchronous and does not determine whether the sale is recorded. New invoice
+snapshots retain the associated `sale_id`; historical documents remain unchanged.
+Receipts linked to a sale no longer display “NO COMMERCIAL SALE”.
 
 A small supervised scanner processes queued/pending documents from registered
 tenants. PostgreSQL session advisory locks coordinate nodes without a database
@@ -105,8 +161,7 @@ transaction around HTTP. Existing generation creates signed, schema/chain-checke
 artifacts. Existing submission journals persist receipt/track identity, poll
 pending results and refuse blind duplicate POSTs. A restart rescans the database
 and resumes the same journal. Config/known pre-upload failures can be retried
-from POS; rejected or uncertain submissions require reconciliation. No test
-status ever promotes a document into operational sales.
+from POS; rejected or uncertain submissions require reconciliation. Sales are already recorded at checkout; later DGII status updates do not create another sale.
 
 E32 below DOP250,000 sends RFCE. Acceptance is summary acceptance; the complete
 ECF remains in its batch for the separate full-document workflow described in
@@ -207,7 +262,7 @@ This reload reads the database; it does not initiate another DGII POST.
 
 ## Disabled-mode static audit
 
-Normal checkout uses only CF/DV/VF and the original pricing, discount, tax,
+With both environments off, normal checkout uses only CF/DV/VF and the original pricing, discount, tax,
 payment, inventory-update, reporting and addon-event code. Test-only request
 fields are neither sent nor cast in normal checkout. Ordinary drafts ignore
 fiscal metadata and keep the original sequence fallback; normal receipt payloads

@@ -33,7 +33,7 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
     unless Decimal.equal?(amounts.amount, Fiscal.decimal(s["totals"]["amount"])),
       do: raise(ArgumentError, "Round checkout amounts to cents before issuing the eCF")
     fields = %{"Version" => "1.0", "TipoeCF" => type, "ENCF" => invoice.encf,
-      "TipoIngresos" => details["ecf_income_type"] || "01",
+      "TipoIngresos" => details["ecf_income_type"] || "02",
       "TipoPago" => if(s["status"] == "CREDIT", do: "2", else: "1"),
       "RNCEmisor" => invoice.issuer_rnc, "RazonSocialEmisor" => s["issuer_name"],
       "DireccionEmisor" => s["issuer_address"], "FechaEmision" => date(s["issued_on"])}
@@ -71,7 +71,7 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
     if kind == "foreign" and type in ~w(31 45), do: raise(ArgumentError, "This sale type requires the buyer RNC/cédula")
     required? = type in ~w(31 44 45 46) or Decimal.compare(amount, 250_000) != :lt
     id = if kind == "domestic" and id, do: String.replace(id, ~r/[\s-]/, ""), else: id
-    valid? = if kind == "domestic", do: is_binary(id) and Regex.match?(~r/\A(?:[0-9]{9}|[0-9]{11})\z/, id),
+    valid? = if kind == "domestic", do: is_binary(id) and Regex.match?(~r/\A[0-9]{7,11}\z/, id),
       else: is_binary(id) and String.length(id) in 1..20
     if required? and not valid?, do: raise(ArgumentError, "Provide a valid buyer RNC/cédula or eligible foreign identifier")
     if type in ~w(44 45) and d["ecf_buyer_confirmed"] not in [true, "true"],
@@ -80,7 +80,7 @@ defmodule TigooServer.Fe.TestInvoiceDocument do
       do: raise(ArgumentError, "Confirm that this goods transaction qualifies for an export eCF")
     fields = Map.put(fields, "RazonSocialComprador", name)
     fields = if valid?, do: Map.put(fields, if(kind == "domestic", do: "RNCComprador", else: "IdentificadorExtranjero"), id), else: fields
-    address = present(d["ecf_buyer_address"]) || present(buyer["address"])
+    address = present(d["ecf_buyer_address"]) || "N/A"
     fields = if address, do: Map.put(fields, "DireccionComprador", String.slice(address, 0, 100)), else: fields
     if type == "46" do
       country = present(d["ecf_buyer_country"])

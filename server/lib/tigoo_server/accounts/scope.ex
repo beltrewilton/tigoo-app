@@ -14,6 +14,7 @@ defmodule TigooServer.Accounts.Scope do
             login: nil,
             pic: nil,
             ecf_test_enabled: false,
+            ecf_production_enabled: false,
             store_ids: [],
             scopes: []
 

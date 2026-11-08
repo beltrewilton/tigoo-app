@@ -31,6 +31,9 @@ defmodule TigooServer.Fe.Submission do
     if expected_type && Map.get(manifest, "document_type", "ECF") != expected_type do
       fail!("Expected a #{expected_type} batch; refusing to use another reception service")
     end
+    if manifest["purpose"] == "pos_ecf_production" and client.environment != "ecf" do
+      fail!("POS production invoices may only be submitted to ecf")
+    end
     if manifest["purpose"] == "pos_ecf_test" and client.environment != "testecf" do
       fail!("POS test invoices may only be submitted to testecf")
     end

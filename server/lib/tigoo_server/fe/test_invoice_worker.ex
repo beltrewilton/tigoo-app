@@ -54,8 +54,16 @@ defmodule TigooServer.Fe.TestInvoiceWorker do
   end
 
   defp submit(tenant, invoice) do
-    with {:ok, config} <- TestInvoices.config(tenant, :submission),
-         true <- invoice.environment in ["testecf", "certecf"] and invoice.issuer_rnc == config["issuer_rnc"] do
+    if TestInvoices.submit_allowed?(invoice) do
+      submit_actionable(tenant, invoice)
+    else
+      save(tenant, invoice, "not_submitted", invoice.report, nil)
+    end
+  end
+
+  defp submit_actionable(tenant, invoice) do
+    with {:ok, config} <- TestInvoices.config(tenant, :submission, invoice.environment),
+         true <- invoice.environment in ["testecf", "certecf", "ecf"] and invoice.issuer_rnc == config["issuer_rnc"] do
       purpose = TestInvoices.submission_purpose(invoice.environment)
       opts = [issuer_rnc: invoice.issuer_rnc, p12_path: config["p12_path"],
         credentials_file: config["credentials_file"], purpose: purpose,

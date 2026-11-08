@@ -34,7 +34,7 @@ defmodule TigooServerWeb.EcfSaleComponents do
           <label>Income type
             <select class="input" name="ecf[ecf_income_type]">
               <option :for={{code, label} <- [{"01", "Operations"}, {"02", "Financial"}, {"03", "Extraordinary"}, {"04", "Rental"}, {"05", "Depreciable asset sale"}, {"06", "Other"}]}
-                value={code} selected={@details["ecf_income_type"] == code}>{code} · {label}</option>
+                value={code} selected={@details["ecf_income_type"] == code}>{code} - {label}</option>
             </select>
           </label>
           <label :if={@sequence == "E46"}>Buyer country

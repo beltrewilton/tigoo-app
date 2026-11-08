@@ -72,8 +72,8 @@ export class ReceiptFormatter {
     const sequence = str(sale.sequence || sale.id || "-")
 
     const lines = [
-      sale.ecf_test === true ? {align: "center", bold: true, text: "eCF Test"} : null,
-      sale.ecf_test === true ? {align: "center", text: "TEST RECEIPT - NO COMMERCIAL SALE"} : null,
+      sale.ecf_test === true ? {align: "center", bold: true, text: sale.environment === "ecf" ? "eCF Production" : sale.environment === "certecf" ? "eCF Certification" : "eCF Test"} : null,
+      sale.ecf_test === true && sale.environment !== "ecf" && !sale.sale_id ? {align: "center", text: sale.environment === "certecf" ? "CERTIFICATION RECEIPT - NO COMMERCIAL SALE" : "TEST RECEIPT - NO COMMERCIAL SALE"} : null,
       store.logo ? {type: "image", image: store.logo, align: "center", width: 286} : null,
       store.address ? {align: "center", text: wrap(str(store.address).toUpperCase(), columns)} : null,
       store.slogan ? {align: "center", text: wrap(str(store.slogan).toUpperCase(), columns)} : null,

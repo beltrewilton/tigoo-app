@@ -92,7 +92,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
           </a>
           <a :if={nav_allowed?(@scope, :ecf_tests)} class="mobile-nav-link"
             href={nav_href(:ecf_tests, @active_page, @store_id)}
-            aria-current={current_page(@active_page, :ecf_tests)}>eCF Test history</a>
+            aria-current={current_page(@active_page, :ecf_tests)}>eCF history</a>
           <a
             :if={nav_allowed?(@scope, :invoices)}
             class="mobile-nav-link"
@@ -324,7 +324,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
         <a :if={nav_allowed?(@scope, :ecf_tests)} class="sidebar-link"
           href={nav_href(:ecf_tests, @active_page, @store_id)}
           aria-current={current_page(@active_page, :ecf_tests)}
-          aria-label="eCF Test history" title="eCF Test history">
+          aria-label="eCF history" title="eCF history">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5" />
           </svg>
@@ -668,8 +668,8 @@ defmodule TigooServerWeb.PosLayoutComponents do
         </details>
       </nav>
       <div class="status-strip" aria-label="System status" data-i18n-aria-label="layout.status.system"
-        style={if Map.get(@scope, :ecf_test_enabled, false), do: "background: #b91c1c; color: white;", else: nil}>
-        <strong :if={Map.get(@scope, :ecf_test_enabled, false)}>eCF Test</strong>
+        style={if TigooServer.Fe.TestInvoices.scope_ecf?(@scope), do: "background: #b91c1c; color: white;", else: nil}>
+        <strong :if={TigooServer.Fe.TestInvoices.scope_ecf?(@scope)}>{TigooServer.Fe.TestInvoices.environment_label(TigooServer.Fe.TestInvoices.environment(@scope))}</strong>
         <span class="session-store-status" aria-live="polite">{@scope.login}</span>
         <details class="language-switcher">
           <summary aria-label="Change display language" data-i18n-aria-label="layout.status.language">
@@ -787,7 +787,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp store_href(path, nil), do: path
   defp store_href(path, ""), do: path
   defp store_href(path, store_id), do: path <> "?" <> URI.encode_query(%{"store_id" => store_id})
-  defp nav_allowed?(scope, :ecf_tests), do: Map.get(scope, :ecf_test_enabled, false)
+  defp nav_allowed?(scope, :ecf_tests), do: TigooServer.Fe.TestInvoices.scope_ecf?(scope)
   defp nav_allowed?(scope, page), do: Scope.allowed?(scope, nav_permission(page))
 
   defp theme_options do

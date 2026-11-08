@@ -192,7 +192,7 @@ defmodule TigooServer.TenantCopy do
     SET is_test = TRUE, access_token = NULL, connected = FALSE, odoo_url = NULL, odoo_db = NULL,
         odoo_user = NULL, odoo_apikey = NULL, ecf_test_sequences_ready = FALSE
     """)
-    query!("UPDATE #{relation(destination, "app_users")} SET ecf_test_enabled = FALSE")
+    query!("UPDATE #{relation(destination, "app_users")} SET ecf_test_enabled = FALSE, ecf_production_enabled = FALSE")
     query!("""
     UPDATE #{relation(destination, "fe_test_invoices")}
     SET snapshot = snapshot - 'batch_path',

@@ -12,11 +12,11 @@ defmodule TigooServerWeb.EcfTestLive do
          _ <- TenantContext.put_tenant(scope.tenant),
          {:ok, stores} <- InventoryContext.stores(scope) do
       if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
-      {:ok, assign(socket, page_title: "eCF Test history", scope: scope, stores: stores,
+      {:ok, assign(socket, page_title: "eCF history", scope: scope, stores: stores,
         store_id: session["store_id"] || (List.first(stores) && hd(stores).id),
         invoices: [], next: nil, before_id: nil, refreshing: nil, inspection: nil, history_timer: nil, status: "")}
     else
-      _ -> {:ok, socket |> put_flash(:error, "eCF Test must be enabled to view this page.") |> redirect(to: ~p"/pos")}
+      _ -> {:ok, socket |> put_flash(:error, "An eCF environment must be enabled to view this page.") |> redirect(to: ~p"/pos")}
     end
   end
 
@@ -69,6 +69,12 @@ defmodule TigooServerWeb.EcfTestLive do
   def handle_info(:refresh_history, socket),
     do: {:noreply, socket |> assign(:history_timer, nil) |> load_history()}
 
+  def handle_info({:ecf_environment, test, production}, socket) do
+    scope = %{socket.assigns.scope | ecf_test_enabled: test, ecf_production_enabled: production}
+    if test or production,
+      do: {:noreply, assign(socket, :scope, scope)}, else: {:noreply, redirect(socket, to: ~p"/pos")}
+  end
+
   def handle_info({:ecf_test_mode, false}, socket), do: {:noreply, redirect(socket, to: ~p"/pos")}
   def handle_info({:ecf_test_mode, true}, socket), do: {:noreply, socket}
 
@@ -111,7 +117,7 @@ defmodule TigooServerWeb.EcfTestLive do
       scope={@scope} stores={@stores} store_id={@store_id}>
       <section class="catalog-panel ecf-history-page" aria-labelledby="ecf-test-title">
         <header class="ecf-history-heading">
-          <div><p class="ecf-xml-eyebrow">FISCAL WORKSPACE</p><h1 id="ecf-test-title">eCF Test history</h1>
+          <div><p class="ecf-xml-eyebrow">FISCAL WORKSPACE</p><h1 id="ecf-test-title">eCF history</h1>
           </div>
           <div class="ecf-history-heading-actions">
             <a class="btn" href={~p"/pos"}>Back to POS</a>
@@ -122,8 +128,8 @@ defmodule TigooServerWeb.EcfTestLive do
           <span :if={@refreshing} class="ecf-spinner" aria-hidden="true"></span>{@status}
         </div>
         <div class="ecf-history-table-card">
-          <div class="ecf-history-table-heading"><span>Test invoices</span><small>{length(@invoices)} on this page · DOP</small></div>
-          <div :if={@invoices == []} class="ecf-history-empty"><strong>No test invoices yet</strong><p>Completed test checkouts will appear here with their DGII responses.</p></div>
+          <div class="ecf-history-table-heading"><span>Fiscal invoices</span><small>{length(@invoices)} on this page · DOP</small></div>
+          <div :if={@invoices == []} class="ecf-history-empty"><strong>No fiscal invoices yet</strong><p>Completed fiscal checkouts will appear here with their DGII responses.</p></div>
           <div :if={@invoices != []} class="ecf-history-table-scroll">
             <table class="ecf-history-table">
               <thead><tr><th>Invoice</th><th>Buyer</th><th class="is-numeric">Amount</th><th>Status</th><th>Track ID</th><th>DGII receipt</th><th class="ecf-history-actions-heading">Actions</th></tr></thead>
@@ -131,7 +137,7 @@ defmodule TigooServerWeb.EcfTestLive do
                 <tr :for={invoice <- @invoices} id={invoice.id}
                   class={[@inspection && @inspection.invoice.id == invoice.id && "is-inspected"]}
                   aria-busy={@refreshing == invoice.id}>
-                  <td><strong class="ecf-history-sequence">{invoice.sequence}</strong><small title={to_string(invoice.inserted_at)}>{created_at(invoice.inserted_at)}</small></td>
+                  <td><strong class="ecf-history-sequence">{invoice.sequence}</strong><small>{TestInvoices.environment_label(invoice.environment)}</small><small title={to_string(invoice.inserted_at)}>{created_at(invoice.inserted_at)}</small></td>
                   <td><span class="ecf-history-buyer">{invoice.receipt.client["name"] || "—"}</span><small>{invoice.receipt.client["document_id"] || "—"}</small></td>
                   <td class="is-numeric ecf-history-amount">{Decimal.to_string(Decimal.round(invoice.receipt.amount, 2), :normal)}</td>
                   <td>
@@ -181,6 +187,7 @@ defmodule TigooServerWeb.EcfTestLive do
           <header class="ecf-inspector-heading">
             <div class="ecf-inspector-title-line"><p class="ecf-xml-eyebrow">DGII EXCHANGE</p>
               <h2 id="ecf-inspector-title">{@inspection.invoice.sequence}</h2>
+              <span>{TestInvoices.environment_label(@inspection.invoice.environment)}</span>
             </div>
             <button class="btn" type="button" phx-click="close_xml_inspector" aria-label="Close request and response inspector">✕</button>
           </header>
@@ -259,6 +266,7 @@ defmodule TigooServerWeb.EcfTestLive do
          {:ok, invoice} <- TestInvoices.get(socket.assigns.scope, number) do
       {artifact, error} = case TestInvoices.posted_xml(socket.assigns.scope, number) do
         {:ok, artifact} -> {artifact, nil}
+        {:error, :ecf_xml_not_submitted} -> {nil, "No submission record is available for this invoice. Review its processing error before retrying."}
         _ -> {nil, "The upload XML is unavailable or does not match its recorded checksum."}
       end
       assign(socket, :inspection, %{invoice: invoice, artifact: artifact, error: error})
@@ -287,6 +295,7 @@ defmodule TigooServerWeb.EcfTestLive do
   defp created_at(%DateTime{} = value), do: value |> DateTime.add(-14_400) |> Calendar.strftime("%d %b %Y · %H:%M")
   defp created_at(value), do: to_string(value)
   defp status_label("accepted"), do: "Accepted"
+  defp status_label("not_submitted"), do: "Not submitted (rotation)"
   defp status_label("accepted_conditional"), do: "Conditional"
   defp status_label("rejected"), do: "Rejected"
   defp status_label("queued"), do: "Queued"
@@ -295,7 +304,8 @@ defmodule TigooServerWeb.EcfTestLive do
   defp status_label(_), do: "Needs review"
 
   defp error_message(:ecf_busy), do: "This invoice is being processed. Try again shortly."
-  defp error_message(:forbidden), do: "eCF Test access is no longer enabled."
+  defp error_message(:forbidden), do: "eCF access is no longer enabled."
+  defp error_message({:ecf_production_not_configured, message}), do: message
   defp error_message({:ecf_test_not_configured, message}), do: message
   defp error_message(_), do: "DGII status is unavailable. The saved response is retained."
 end

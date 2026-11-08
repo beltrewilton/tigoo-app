@@ -58,6 +58,10 @@ defmodule TigooServerWeb.PosUserComponents do
         </div>
       </header>
       <p class="users-status" role="status">{@status}</p>
+      <p :if={@options[:production]} class="users-status" role="status">
+        Production: {if @options.production.ready, do: "company and signing data available", else: "configuration incomplete"}.
+        {Enum.join(@options.production.missing, "; ")}
+      </p>
       <div class="user-list">
         <article :for={user <- @users} class={["card user-card", !active?(user) && "is-inactive"]}>
           <div class="card-content">
@@ -90,6 +94,14 @@ defmodule TigooServerWeb.PosUserComponents do
           </div>
           <div class="card-footer">
             <button type="button" class="btn" role="switch"
+              aria-checked={to_string(user.ecf_production_enabled)}
+              aria-label={"eCF Production for #{user.username}"}
+              data-variant={if user.ecf_production_enabled, do: "destructive", else: "outline"}
+              phx-click="set_ecf_production" phx-value-id={user.id}
+              phx-value-enabled={to_string(!user.ecf_production_enabled)}>
+              eCF Production: {if user.ecf_production_enabled, do: "On", else: "Off"}
+            </button>
+            <button :if={@options[:is_test]} type="button" class="btn" role="switch"
               aria-checked={to_string(user.ecf_test_enabled)}
               aria-label={"eCF Test for #{user.username}"}
               data-variant={if user.ecf_test_enabled, do: "destructive", else: "outline"}

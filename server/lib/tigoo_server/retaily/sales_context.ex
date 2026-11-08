@@ -19,7 +19,7 @@ defmodule TigooServer.Retaily.Sales do
     Sale,
     SaleLine,
     SalePaid,
-    Sequence,
+    SequenceIssuer,
     User,
     UserStore
   }
@@ -30,8 +30,10 @@ defmodule TigooServer.Retaily.Sales do
   @zero Decimal.new(0)
 
   def create_sale(scope, attrs) do
-    with {:ok, cashier, tenant} <- cashier(scope) do
-      if Map.get(cashier, :ecf_test_enabled, false) do
+    with {:ok, cashier, tenant} <- cashier(scope),
+         :ok <- production_sequence_allowed(scope, attrs) do
+      if TigooServer.Fe.TestInvoices.enabled?(scope) and
+           Map.get(attrs, "sequence_type", Map.get(attrs, :sequence_type)) != "DV" do
         create_test_invoice(scope, attrs, cashier, tenant)
       else
         create_operational_sale(scope, attrs, cashier, tenant)
@@ -39,14 +41,36 @@ defmodule TigooServer.Retaily.Sales do
     end
   end
 
+  defp production_sequence_allowed(scope, attrs) do
+    code = Map.get(attrs, "sequence_type", Map.get(attrs, :sequence_type))
+    if TigooServer.Fe.TestInvoices.environment(scope) == "ecf" and code not in ~w(E31 E32),
+      do: {:error, :invalid_ecf_sequence}, else: :ok
+  end
+
   defp create_test_invoice(scope, attrs, cashier, tenant) do
     changeset = Checkout.changeset(%Checkout{}, attrs, TigooServer.Fe.TestInvoices.checkout_codes())
-    with true <- changeset.valid?,
-         checkout <- Changeset.apply_changes(changeset),
-         :ok <- delivery_allowed?(scope, checkout),
+    if changeset.valid? do
+      checkout = Changeset.apply_changes(changeset)
+      prepare = fn -> prepare_test_sale(scope, checkout, cashier, tenant) end
+
+      case TigooServer.Fe.TestInvoices.create(scope, checkout, prepare, attrs) do
+        {:ok, {invoice, effects}} ->
+          if effects, do: publish_sale(scope, checkout, effects)
+          {:ok, invoice}
+        error -> error
+      end
+    else
+      {:error, changeset}
+    end
+  rescue
+    error in ArgumentError -> {:error, {:ecf_document, Exception.message(error)}}
+  end
+
+  defp prepare_test_sale(scope, checkout, cashier, tenant) do
+    with :ok <- delivery_allowed?(scope, checkout),
          :ok <- cashier_store?(cashier, checkout.store_id, tenant),
          %Client{} = client <- Repo.get(Client, checkout.client_id, prefix: tenant),
-         {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant, false, checkout.sequence_type),
+         {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant, true, checkout.sequence_type),
          totals <- totals(lines, checkout),
          :ok <- valid_payments?(checkout.payments, totals.amount) do
       snapshot = %{
@@ -66,15 +90,14 @@ defmodule TigooServer.Retaily.Sales do
       }
       fiscal_totals = TigooServer.Fe.TestInvoiceDocument.totals(snapshot)
       snapshot = Map.put(snapshot, :totals, Map.merge(totals, fiscal_totals))
-      TigooServer.Fe.TestInvoices.create(scope, checkout, snapshot, attrs)
+      {:ok, %{snapshot: snapshot, persist: fn issuance ->
+        persist_sale(checkout, cashier, client, issuance.identifier, lines, snapshot.totals, tenant)
+      end}}
     else
-      false -> {:error, changeset}
       nil -> {:error, :not_found}
       :error -> {:error, :forbidden_store}
       error -> error
     end
-  rescue
-    error in ArgumentError -> {:error, {:ecf_document, Exception.message(error)}}
   end
 
   defp create_operational_sale(scope, attrs, cashier, tenant) do
@@ -82,48 +105,54 @@ defmodule TigooServer.Retaily.Sales do
          :ok <- delivery_allowed?(scope, checkout) do
       with {:ok, sale} <-
              Repo.transaction(fn ->
-               with :ok <- lock_operational_mode(scope, tenant),
+               with :ok <- lock_operational_mode(scope, tenant, checkout.sequence_type),
                     :ok <- cashier_store?(cashier, checkout.store_id, tenant),
                     %Client{} = client <- Repo.get(Client, checkout.client_id, prefix: tenant),
-                    {:ok, sequence} <- next_sequence(checkout.sequence_type, tenant),
+                    {:ok, issuance} <- SequenceIssuer.next(checkout.sequence_type, tenant),
                     {:ok, lines} <- sale_lines(checkout.lines, checkout.store_id, tenant),
                     totals <- totals(lines, checkout),
                     :ok <- valid_payments?(checkout.payments, totals.amount),
-                    {:ok, sale} <-
-                      insert_sale(checkout, cashier.username, sequence, totals, tenant),
-                    {:ok, _} <- insert_lines(lines, sale.id, tenant),
-                    {:ok, _} <-
-                      insert_payments(checkout.payments, sale.id, cashier.username, tenant) do
-                 %{
-                   sale: sale_response(sale.id, tenant),
-                   traces: sale_trace_attrs(lines, sale, checkout, client.name, cashier.username)
-                 }
+                    {:ok, result} <- persist_sale(checkout,
+                      cashier, client, issuance.identifier, lines, totals, tenant) do
+                 result
                else
                  nil -> Repo.rollback(:not_found)
                  {:error, reason} -> Repo.rollback(reason)
                  :error -> Repo.rollback(:forbidden_store)
                end
              end) do
-        InventoryEvents.broadcast(
-          tenant,
-          checkout.store_id,
-          Enum.map(checkout.lines, & &1.product_id)
-        )
-
-        ProductTraces.dispatch(tenant, sale.traces)
-        AddonEvents.dispatch(:sale_completed, sale.sale, scope)
+        publish_sale(scope, checkout, sale)
         {:ok, sale.sale}
       end
     end
   end
 
-  defp lock_operational_mode(%AccessScope{actor: :employee, actor_id: id}, tenant) do
+  defp persist_sale(checkout, cashier, client, sequence, lines, totals, tenant) do
+    with {:ok, sale} <- insert_sale(checkout, cashier.username, sequence, totals, tenant),
+         {:ok, _} <- insert_lines(lines, sale.id, tenant),
+         {:ok, _} <- insert_payments(checkout.payments, sale.id, cashier.username, tenant) do
+      {:ok, %{
+        sale: sale_response(sale.id, tenant),
+        traces: sale_trace_attrs(lines, sale, checkout, client.name, cashier.username)
+      }}
+    end
+  end
+
+  defp publish_sale(scope, checkout, result) do
+    InventoryEvents.broadcast(scope.tenant, checkout.store_id, Enum.map(checkout.lines, & &1.product_id))
+    ProductTraces.dispatch(scope.tenant, result.traces)
+    AddonEvents.dispatch(:sale_completed, result.sale, scope)
+  end
+
+  defp lock_operational_mode(%AccessScope{actor: :employee, actor_id: id}, tenant, sequence_type) do
     case Repo.one(from(u in User, where: u.id == ^id, lock: "FOR UPDATE"), prefix: tenant) do
-      %User{is_active: 1, ecf_test_enabled: false} -> :ok
+      %User{is_active: 1} ->
+        if sequence_type != "DV" and TigooServer.Fe.TestInvoices.enabled?(%AccessScope{actor: :employee, actor_id: id, tenant: tenant}),
+          do: {:error, :ecf_mode_changed}, else: :ok
       _ -> {:error, :ecf_mode_changed}
     end
   end
-  defp lock_operational_mode(%AccessScope{actor: :admin}, _tenant), do: :ok
+  defp lock_operational_mode(%AccessScope{actor: :admin}, _tenant, _sequence_type), do: :ok
 
   defp delivery_allowed?(scope, checkout) do
     if Decimal.compare(checkout.delivery_charge || @zero, @zero) == :gt and
@@ -351,24 +380,6 @@ defmodule TigooServer.Retaily.Sales do
       Repo.all(from(link in UserStore, where: link.user_id == ^cashier_id, select: link.store_id),
         prefix: tenant
       )
-
-  defp next_sequence(code, tenant) do
-    case Repo.one(from(sequence in Sequence, where: sequence.code == ^code, lock: "FOR UPDATE"),
-           prefix: tenant
-         ) do
-      nil ->
-        {:error, :sequence_not_found}
-
-      sequence ->
-        current = sequence.current_seq + sequence.increment_by
-
-        {:ok, updated} =
-          Repo.update(Changeset.change(sequence, current_seq: current), prefix: tenant)
-
-        {:ok,
-         String.pad_trailing(updated.prefix, updated.fill, "0") <> Integer.to_string(current)}
-    end
-  end
 
   defp sale_lines(lines, store_id, tenant, move_inventory? \\ true, ecf_sequence \\ nil) do
     if duplicate_products?(lines) do

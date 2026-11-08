@@ -14,9 +14,10 @@ defmodule TigooServerWeb.EcfTestXmlLive do
       if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
       {artifact, error} = case TestInvoices.posted_xml(scope, id) do
         {:ok, artifact} -> {artifact, nil}
+        {:error, :ecf_xml_not_submitted} -> {nil, "No submission record is available for this invoice. Review its processing error in invoice history before retrying."}
         _ -> {nil, "The uploaded XML is not available or its checksum does not match the submission record. Check the saved invoice artifacts."}
       end
-      {:ok, assign(socket, page_title: "eCF Test submitted XML", scope: scope, stores: stores,
+      {:ok, assign(socket, page_title: "eCF submitted XML", scope: scope, stores: stores,
         store_id: session["store_id"] || (List.first(stores) && hd(stores).id), artifact: artifact, error: error)}
     else
       _ -> {:ok, redirect(socket, to: ~p"/pos")}
@@ -28,6 +29,12 @@ defmodule TigooServerWeb.EcfTestXmlLive do
       do: {:noreply, assign(socket, :store_id, id)}, else: {:noreply, socket}
   end
 
+  def handle_info({:ecf_environment, test, production}, socket) do
+    scope = %{socket.assigns.scope | ecf_test_enabled: test, ecf_production_enabled: production}
+    if test or production,
+      do: {:noreply, assign(socket, :scope, scope)}, else: {:noreply, redirect(socket, to: ~p"/pos")}
+  end
+
   def handle_info({:ecf_test_mode, false}, socket), do: {:noreply, redirect(socket, to: ~p"/pos")}
   def handle_info({:ecf_test_mode, true}, socket), do: {:noreply, socket}
 
@@ -37,15 +44,15 @@ defmodule TigooServerWeb.EcfTestXmlLive do
       scope={@scope} stores={@stores} store_id={@store_id}>
       <section class="catalog-panel ecf-xml-page" aria-labelledby="ecf-xml-title">
         <a class="ecf-xml-back" href={~p"/pos/ecf-tests"}>
-          <span aria-hidden="true">←</span> eCF Test history
+          <span aria-hidden="true">←</span> eCF history
         </a>
         <header class="ecf-xml-heading">
           <div>
             <p class="ecf-xml-eyebrow">DOCUMENT INSPECTOR</p>
             <h1 id="ecf-xml-title">Invoice XML</h1>
-            <p class="ecf-xml-subtitle">The signed document used for this DGII test submission.</p>
+            <p class="ecf-xml-subtitle">The signed document used for this DGII submission.</p>
           </div>
-          <span class="ecf-xml-environment"><span aria-hidden="true"></span> eCF Test</span>
+          <span class="ecf-xml-environment"><span aria-hidden="true"></span> {if @artifact, do: TestInvoices.environment_label(@artifact.environment), else: "eCF"}</span>
         </header>
         <div :if={@error} class="ecf-xml-notice is-warning" role="alert">{@error}</div>
         <div :if={@artifact} id="ecf-xml-viewer" class="ecf-xml-workspace" phx-hook="XmlViewer"

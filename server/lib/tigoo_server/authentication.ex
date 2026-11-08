@@ -323,7 +323,8 @@ defmodule TigooServer.Authentication do
       actor_id: employee.id,
       login: employee.username,
       pic: employee.pic,
-      ecf_test_enabled: employee.ecf_test_enabled,
+      ecf_test_enabled: employee.ecf_test_enabled and not employee.ecf_production_enabled and TigooServer.Fe.TestInvoices.test_company?(tenant),
+      ecf_production_enabled: employee.ecf_production_enabled,
       scopes: scopes,
       store_ids: store_ids
     }

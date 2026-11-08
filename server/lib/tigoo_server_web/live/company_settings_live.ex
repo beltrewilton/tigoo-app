@@ -102,6 +102,13 @@ defmodule TigooServerWeb.CompanySettingsLive do
     end
   end
 
+  def handle_event("save_fiscal_company", %{"fiscal_company" => attrs}, socket) do
+    case safe_company_settings(fn -> CompanySettings.update_fiscal_company(socket.assigns.scope, attrs) end) do
+      {:ok, _} -> {:noreply, socket |> reload() |> assign(:status, "Company fiscal data saved.")}
+      {:error, _} -> {:noreply, assign(socket, :status, "Review the company legal name, RNC, address and production sequence expiry.")}
+    end
+  end
+
   def handle_event("save_ecf_test_settings", %{"ecf_test" => attrs}, socket) do
     case safe_company_settings(fn -> CompanySettings.update_ecf_test_settings(socket.assigns.scope, attrs) end) do
       {:ok, settings} ->
@@ -305,6 +312,33 @@ defmodule TigooServerWeb.CompanySettingsLive do
                 </form>
               </div>
             </article>
+            <article :if={@overview.fiscal_company} class="card company-settings-card">
+              <div class="card-header">
+                <h3 class="card-title">Company fiscal data</h3>
+                <p class="card-description">Production uses this company data and automatically resolves the existing signing files.</p>
+              </div>
+              <div class="card-content">
+                <p role="status">Production: {if @overview.production.ready, do: "company and signing data available", else: "configuration incomplete"}.</p>
+                <ul :if={@overview.production.missing != []}>
+                  <li :for={message <- @overview.production.missing}>{message}</li>
+                </ul>
+                <form id="company-fiscal-data" class="form" phx-submit="save_fiscal_company">
+                  <label>Company legal name
+                    <input class="input" name="fiscal_company[company_name]" value={@overview.fiscal_company.company_name} maxlength="150" required />
+                  </label>
+                  <label>Company RNC
+                    <input class="input" name="fiscal_company[rnc]" value={@overview.fiscal_company.rnc} maxlength="11" required />
+                  </label>
+                  <label>Company address
+                    <input class="input" name="fiscal_company[address]" value={@overview.fiscal_company.address} maxlength="100" required />
+                  </label>
+                  <label>Production sequence expiry (required for E31)
+                    <input class="input" type="date" name="fiscal_company[ecf_sequence_expiry]" value={@overview.fiscal_company.ecf_sequence_expiry} />
+                  </label>
+                  <button class="btn" type="submit" phx-disable-with="Saving…">Save company fiscal data</button>
+                </form>
+              </div>
+            </article>
             <article :if={@overview.ecf_test} class="card company-settings-card">
               <div class="card-header">
                 <h3 class="card-title">eCF Test issuer settings</h3>
@@ -312,6 +346,7 @@ defmodule TigooServerWeb.CompanySettingsLive do
               </div>
               <div class="card-content">
                 <form id="ecf-test-company-settings" class="form" phx-submit="save_ecf_test_settings">
+                  <fieldset disabled={!@overview.is_test}>
                   <label class="label" for="ecf-test-address">Issuer address</label>
                   <input id="ecf-test-address" class="input" name="ecf_test[address]" maxlength="100"
                     value={@overview.ecf_test.address} />
@@ -324,8 +359,9 @@ defmodule TigooServerWeb.CompanySettingsLive do
                       value="true" checked={@overview.ecf_test.ecf_test_sequences_ready} />
                     Test sequence counters reconciled and ready
                   </label>
-                  <p class="field-description">Check existing test numbers in Sequences before enabling readiness. Never reset a used counter.</p>
+                  <p class="field-description">Reconcile test numbers in Sequences before enabling readiness. Never reset a used counter.</p>
                   <button class="btn" type="submit" data-variant="default" phx-disable-with="Saving…">Save eCF Test settings</button>
+                  </fieldset>
                 </form>
               </div>
             </article>

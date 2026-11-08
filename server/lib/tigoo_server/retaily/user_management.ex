@@ -39,28 +39,45 @@ defmodule TigooServer.Retaily.Users do
           prefix: scope.tenant
         )
 
-      {:ok, %{stores: stores, scopes: scopes}}
+      {:ok, %{stores: stores, scopes: scopes, is_test: TigooServer.Fe.TestInvoices.test_company?(scope.tenant),
+        production: TigooServer.Fe.TestInvoices.production_readiness(scope.tenant)}}
     end
   end
 
   def update(scope, id, attrs), do: update_user(scope, id, attrs)
 
-  def set_ecf_test(scope, id, enabled) when is_boolean(enabled) do
+  def set_ecf_test(scope, id, enabled), do: set_ecf_environment(scope, id, :test, enabled)
+  def set_ecf_production(scope, id, enabled), do: set_ecf_environment(scope, id, :production, enabled)
+
+  defp set_ecf_environment(scope, id, environment, enabled) when is_boolean(enabled) do
     with :ok <- authorize(scope, "user.view") do
       result = Repo.transaction(fn ->
+        if environment == :test and not TigooServer.Fe.TestInvoices.test_company?(scope.tenant),
+          do: Repo.rollback(:forbidden)
         user = Repo.one(from(u in User, where: u.id == ^id, lock: "FOR UPDATE"), prefix: scope.tenant)
         if is_nil(user), do: Repo.rollback(:not_found)
-        updated = user |> Ecto.Changeset.change(ecf_test_enabled: enabled) |> Repo.update!(prefix: scope.tenant)
-        if user.ecf_test_enabled != enabled do
+        attrs = case {environment, enabled} do
+          {:test, true} -> %{ecf_test_enabled: true, ecf_production_enabled: false}
+          {:production, true} -> %{ecf_test_enabled: false, ecf_production_enabled: true}
+          {:test, false} -> %{ecf_test_enabled: false}
+          {:production, false} -> %{ecf_production_enabled: false}
+        end
+        updated = user |> Ecto.Changeset.change(attrs) |> Repo.update!(prefix: scope.tenant)
+        changed? = user.ecf_test_enabled != updated.ecf_test_enabled or
+          user.ecf_production_enabled != updated.ecf_production_enabled
+        if changed? do
           Repo.insert_all("fe_test_mode_changes", [%{user_id: user.id,
-            actor: "#{scope.actor}:#{scope.actor_id}", enabled: enabled,
+            actor: "#{scope.actor}:#{scope.actor_id}", enabled: updated.ecf_test_enabled,
+            production_enabled: updated.ecf_production_enabled,
             inserted_at: DateTime.utc_now() |> DateTime.truncate(:second)}], prefix: scope.tenant)
         end
-        {serialize(updated, scope.tenant), user.ecf_test_enabled != enabled}
+        {serialize(updated, scope.tenant), changed?}
       end)
       case result do
         {:ok, {user, changed?}} ->
-          if changed?, do: Phoenix.PubSub.broadcast(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{user.id}", {:ecf_test_mode, enabled})
+          if changed?, do: Phoenix.PubSub.broadcast(TigooServer.PubSub,
+            "ecf-mode:#{scope.tenant}:#{user.id}",
+            {:ecf_environment, user.ecf_test_enabled, user.ecf_production_enabled})
           {:ok, user}
         error -> error
       end
@@ -127,6 +144,7 @@ defmodule TigooServer.Retaily.Users do
       last_name: user.last_name,
       is_active: user.is_active,
       ecf_test_enabled: user.ecf_test_enabled,
+      ecf_production_enabled: user.ecf_production_enabled,
       pic: user.pic,
       date_joined: user.date_joined,
       last_login: user.last_login,
