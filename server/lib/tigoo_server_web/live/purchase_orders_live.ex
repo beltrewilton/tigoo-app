@@ -586,6 +586,8 @@ defmodule TigooServerWeb.PurchaseOrdersLive do
       id="purchase-orders-live"
       class="pos-shell invoice-view"
       active_page={:orders}
+      mobile_title={if @view != :list, do: if(@view == :form and @mode == :move, do: "Move products", else: "Purchase order")}
+      mobile_title_key={if @view != :list, do: if(@view == :form and @mode == :move, do: "orders.moveProducts", else: "orders.purchaseOrder")}
       scope={@scope}
       stores={@stores}
       store_id={@store_id}

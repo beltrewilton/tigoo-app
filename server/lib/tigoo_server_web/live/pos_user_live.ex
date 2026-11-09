@@ -52,6 +52,8 @@ defmodule TigooServerWeb.PosUserLive do
       id="users-live"
       class="pos-shell users-view"
       active_page={:users}
+      mobile_title={%{view: "Details", edit: "Edit", new: "Create"}[@mode]}
+      mobile_title_key={%{view: "users.details", edit: "common.edit", new: "common.create"}[@mode]}
       scope={@scope}
       stores={@stores}
       store_id={@store_id}

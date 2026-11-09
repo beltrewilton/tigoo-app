@@ -11,6 +11,7 @@ const en = {
   layout: {
     nav: {
       primary: "Primary navigation",
+      ecfHistory: "eCF history",
       pos: "POS",
       customers: "Customers",
       invoices: "Invoice report",
@@ -514,7 +515,7 @@ const en = {
     availableApps: "Available apps",
     catalogCopy: "Extend your workspace with server-managed business tools.",
     available: "available",
-    installedAddons: "ADDONS INSTALADOS",
+    installedAddons: "Installed Add-ons",
     installed: "Installed",
     install: "Install",
     uninstall: "Uninstall"
@@ -606,9 +607,11 @@ const en = {
 }
 
 const es = {
+  dashboard: {dashboard: "Panel de control", installAddon: "Instalar complementos"},
+  addons: {installedAddons: "Complementos instalados"},
   sequences: {"title": "Secuencias", "standard": "Secuencias de ventas", "rotation": "Secuencias con rotación mensual", "standardCopy": "Configura la numeración de facturas para ventas CF, VF y DV.", "rotationCopy": "Configura una ventana mensual con reutilización cíclica de números.", "empty": "No hay secuencias configuradas.", "base": "Base actual", "windowSize": "Valores disponibles", "allowedSteps": "Pasos permitidos", "period": "Mes", "step": "Paso", "lastNumber": "Último número", "estimated": "Monto mensual estimado", "allowed": "Monto mensual permitido", "average": "Monto promedio", "rotationHelp": "Los valores se calculan automáticamente. No se pueden editar la configuración del mes activo ni una base ya inicializada.", "loadFailed": "No se pudieron cargar las secuencias.", "saveFailed": "No se pudo guardar la secuencia.", "deleteFailed": "No se pudo eliminar la secuencia."},
   layout: {
-    nav: {primary: "Navegación principal", pos: "POS", customers: "Clientes", invoices: "Reporte de facturas", inventory: "Inventario", orders: "Órdenes de compra", companySettings: "Configuración de empresa", users: "Usuarios", expand: "Expandir navegación", collapse: "Contraer navegación"},
+    nav: {ecfHistory: "Historial de eCF", primary: "Navegación principal", pos: "POS", customers: "Clientes", invoices: "Reporte de facturas", inventory: "Inventario", orders: "Órdenes de compra", companySettings: "Configuración de empresa", users: "Usuarios", expand: "Expandir navegación", collapse: "Contraer navegación"},
     theme: {choose: "Elegir tema", label: "Tema", defaultLight: "Claro predeterminado", natureLight: "Naturaleza claro", natureDark: "Naturaleza oscuro", caffeineLight: "Café claro", caffeineDark: "Café oscuro", boldTechLight: "Tecnología claro", boldTechDark: "Tecnología oscuro", doom64Light: "Doom 64 claro", doom64Dark: "Doom 64 oscuro"},
     store: {choose: "Elegir tienda activa", active: "Tienda activa"},
     user: {menu: "Menú de usuario", openMenuFor: "Abrir menú para {name}", logout: "Cerrar sesión"},
@@ -637,9 +640,11 @@ const es = {
 }
 
 const pt = {
+  dashboard: {dashboard: "Painel de controle", installAddon: "Instalar complementos"},
+  addons: {installedAddons: "Complementos instalados"},
   sequences: {"title": "Sequências", "standard": "Sequências de vendas", "rotation": "Sequências com rotação mensal", "standardCopy": "Configure a numeração de faturas para vendas CF, VF e DV.", "rotationCopy": "Configure uma janela mensal com reutilização cíclica de números.", "empty": "Nenhuma sequência configurada.", "base": "Base atual", "windowSize": "Valores disponíveis", "allowedSteps": "Passos permitidos", "period": "Mês", "step": "Passo", "lastNumber": "Último número", "estimated": "Valor mensal estimado", "allowed": "Valor mensal permitido", "average": "Valor médio", "rotationHelp": "Os valores são calculados automaticamente. A configuração do mês ativo e uma base já inicializada não podem ser editadas.", "loadFailed": "Não foi possível carregar as sequências.", "saveFailed": "Não foi possível salvar a sequência.", "deleteFailed": "Não foi possível excluir a sequência."},
   layout: {
-    nav: {primary: "Navegação principal", pos: "PDV", customers: "Clientes", invoices: "Relatório de faturas", inventory: "Estoque", orders: "Pedidos de compra", companySettings: "Configurações da empresa", users: "Usuários", expand: "Expandir navegação", collapse: "Recolher navegação"},
+    nav: {ecfHistory: "Histórico de eCF", primary: "Navegação principal", pos: "PDV", customers: "Clientes", invoices: "Relatório de faturas", inventory: "Estoque", orders: "Pedidos de compra", companySettings: "Configurações da empresa", users: "Usuários", expand: "Expandir navegação", collapse: "Recolher navegação"},
     theme: {choose: "Escolher tema", label: "Tema", defaultLight: "Claro padrão", natureLight: "Natureza claro", natureDark: "Natureza escuro", caffeineLight: "Café claro", caffeineDark: "Café escuro", boldTechLight: "Tecnologia claro", boldTechDark: "Tecnologia escuro", doom64Light: "Doom 64 claro", doom64Dark: "Doom 64 escuro"},
     store: {choose: "Escolher loja ativa", active: "Loja ativa"},
     user: {menu: "Menu do usuário", openMenuFor: "Abrir menu para {name}", logout: "Sair"},

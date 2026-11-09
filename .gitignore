@@ -36,6 +36,7 @@ server/priv/static/assets/**
 !server/priv/static/assets/pos.css
 !server/priv/static/assets/default.css
 !server/priv/static/assets/inventory-product-image.js
+!server/priv/static/assets/mobile-navigation.js
 !server/priv/static/assets/invoice-live-overrides.css
 !server/priv/static/assets/phoenix.js
 !server/priv/static/assets/phoenix_live_view.esm.js

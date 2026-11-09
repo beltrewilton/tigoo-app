@@ -1,3 +1,4 @@
+import "./sidebar-tooltips.js";
 import * as printer from "./printer.js";
 import { createPrintRelay } from "./print-relay.js";
 import { uuid } from "./uuid.js";
@@ -93,7 +94,7 @@ const pos = createPos({
   discountElement: document.querySelector("#discount"),
   taxElement: document.querySelector("#tax"),
   itemCountElement: document.querySelector("#items-count"),
-  itemCountBadges: [mobileCartCount],
+  itemCountBadges: [mobileCartCount, document.querySelector("#sidebar-cart-count")],
   emptyElement: document.querySelector("#cart-empty"),
   clearButton: document.querySelector("#clear-order"),
   chargeButton: document.querySelector("#print-test"),

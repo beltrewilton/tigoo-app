@@ -841,12 +841,26 @@ defmodule TigooServerWeb.PosLive do
       id="pos-live"
       class="pos-shell"
       active_page={:pos}
+      cart_count={items(assigns)}
+      mobile_title={cond do
+        @dialog == :customer_picker -> "Customers"
+        @checkout_stage == :customer -> "Customer"
+        @checkout_stage -> "Payment & completion"
+        true -> nil
+      end}
+      mobile_title_key={cond do
+        @dialog == :customer_picker -> "pos.customers.customers"
+        @checkout_stage == :customer -> "pos.checkout.customer"
+        @checkout_stage -> "pos.checkout.paymentCompletion"
+        true -> nil
+      end}
       scope={@scope}
       stores={@stores}
       store_id={@store_id}
       print_relay_token={@print_relay_token}
       phx-hook="PosShell"
       data-mobile-cart-open={to_string(@mobile_cart_open)}
+      data-mobile-view={pos_mobile_view(assigns)}
       data-checkout-stage={@checkout_stage || ""}
       data-catalog-view={@catalog_view}
     >
@@ -891,6 +905,28 @@ defmodule TigooServerWeb.PosLive do
             <path d="M11 17h10" />
           </symbol>
         </svg>
+        <button
+          class="btn mobile-topbar-cart"
+          type="button"
+          data-variant="outline"
+          data-size="icon"
+          phx-click="open_mobile_cart"
+          aria-label="Open current sale"
+          data-i18n-aria-label="pos.cart.openCurrentSale"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1.5" /><circle cx="18" cy="20" r="1.5" /><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7" />
+          </svg>
+          <span :if={items(assigns) > 0} class="mobile-cart-count" aria-live="polite" aria-atomic="true">{items(assigns)}</span>
+        </button>
         <div
           :if={message = Phoenix.Flash.get(@flash, :info)}
           id="toast-container"
@@ -955,27 +991,6 @@ defmodule TigooServerWeb.PosLive do
                 </h1>
               </div>
             </div>
-            <button
-              class="btn mobile-topbar-cart"
-              type="button"
-              data-variant="outline"
-              data-size="icon"
-              phx-click="open_mobile_cart"
-              aria-label="Open current sale"
-            >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="9" cy="20" r="1.5" /><circle cx="18" cy="20" r="1.5" /><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7" />
-              </svg>
-              <span :if={items(assigns) > 0} class="mobile-cart-count">{items(assigns)}</span>
-            </button>
             <div class="topbar-search">
               <div class="search-field">
                 <svg class="search-icon" aria-hidden="true"><use href="#ui-icon-search" /></svg>

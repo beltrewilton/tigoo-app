@@ -1,6 +1,8 @@
 export function createPos(options) {
   const { cartElement, totalTrigger, totalElement, totalBeforeDiscountElement, subtotalElement, discountElement, taxElement, itemCountElement, itemCountBadges = [], emptyElement, clearButton, chargeButton, checkoutButton, productGrid, discountDialog, discountForm, discountTypeButtons, discountInput, discountInputLabel, discountHelp, discountProductImage, discountProductName, discountPreviewAmount, discountPreviewDiscount, discountPreviewTotal, clearDialog, clearConfirmButton, t, formatCurrency } = options;
   const cart = [];
+  let previousItemCount = 0;
+  const cartFeedbackAnimations = new WeakMap();
   const saleChangeListeners = new Set();
   let discountTarget = null;
   let discountType = "amount";
@@ -22,7 +24,7 @@ export function createPos(options) {
   const subTotal = () => cart.reduce((value, item) => value + item.sub * item.qty * lineFactor(item) * orderFactor(), 0);
   const items = () => cart.reduce((value, item) => value + item.qty, 0);
 
-  function render({ bumpId, bumpCartBadge = false } = {}) {
+  function render({ bumpId } = {}) {
     cartElement.replaceChildren(...cart.map((item) => {
       const line = document.createElement("article");
       line.className = "cart-line";
@@ -53,8 +55,27 @@ export function createPos(options) {
     itemCountBadges.forEach((badge) => {
       badge.hidden = itemCount === 0;
       badge.textContent = String(itemCount);
-      if (bumpCartBadge && itemCount > 0) animateCartBadge(badge);
+
     });
+    if (itemCount !== previousItemCount) {
+      const targets = new Set(itemCountBadges.map((badge) => badge.closest("button, a")).filter(Boolean));
+      const cartHeading = document.querySelector(".order-panel.is-mobile-open .order-header .eyebrow");
+      if (cartHeading) targets.add(cartHeading);
+      if (window.matchMedia("(max-width: 640px)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        targets.forEach((target) => {
+          cartFeedbackAnimations.get(target)?.cancel();
+          const scale = itemCount > previousItemCount ? 1.18 : 0.88;
+          const animation = target.animate?.([
+            { transform: "scale(1)" },
+            { transform: `scale(${scale})`, offset: 0.3 },
+            { transform: `scale(${scale > 1 ? 0.96 : 1.06})`, offset: 0.65 },
+            { transform: "scale(1)" },
+          ], { duration: 420, easing: "ease-out" });
+          if (animation) cartFeedbackAnimations.set(target, animation);
+        });
+      }
+      previousItemCount = itemCount;
+    }
     if (chargeButton) chargeButton.textContent = t("charge", { amount: money(total()) });
     saleChangeListeners.forEach((listener) => listener());
   }
@@ -63,7 +84,7 @@ export function createPos(options) {
     const existingItem = cart.find((item) => item.id === id);
     if (existingItem) existingItem.qty += 1;
     else cart.push({ id, name, qty: 1, price, sub, tax, imageSrc, discount: 0, discountType: "amount" });
-    render({ bumpId: id, bumpCartBadge: true });
+    render({ bumpId: id });
     requestAnimationFrame(() => Array.from(cartElement.children).find((line) => line.dataset.cartItemId === String(id))?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
   }
   function changeQuantity(id, quantity) {
@@ -179,11 +200,6 @@ export function createPos(options) {
     discountPreviewTotal.textContent = money(amount - deduction);
   }
 
-  function animateCartBadge(badge) {
-    badge.classList.remove("is-bumping");
-    void badge.offsetWidth;
-    badge.classList.add("is-bumping");
-  }
   return { isEmpty: () => cart.length === 0, total, subscribe: (listener) => { saleChangeListeners.add(listener); return () => saleChangeListeners.delete(listener); }, setDelivery: (value) => { delivery = value; render(); }, receipt: () => ({ number: "POS-" + String(Date.now()).slice(-6), items: cart.map((item) => ({ id: item.id, name: item.name, qty: item.qty, price: item.price, sub: item.sub, tax: item.tax, discount: lineDiscount(item), discount_type: item.discount ? (item.discountType === "percent" ? "percentage" : "money") : null, discount_input: item.discount })), order_discount: orderDiscountTotal(), order_discount_type: orderDiscount ? (orderDiscountType === "percent" ? "percentage" : "money") : null, order_discount_input: orderDiscount, delivery, sub: subTotal(), tax: taxTotal(), total: total() }), clear: () => { cart.splice(0); orderDiscount = 0; delivery = 0; render(); }, render };
 }
 

@@ -7,6 +7,9 @@ defmodule TigooServerWeb.PosLayoutComponents do
   attr(:id, :string, required: true)
   attr(:class, :string, default: "pos-shell")
   attr(:active_page, :atom, required: true)
+  attr(:cart_count, :integer, default: 0)
+  attr(:mobile_title, :string, default: nil)
+  attr(:mobile_title_key, :string, default: nil)
   attr(:scope, :map, required: true)
   attr(:stores, :list, required: true)
   attr(:store_id, :any, required: true)
@@ -17,11 +20,19 @@ defmodule TigooServerWeb.PosLayoutComponents do
   slot(:inner_block, required: true)
 
   def pos_layout(assigns) do
+    {mobile_nav_key, mobile_nav_label} = mobile_nav_label(assigns.active_page)
+    assigns =
+      assign(assigns,
+        mobile_nav_key: assigns.mobile_title_key || mobile_nav_key,
+        mobile_nav_label: assigns.mobile_title || mobile_nav_label
+      )
+
     ~H"""
     <main
       id={@id}
       class={@class}
       data-store-id={@store_id}
+      data-cart-count={@cart_count}
       data-print-relay-token={@print_relay_token}
       data-tenant={@scope.tenant}
       data-print-logo={print_logo(@stores, @store_id)}
@@ -56,7 +67,9 @@ defmodule TigooServerWeb.PosLayoutComponents do
       </span>
       {render_slot(@before_layout)}
       <details class="mobile-nav-menu">
-        <summary class="mobile-nav-trigger" aria-label="Open navigation">
+        <summary class="btn mobile-nav-trigger" data-variant="ghost" data-size="icon">
+          <span class="sr-only mobile-nav-open-label" data-i18n="layout.nav.expand">Expand navigation</span>
+          <span class="sr-only mobile-nav-close-label" data-i18n="layout.nav.collapse">Collapse navigation</span>
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"
@@ -65,8 +78,10 @@ defmodule TigooServerWeb.PosLayoutComponents do
             stroke-width="2.4"
             stroke-linecap="round"
           >
-            <path d="M4 7h16M4 12h16M4 17h16" />
+            <path class="mobile-nav-expand-icon" d="M4 7h16M4 12h16M4 17h16" />
+            <path class="mobile-nav-collapse-icon" d="m6 6 12 12M6 18 18 6" />
           </svg>
+          <span class="mobile-nav-current-label" data-i18n={@mobile_nav_key}>{@mobile_nav_label}</span>
         </summary>
         <div
           class="mobile-nav-panel"
@@ -80,7 +95,30 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:dashboard, @active_page, @store_id)}
             aria-current={current_page(@active_page, :dashboard)}
           >
-            Dashboard
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="9" rx="1" /><rect
+                x="14"
+                y="3"
+                width="7"
+                height="5"
+                rx="1"
+              /><rect x="14" y="12" width="7" height="9" rx="1" /><rect
+                x="3"
+                y="16"
+                width="7"
+                height="5"
+                rx="1"
+              />
+            </svg>
+            <span data-i18n="dashboard.dashboard">Dashboard</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :pos)}
@@ -88,18 +126,42 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:pos, @active_page, @store_id)}
             aria-current={current_page(@active_page, :pos)}
           >
-            POS
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
+            </svg>
+            <span data-i18n="layout.nav.pos">POS</span>
+            <span :if={@cart_count > 0} class="sidebar-cart-count">{@cart_count}</span>
           </a>
           <a :if={nav_allowed?(@scope, :ecf_tests)} class="mobile-nav-link"
             href={nav_href(:ecf_tests, @active_page, @store_id)}
-            aria-current={current_page(@active_page, :ecf_tests)}>eCF history</a>
+            aria-current={current_page(@active_page, :ecf_tests)}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5" />
+            </svg>
+            <span data-i18n="layout.nav.ecfHistory">eCF history</span>
+          </a>
           <a
             :if={nav_allowed?(@scope, :invoices)}
             class="mobile-nav-link"
             href={nav_href(:invoices, @active_page, @store_id)}
             aria-current={current_page(@active_page, :invoices)}
           >
-            Invoice report
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 2v20h16" /><path d="M8 6h8M8 10h8M8 14h5" />
+            </svg>
+            <span data-i18n="layout.nav.invoices">Invoice report</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :reconciliation)}
@@ -107,7 +169,20 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:reconciliation, @active_page, @store_id)}
             aria-current={current_page(@active_page, :reconciliation)}
           >
-            Cash reconciliation
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="6" width="18" height="13" rx="2" />
+              <path d="M16 6V4H8v2" />
+              <path d="M7 11h.01M11 11h6M7 15h.01M11 15h6" />
+            </svg>
+            <span data-i18n="reconciliation.title">Cash reconciliation</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :customers)}
@@ -115,7 +190,16 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:customers, @active_page, @store_id)}
             aria-current={current_page(@active_page, :customers)}
           >
-            Customers
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+            </svg>
+            <span data-i18n="layout.nav.customers">Customers</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :inventory)}
@@ -123,7 +207,16 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:inventory, @active_page, @store_id)}
             aria-current={current_page(@active_page, :inventory)}
           >
-            Inventory
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 16l9 5 9-5" />
+            </svg>
+            <span data-i18n="layout.nav.inventory">Inventory</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :orders)}
@@ -131,7 +224,16 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:orders, @active_page, @store_id)}
             aria-current={current_page(@active_page, :orders)}
           >
-            Purchase orders
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M6 2h9l3 3v17H6z" /><path d="M9 10h6M9 14h6" />
+            </svg>
+            <span data-i18n="layout.nav.orders">Purchase orders</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :installed_addons)}
@@ -139,7 +241,16 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:installed_addons, @active_page, @store_id)}
             aria-current={current_page(@active_page, :installed_addons)}
           >
-            Installed Add-ons
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 4h6v6H4z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6H4z" /><path d="M14 14h6v6h-6z" />
+            </svg>
+            <span data-i18n="addons.installedAddons">Installed Add-ons</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :company_settings)}
@@ -147,16 +258,30 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:company_settings, @active_page, @store_id)}
             aria-current={current_page(@active_page, :company_settings)}
           >
-            Company settings
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m3 9 2-5h14l2 5" /><path d="M3 9h18v11H3z" /><path d="M7 20v-6h4v6" /><path d="M3 9c0 2 2 3 4 3s4-1 4-3c0 2 2 3 4 3s4-1 4-3" />
+            </svg>
+            <span data-i18n="layout.nav.companySettings">Company settings</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :sequences)}
             class="mobile-nav-link"
             href={nav_href(:sequences, @active_page, @store_id)}
             aria-current={current_page(@active_page, :sequences)}
-            data-i18n="sequences.title"
           >
-            Sequences
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 5h12M9 12h12M9 19h12M3 4h1v3M3 11h2l-2 3h2M3 18h2v3H3" />
+            </svg>
+            <span data-i18n="sequences.title">Sequences</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :users)}
@@ -164,7 +289,18 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:users, @active_page, @store_id)}
             aria-current={current_page(@active_page, :users)}
           >
-            Users
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /><path d="M19 8v4M17 10h4" />
+            </svg>
+            <span data-i18n="layout.nav.users">Users</span>
           </a>
           <a
             :if={nav_allowed?(@scope, :addons)}
@@ -172,11 +308,33 @@ defmodule TigooServerWeb.PosLayoutComponents do
             href={nav_href(:addons, @active_page, @store_id)}
             aria-current={current_page(@active_page, :addons)}
           >
-            Install Addons
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 5v14" /><path d="M5 12h14" />
+            </svg>
+            <span data-i18n="dashboard.installAddon">Install Addons</span>
           </a>
           <hr class="separator" />
           <details class="mobile-nav-section mobile-store-selector">
-            <summary class="mobile-nav-section-trigger">Store</summary>
+            <summary class="mobile-nav-section-trigger"><svg
+              class="sidebar-store-icon"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m3 9 2-5h14l2 5" /><path d="M3 9h18v11H3z" /><path d="M7 20v-6h4v6" /><path d="M3 9c0 2 2 3 4 3s4-1 4-3c0 2 2 3 4 3s4-1 4-3" />
+            </svg><span data-i18n="layout.store.active">Store</span></summary>
             <div class="mobile-nav-section-content" role="group" aria-label="Active store">
               <button
                 :for={store <- @stores}
@@ -204,7 +362,28 @@ defmodule TigooServerWeb.PosLayoutComponents do
             </div>
           </details>
           <details class="mobile-nav-section mobile-theme-selector sidebar-theme-selector">
-            <summary class="mobile-nav-section-trigger">Theme</summary>
+            <summary class="mobile-nav-section-trigger"><svg
+              class="sidebar-theme-icon"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /><circle
+                cx="17.5"
+                cy="10.5"
+                r=".5"
+                fill="currentColor"
+              /><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /><circle
+                cx="6.5"
+                cy="12.5"
+                r=".5"
+                fill="currentColor"
+              /><path d="M12 3a9 9 0 1 0 0 18 1.5 1.5 0 0 0 1.5-1.5c0-.4-.16-.78-.44-1.06a1.5 1.5 0 0 1 1.06-2.56H16a5 5 0 0 0 0-10Z" />
+            </svg><span data-i18n="layout.theme.label">Theme</span></summary>
             <div class="mobile-nav-section-content" role="group" aria-label="Theme">
               <button class="mobile-nav-action" type="button" data-theme="default-light">
                 Default Light
@@ -320,11 +499,12 @@ defmodule TigooServerWeb.PosLayoutComponents do
           >
             <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
           </svg>
+          <span :if={@cart_count > 0} class="sidebar-cart-count">{@cart_count}</span>
         </a>
         <a :if={nav_allowed?(@scope, :ecf_tests)} class="sidebar-link"
           href={nav_href(:ecf_tests, @active_page, @store_id)}
           aria-current={current_page(@active_page, :ecf_tests)}
-          aria-label="eCF history" title="eCF history">
+          aria-label="eCF history" data-i18n-aria-label="layout.nav.ecfHistory">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5" />
           </svg>
@@ -353,7 +533,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
           href={nav_href(:reconciliation, @active_page, @store_id)}
           aria-current={current_page(@active_page, :reconciliation)}
           aria-label="Cash reconciliation"
-          data-i18n-aria-label="layout.nav.reconciliation"
+          data-i18n-aria-label="reconciliation.title"
         >
           <svg
             aria-hidden="true"
@@ -628,7 +808,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
           </div>
         </details>
         <details class="user-menu sidebar-user-menu">
-          <summary class="avatar avatar-trigger" aria-label={"Open menu for #{user_name(@scope)}"}>
+          <summary class="avatar avatar-trigger" aria-label="User menu" data-i18n-aria-label="layout.user.menu">
             <img :if={avatar_image?(@scope)} class="avatar-image" src={@scope.pic} alt="" />
             <span :if={!avatar_image?(@scope)} class="avatar-fallback">{user_initials(@scope)}</span>
           </summary>
@@ -768,6 +948,28 @@ defmodule TigooServerWeb.PosLayoutComponents do
       {render_slot(@inner_block)}
     </main>
     """
+  end
+
+  defp mobile_nav_label(page) do
+    Map.get(
+      %{
+        dashboard: {"dashboard.dashboard", "Dashboard"},
+        pos: {"layout.nav.pos", "POS"},
+        ecf_tests: {"layout.nav.ecfHistory", "eCF history"},
+        invoices: {"layout.nav.invoices", "Invoice report"},
+        reconciliation: {"reconciliation.title", "Cash reconciliation"},
+        customers: {"layout.nav.customers", "Customers"},
+        inventory: {"layout.nav.inventory", "Inventory"},
+        orders: {"layout.nav.orders", "Purchase orders"},
+        installed_addons: {"addons.installedAddons", "Installed Add-ons"},
+        company_settings: {"layout.nav.companySettings", "Company settings"},
+        sequences: {"sequences.title", "Sequences"},
+        users: {"layout.nav.users", "Users"},
+        addons: {"dashboard.installAddon", "Install Addons"}
+      },
+      page,
+      {"layout.nav.primary", "Primary navigation"}
+    )
   end
 
   defp current_page(page, page), do: "page"

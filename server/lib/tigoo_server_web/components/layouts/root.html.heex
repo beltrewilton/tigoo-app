@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <meta :if={pos_pwa_path?(assigns)} name="theme-color" content="#088674" />
     <.live_title default="tigoo" suffix="">
@@ -66,6 +66,8 @@
     <script defer src={~p"/assets/company-settings-live.js"}>
     </script>
     <script defer src={~p"/assets/login-live.js"}>
+    </script>
+    <script defer src={~p"/assets/mobile-navigation.js"}>
     </script>
     <script type="module" src={~p"/assets/app.js"}>
     </script>

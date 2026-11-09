@@ -54,6 +54,8 @@ defmodule TigooServerWeb.CustomerLive do
       id="customer-live"
       class="pos-shell invoice-view"
       active_page={:customers}
+      mobile_title={if @mode == :detail, do: "Customer detail"}
+      mobile_title_key={if @mode == :detail, do: "pos.customers.detail"}
       scope={@scope}
       stores={@stores}
       store_id={@store_id}
