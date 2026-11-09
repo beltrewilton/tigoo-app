@@ -692,14 +692,14 @@ const pageTitleKeys = {
 export function getLanguage() {
   try {
     const saved = localStorage.getItem(LANGUAGE_KEY)
-    return Object.hasOwn(LANGUAGES, saved) ? saved : "en"
+    return Object.hasOwn(LANGUAGES, saved) ? saved : "es"
   } catch {
-    return "en"
+    return "es"
   }
 }
 
 export function setLanguage(language) {
-  const next = Object.hasOwn(LANGUAGES, language) ? language : "en"
+  const next = Object.hasOwn(LANGUAGES, language) ? language : "es"
   try {
     localStorage.setItem(LANGUAGE_KEY, next)
   } catch {

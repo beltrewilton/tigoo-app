@@ -170,10 +170,10 @@ Object.assign(staticLabelKeys, {
   "Company settings": "ui.companySettings", "Company": "ui.company"
 });
 const listeners = new Set();
-const browserLanguage = navigator.language.toLowerCase();
 const legacyLanguages = { en: "eng", es: "latam", spa: "latam", pt: "por" };
 const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
-let language = legacyLanguages[savedLanguage] || savedLanguage || (browserLanguage.startsWith("es") ? "latam" : browserLanguage.startsWith("pt") ? "por" : "eng");
+const preferredLanguage = legacyLanguages[savedLanguage] || savedLanguage;
+let language = Object.hasOwn(translations, preferredLanguage) ? preferredLanguage : "latam";
 if (savedLanguage && legacyLanguages[savedLanguage]) localStorage.setItem(LANGUAGE_KEY, language);
 const numberLocale = () => language === "por" ? "pt-BR" : "en-US";
 

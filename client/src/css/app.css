@@ -4953,3 +4953,17 @@ html.dark body,
     visibility: visible;
   }
 }
+
+/* iOS zooms focused fields below 16px. Keep touch inputs readable without
+   restricting the viewport or disabling the user's pinch-to-zoom gesture. */
+@media (max-width: 640px), (hover: none) and (pointer: coarse) {
+  input,
+  select,
+  textarea,
+  [contenteditable="true"],
+  [contenteditable=""],
+  [contenteditable="plaintext-only"] {
+    /* Override compact field sizes, including inputs inside modal dialogs. */
+    font-size: max(16px, 1rem) !important;
+  }
+}
