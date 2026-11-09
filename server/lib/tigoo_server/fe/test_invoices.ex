@@ -228,12 +228,14 @@ defmodule TigooServer.Fe.TestInvoices do
   end
   def enabled?(_), do: false
 
+  def view_allowed?(%{actor: :admin, tenant: tenant}), do: Tenants.exists?(tenant)
   def view_allowed?(scope),
     do: TigooServer.Accounts.Scope.allowed?(scope, "ecf.view") and enabled?(scope)
 
   def history(scope, before_id \\ nil) do
     if view_allowed?(scope) do
-      query = from(i in TestInvoice, where: i.user_id == ^scope.actor_id, order_by: [desc: i.id], limit: 51)
+      query = from(i in TestInvoice, order_by: [desc: i.id], limit: 51)
+      query = if scope.actor == :admin, do: query, else: from(i in query, where: i.user_id == ^scope.actor_id)
       query = if is_integer(before_id), do: from(i in query, where: i.id < ^before_id), else: query
       records = Repo.all(query, prefix: scope.tenant)
       page = Enum.take(records, 50)
@@ -310,7 +312,7 @@ defmodule TigooServer.Fe.TestInvoices do
   def posted_xml(scope, id) do
     with true <- view_allowed?(scope),
          {id, ""} <- Integer.parse(to_string(id)),
-         %TestInvoice{} = invoice <- Repo.get_by(TestInvoice, [id: id, user_id: scope.actor_id], prefix: scope.tenant),
+         %TestInvoice{} = invoice <- Repo.one(invoice_query(scope, id), prefix: scope.tenant),
          {:ok, entry} <- submission_entry(invoice),
          true <- entry["kind"] in ["ecf", "rfce"],
          relative when is_binary(relative) <- entry["file"],
@@ -347,7 +349,7 @@ defmodule TigooServer.Fe.TestInvoices do
          {:ok, invoice} <- get(scope, id),
          true <- invoice.environment in ["testecf", "certecf", "ecf"],
          {record_id, ""} <- invoice.id |> String.replace_prefix("ecf-test-", "") |> Integer.parse(),
-         %TestInvoice{} = record <- Repo.get_by(TestInvoice, [id: record_id, user_id: scope.actor_id], prefix: scope.tenant),
+         %TestInvoice{} = record <- Repo.one(invoice_query(scope, record_id), prefix: scope.tenant),
          root <- Path.expand(record.snapshot["batch_path"]),
          {:ok, bytes} <- File.read(Path.join(root, "manifest.json")),
          {:ok, manifest} <- Jason.decode(bytes),
@@ -411,12 +413,15 @@ defmodule TigooServer.Fe.TestInvoices do
 
   def get(scope, "ecf-test-" <> id), do: get(scope, id)
   def get(scope, id) do
-    query = from(i in TestInvoice, where: i.id == ^id)
-    query = if scope.actor == :admin, do: query, else: from(i in query, where: i.user_id == ^scope.actor_id)
-    case Repo.one(query, prefix: scope.tenant) do
+    case Repo.one(invoice_query(scope, id), prefix: scope.tenant) do
       nil -> {:error, :not_found}
       invoice -> {:ok, response(invoice)}
     end
+  end
+
+  defp invoice_query(scope, id) do
+    query = from(i in TestInvoice, where: i.id == ^id)
+    if scope.actor == :admin, do: query, else: from(i in query, where: i.user_id == ^scope.actor_id)
   end
 
   defp receipt(invoice) do

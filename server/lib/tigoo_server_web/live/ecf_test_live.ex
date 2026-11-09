@@ -11,7 +11,7 @@ defmodule TigooServerWeb.EcfTestLive do
          true <- TestInvoices.view_allowed?(scope),
          _ <- TenantContext.put_tenant(scope.tenant),
          {:ok, stores} <- InventoryContext.stores(scope) do
-      if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
+      if connected?(socket) and scope.actor == :employee, do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
       {:ok, assign(socket, page_title: "eCF history", scope: scope, stores: stores,
         store_id: session["store_id"] || (List.first(stores) && hd(stores).id),
         invoices: [], next: nil, before_id: nil, refreshing: nil, inspection: nil, history_timer: nil, status: "")}
@@ -165,7 +165,7 @@ defmodule TigooServerWeb.EcfTestLive do
                           <circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6h14M5 18h14" />
                         </svg>
                       </a>
-                      <button class="ecf-history-refresh" type="button" phx-click="refresh_track" phx-value-id={invoice.id}
+                      <button :if={@scope.actor != :admin} class="ecf-history-refresh" type="button" phx-click="refresh_track" phx-value-id={invoice.id}
                         disabled={not is_nil(@refreshing) or is_nil(TestInvoices.track_id(invoice))}
                         title={if TestInvoices.track_id(invoice), do: "Fetch DGII status by track ID", else: "No track ID available; RFCE responses are returned directly"}
                         aria-label={"Fetch DGII status for #{invoice.sequence}"}>
@@ -229,7 +229,7 @@ defmodule TigooServerWeb.EcfTestLive do
               <div class="ecf-inspector-panel-heading">
                 <h3 id="ecf-response-title">Response <span>JSON</span></h3>
                 <span class="ecf-status-badge" data-state={@inspection.invoice.state}>{status_label(@inspection.invoice.state)}</span>
-                <button class="ecf-history-refresh" type="button" phx-click="refresh_track" phx-value-id={@inspection.invoice.id}
+                <button :if={@scope.actor != :admin} class="ecf-history-refresh" type="button" phx-click="refresh_track" phx-value-id={@inspection.invoice.id}
                   disabled={not is_nil(@refreshing) or is_nil(TestInvoices.track_id(@inspection.invoice))} aria-label="Fetch DGII response">
                   <span :if={@refreshing == @inspection.invoice.id} class="ecf-spinner" aria-hidden="true"></span>
                   <span :if={@refreshing != @inspection.invoice.id} aria-hidden="true">↻</span>

@@ -11,7 +11,7 @@ defmodule TigooServerWeb.EcfTestXmlLive do
          true <- TestInvoices.view_allowed?(scope),
          _ <- TenantContext.put_tenant(scope.tenant),
          {:ok, stores} <- InventoryContext.stores(scope) do
-      if connected?(socket), do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
+      if connected?(socket) and scope.actor == :employee, do: Phoenix.PubSub.subscribe(TigooServer.PubSub, "ecf-mode:#{scope.tenant}:#{scope.actor_id}")
       {artifact, error} = case TestInvoices.posted_xml(scope, id) do
         {:ok, artifact} -> {artifact, nil}
         {:error, :ecf_xml_not_submitted} -> {nil, "No submission record is available for this invoice. Review its processing error in invoice history before retrying."}

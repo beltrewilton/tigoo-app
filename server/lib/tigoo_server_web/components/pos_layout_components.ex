@@ -993,7 +993,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp store_href(path, nil), do: path
   defp store_href(path, ""), do: path
   defp store_href(path, store_id), do: path <> "?" <> URI.encode_query(%{"store_id" => store_id})
-  defp nav_allowed?(scope, :ecf_tests), do: Scope.allowed?(scope, "ecf.view") and TigooServer.Fe.TestInvoices.scope_ecf?(scope)
+  defp nav_allowed?(scope, :ecf_tests), do: Scope.admin?(scope) or (Scope.allowed?(scope, "ecf.view") and TigooServer.Fe.TestInvoices.scope_ecf?(scope))
   defp nav_allowed?(scope, page), do: Scope.allowed?(scope, nav_permission(page))
 
   defp theme_options do
