@@ -41,6 +41,56 @@
   });
 })();
 
+// Other screens do not own the live cart. Read the same user draft that POS
+// restores, and refresh after navigation, store changes, and LiveView patches.
+(() => {
+  let observer;
+  let root;
+
+  function savedCount() {
+    const user = root.querySelector('.session-store-status')?.textContent?.trim() || 'default';
+    try {
+      const draft = JSON.parse(localStorage.getItem(`pos-sale-draft:${user}`) || 'null');
+      if (!Array.isArray(draft?.cart) || String(draft.store_id) !== root.dataset.storeId) return 0;
+      return draft.cart.reduce((total, line) => {
+        const quantity = Number(line.qty);
+        return total + (Number.isFinite(quantity) && quantity > 0 ? quantity : 0);
+      }, 0);
+    } catch {
+      return 0;
+    }
+  }
+
+  function syncBadges() {
+    if (!root?.isConnected) return;
+    const count = root.id === 'pos-live' ? Number(root.dataset.cartCount) || 0 : savedCount();
+    root.querySelectorAll('.sidebar-cart-count').forEach(badge => {
+      const value = String(count);
+      if (badge.textContent !== value) badge.textContent = value;
+      if (badge.hidden !== (count <= 0)) badge.hidden = count <= 0;
+    });
+  }
+
+  function watchBadges() {
+    observer?.disconnect();
+    root = document.querySelector('.pos-shell[data-cart-count]');
+    if (!root) return;
+    syncBadges();
+    observer = new MutationObserver(syncBadges);
+    observer.observe(root, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['data-cart-count', 'data-store-id']
+    });
+  }
+
+  watchBadges();
+  window.addEventListener('phx:page-loading-stop', watchBadges);
+  window.addEventListener('storage', syncBadges);
+  window.addEventListener('pageshow', watchBadges);
+})();
+
 // Watch the rendered count, so additions, removals, and quantity edits share
 // one lightweight animation without changing layout or scrolling the page.
 (() => {

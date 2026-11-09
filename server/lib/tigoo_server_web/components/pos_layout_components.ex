@@ -136,7 +136,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
               <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
             </svg>
             <span data-i18n="layout.nav.pos">POS</span>
-            <span :if={@cart_count > 0} class="sidebar-cart-count">{@cart_count}</span>
+            <span class="sidebar-cart-count" hidden={@cart_count <= 0}>{@cart_count}</span>
           </a>
           <a :if={nav_allowed?(@scope, :ecf_tests)} class="mobile-nav-link"
             href={nav_href(:ecf_tests, @active_page, @store_id)}
@@ -499,7 +499,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
           >
             <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
           </svg>
-          <span :if={@cart_count > 0} class="sidebar-cart-count">{@cart_count}</span>
+          <span class="sidebar-cart-count" hidden={@cart_count <= 0}>{@cart_count}</span>
         </a>
         <a :if={nav_allowed?(@scope, :ecf_tests)} class="sidebar-link"
           href={nav_href(:ecf_tests, @active_page, @store_id)}
