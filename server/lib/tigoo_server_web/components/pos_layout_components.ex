@@ -414,6 +414,38 @@ defmodule TigooServerWeb.PosLayoutComponents do
               </button>
             </div>
           </details>
+          <details class="mobile-nav-section mobile-language-selector">
+            <summary class="mobile-nav-section-trigger">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.5 3.7 5.5 3.7 9S14.5 18.5 12 21c-2.5-2.5-3.7-5.5-3.7-9S9.5 5.5 12 3Z" />
+              </svg>
+              <span data-i18n="layout.status.language">Change display language</span>
+            </summary>
+            <div
+              class="mobile-nav-section-content"
+              role="group"
+              aria-label="Change display language"
+              data-i18n-aria-label="layout.status.language"
+            >
+              <button
+                :for={{language, label} <- [{"en", "English"}, {"es", "Español"}, {"pt", "Português"}]}
+                class="mobile-nav-action"
+                type="button"
+                data-language={language}
+              >
+                <span lang={language}>{label}</span>
+                <.menu_check />
+              </button>
+            </div>
+          </details>
           <details class="mobile-nav-section mobile-user-menu">
             <summary class="mobile-user-trigger">
               <span class="avatar avatar-sm" aria-hidden="true">

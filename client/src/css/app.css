@@ -4948,4 +4948,8 @@ html.dark body,
     height: 24px;
     font-size: .8125rem;
   }
+  .mobile-language-selector .sidebar-menu-check { visibility: hidden; }
+  .mobile-language-selector .mobile-nav-action[aria-pressed="true"] .sidebar-menu-check {
+    visibility: visible;
+  }
 }
