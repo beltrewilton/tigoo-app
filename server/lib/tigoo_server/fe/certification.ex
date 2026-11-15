@@ -2,15 +2,15 @@ defmodule TigooServer.Fe.Certification do
   @moduledoc "Tenant-scoped adapter for the existing certification submission CLI flow."
   import Ecto.Query
   alias TigooServer.{Accounts.Company, Accounts.Scope, Repo, Tenants}
-  alias TigooServer.Fe.{Client, Credentials, Generation, Submission}
+  alias TigooServer.Fe.{Client, CommercialApproval, Credentials, Generation, Submission}
 
-  def batches(scope) do
+  def batches(scope, type \\ "ECF") when type in ["ECF", "ACECF"] do
     with {:ok, issuer} <- issuer(scope),
          {:ok, names} <- File.ls(root()) do
       batches = names
         |> Enum.sort()
         |> Enum.flat_map(fn name ->
-          case read_batch(name, issuer) do
+          case read_batch(name, issuer, type) do
             {:ok, batch} -> [batch]
             _ -> []
           end
@@ -24,10 +24,12 @@ defmodule TigooServer.Fe.Certification do
     _ -> {:error, "No se pudieron cargar los casos de certificación de esta empresa."}
   end
 
-  def generate(scope, workbook, on_document) when is_binary(workbook) and byte_size(workbook) in 1..20_000_000 do
+  def generate(scope, workbook, on_document, type \\ "ECF")
+
+  def generate(scope, workbook, on_document, type) when type in ["ECF", "ACECF"] and is_binary(workbook) and byte_size(workbook) in 1..20_000_000 do
     with {:ok, issuer} <- issuer(scope),
          {:ok, identity} <- Credentials.for_tenant(scope.tenant) do
-      id = scope.tenant <> "-" <> Integer.to_string(System.system_time(:millisecond)) <>
+      id = scope.tenant <> "-" <> String.downcase(type) <> "-" <> Integer.to_string(System.system_time(:millisecond)) <>
         "-" <> Base.url_encode64(:crypto.strong_rand_bytes(9), padding: false)
       source_directory = Path.join([root(), ".sources", scope.tenant])
       source = Path.join(source_directory, id <> ".xlsx")
@@ -45,11 +47,19 @@ defmodule TigooServer.Fe.Certification do
           p12_path: identity.p12_path, password: identity.password,
           strict_arithmetic: false, on_document: on_document] ++ trust
 
-        case Generation.generate(opts) do
+        result = if type == "ACECF" do
+          opts = opts |> Keyword.delete(:issuer_rnc) |> Keyword.put(:buyer_rnc, issuer)
+          CommercialApproval.generate(opts)
+        else
+          Generation.generate(opts)
+        end
+        case result do
           {:ok, manifest} ->
             observations = Enum.reduce(manifest.documents, 0,
-              &(length(&1.source_arithmetic_observations) + &2))
-            {:ok, %{id: id, counts: manifest.counts, observations: observations}}
+              &(length(Map.get(&1, :source_arithmetic_observations, [])) + &2))
+            count = if type == "ACECF", do: manifest.count, else: manifest.counts.ecf
+            message = if type == "ACECF", do: "#{count} ACECF firmados", else: "#{count} ECF y #{manifest.counts.rfce} RFCE firmados"
+            {:ok, %{id: id, description: message, observations: observations}}
           {:error, error} -> {:error, Exception.message(error)}
         end
       after
@@ -64,11 +74,11 @@ defmodule TigooServer.Fe.Certification do
     _ -> {:error, "No se pudo generar el lote. Revisa el archivo XLSX y los permisos de almacenamiento."}
   end
 
-  def generate(_, _, _), do: {:error, "Selecciona un archivo XLSX de máximo 20 MB."}
+  def generate(_, _, _, _), do: {:error, "Selecciona un archivo XLSX de máximo 20 MB."}
 
-  def submit(scope, id, on_result) do
+  def submit(scope, id, on_result, type \\ "ECF") when type in ["ECF", "ACECF"] do
     with {:ok, issuer} <- issuer(scope),
-         {:ok, batch} <- read_batch(id, issuer),
+         {:ok, batch} <- read_batch(id, issuer, type),
          true <- is_nil(batch.journal_error),
          {:ok, identity} <- Credentials.for_tenant(scope.tenant) do
       # Same options as submit_fe_certification.sh; the environment is fixed here.
@@ -76,7 +86,7 @@ defmodule TigooServer.Fe.Certification do
         p12_path: identity.p12_path, password: identity.password, receive_timeout: 60_000)
 
       case Submission.run(Path.join(root(), id), client,
-             expected_document_type: "ECF", poll_attempts: 20, poll_interval: 1000,
+             expected_document_type: type, poll_attempts: 20, poll_interval: 1000,
              on_result: on_result) do
         {:ok, _report} -> :ok
         {:error, error, _report} -> {:error, Exception.message(error)}
@@ -125,21 +135,23 @@ defmodule TigooServer.Fe.Certification do
     end
   end
 
-  defp read_batch(id, issuer) when is_binary(id) do
+  defp read_batch(id, issuer, type \\ "ECF")
+
+  defp read_batch(id, issuer, type) when is_binary(id) do
     with true <- id not in ["", ".", ".."] and Path.basename(id) == id,
          path <- Path.join([root(), id, "manifest.json"]),
          {:ok, bytes} <- File.read(path),
          {:ok, manifest} when is_map(manifest) <- Jason.decode(bytes),
-         true <- manifest["authorized_issuer_rnc"] == issuer and manifest["worksheet"] == "ECF" and
-           Map.get(manifest, "document_type", "ECF") == "ECF" and manifest["purpose"] in [nil, "dgii_data_tests"],
+         true <- matching_manifest?(manifest, issuer, type),
          documents when is_list(documents) and documents != [] <- manifest["documents"] do
-      {report, journal_error} = read_report(id, issuer, bytes)
+      {report, journal_error} = read_report(id, issuer, bytes, type)
       entries = Map.get(report, "entries", %{})
       rows = Enum.map(documents, fn doc ->
         entry = Map.get(entries, doc["encf"], %{})
         %{encf: doc["encf"], type: doc["type"], amount: doc["amount_dop"],
-          channel: if(doc["small_consumption"], do: "RFCE", else: "ECF"),
-          portal_file: if(doc["small_consumption"] and doc["type"] == "32" and
+          channel: if(type == "ACECF", do: "ACECF", else: if(doc["small_consumption"], do: "RFCE", else: "ECF")),
+          decision: doc["state"], invoice_issuer: doc["issuer_rnc"],
+          portal_file: if(doc["small_consumption"] == true and doc["type"] == "32" and
             Decimal.compare(Decimal.new(doc["amount_dop"]), Decimal.new("250000")) == :lt, do: doc["ecf_file"]),
           portal_sha256: doc["ecf_sha256"], rfce_file: doc["rfce_file"], rfce_sha256: doc["rfce_sha256"],
           state: Map.get(entry, "state", "not_sent"), track_id: entry["track_id"],
@@ -157,15 +169,26 @@ defmodule TigooServer.Fe.Certification do
     _ -> {:error, :batch_unavailable}
   end
 
-  defp read_batch(_, _), do: {:error, :batch_unavailable}
+  defp read_batch(_, _, _), do: {:error, :batch_unavailable}
 
-  defp read_report(id, issuer, manifest) do
+  defp matching_manifest?(manifest, rnc, "ACECF") do
+    manifest["document_type"] == "ACECF" and manifest["worksheet"] == "ACEECF_Generadas" and
+      manifest["authorized_buyer_rnc"] == rnc
+  end
+
+  defp matching_manifest?(manifest, rnc, "ECF") do
+    manifest["authorized_issuer_rnc"] == rnc and manifest["worksheet"] == "ECF" and
+      Map.get(manifest, "document_type", "ECF") == "ECF" and manifest["purpose"] in [nil, "dgii_data_tests"]
+  end
+
+  defp read_report(id, issuer, manifest, type) do
     path = Path.join([root(), id, "submission-certecf.json"])
     case File.read(path) do
       {:error, :enoent} -> {%{}, nil}
       {:ok, bytes} ->
         with {:ok, report} when is_map(report) <- Jason.decode(bytes),
-             true <- report["environment"] == "certecf" and report["issuer_rnc"] == issuer and
+             true <- report["environment"] == "certecf" and report[if(type == "ACECF", do: "buyer_rnc", else: "issuer_rnc")] == issuer and
+               Map.get(report, "document_type", "ECF") == type and
                report["manifest_sha256"] == sha256(manifest) and is_map(report["entries"]) do
           {report, nil}
         else

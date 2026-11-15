@@ -47,7 +47,7 @@ without invoking the shell script or accepting a tenant from the upload form.
 The signed XML download is available only for the current page session; no
 signed document or certification progress is persisted. Signing identity files
 uploaded in step 0 are persisted in the tenant directory. Upload the downloaded file to DGII manually.
-Step 2 submits existing signed certification cases. Steps 3–15 are placeholders pending implementation.
+Step 2 submits existing signed certification cases. Step 3 handles commercial approvals. Steps 4–15 are placeholders pending implementation.
 
 ### Step 0: signing identity
 
@@ -137,3 +137,28 @@ that the taxpayer must retain. The exact combined term “Resumen de Factura de
 Consumo Íntegro” was not found in the repository guides. The UI therefore
 labels the two artifact types separately. RFCE downloads use the manifest's
 `rfce_file` and `rfce_sha256`; full ECF downloads use `ecf_file` and `ecf_sha256`.
+
+## Step 3: commercial approvals (ACECF)
+
+**Aprobación comercial** accepts one XLSX up to 20 MB with its first worksheet
+named `ACEECF_Generadas`. This uses `CommercialApproval.generate/1`, the same
+backend as `sh/generate_fe_approvals.sh`. The tenant's active-company RNC is the
+authorized **buyer** (`RNCComprador`); invoice issuer RNCs, commercial decisions,
+rejection reasons, and approval timestamps are preserved by the existing
+generator. No RNC, row count, or filename from the sample is hardcoded.
+
+On success, the new ACECF batch is selected for submission. The UI lists only
+ACECF batches matching the tenant's buyer RNC. **Enviar / continuar decisiones
+en CerteCF** uses the flow behind `sh/submit_fe_approvals.sh`, calling
+`Submission.run/3` with `expected_document_type: "ACECF"` and a client fixed to
+`environment: "certecf"`. Authentication uses the tenant's step-0 identity.
+The existing sender posts to the commercial approval service, rather than
+the invoice reception service.
+
+Generation and submission run asynchronously with per-document progress. The
+existing `submission-certecf.json` journal is reused and checked against the
+manifest, buyer RNC, document type, and environment. Registered decisions are
+skipped on resume. The table distinguishes the commercial decision (Estado 1
+or 2) from DGII registration status and shows saved DGII responses. A commercial
+rejection can be successfully registered by DGII. Steps cannot be switched
+while an operation is running, preventing mixed invoice/approval actions.
