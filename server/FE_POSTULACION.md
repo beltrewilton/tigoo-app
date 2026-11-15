@@ -113,3 +113,8 @@ On success, the new batch is automatically selected in the submission section.
 Generation makes no DGII requests; **Enviar / continuar casos en CerteCF** is
 a separate action. Arithmetic observations are reported without changing the
 workbook's supplied values, matching the CLI's default behavior.
+
+The generation rules and currency interpretation are documented in
+[FE_GENERATION_GUIDE.md](FE_GENERATION_GUIDE.md), with printed-page references
+to the local DGII format guide. Missing currency means local DOP in the
+manifest; it does not produce a `TipoMoneda=DOP` foreign-currency XML tag.

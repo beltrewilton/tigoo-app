@@ -133,7 +133,7 @@ defmodule TigooServer.Fe.Generation do
     Artifact.save_verified!(signed, Path.join(stage, relative), schema, opts)
     record = %{
       source_row: row.number, case: row.fields["CasoPrueba"], type: info.type, encf: info.encf,
-      issuer_rnc: info.issuer_rnc, amount_dop: info.amount, small_consumption: info.small_consumption?,
+      issuer_rnc: info.issuer_rnc, amount_dop: info.amount, currency: row.fields["TipoMoneda"] || "DOP", small_consumption: info.small_consumption?,
       ecf_file: relative, ecf_sha256: sha256(signed), ecf_schema: schema.path, ecf_schema_sha256: schema.sha256,
       signature_timestamp: built.timestamp, certificate_sha256: signature.certificate_sha256,
       schema_valid: true, signature_valid: true, certificate_chain_valid: true, source_fields_preserved: true,

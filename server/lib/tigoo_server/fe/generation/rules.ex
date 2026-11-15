@@ -47,8 +47,6 @@ defmodule TigooServer.Fe.Generation.Rules do
       small_consumption?: small, reference: f["NCFModificado"]}
   end
 
-  defp required!(row, "TipoMoneda"), do: row.fields["TipoMoneda"] || "DOP"
-
   defp required!(row, field) do
     row.fields[field] || Error.fail!(:rules, "Required value is missing", row: row.number, field: field)
   end
@@ -94,11 +92,38 @@ defmodule TigooServer.Fe.Generation.Rules do
     Enum.each([{"MontoITBISRetenido", "TotalITBISRetenido"}, {"MontoISRRetenido", "TotalISRRetencion"}], fn {line_field, total_field} ->
       if Enum.any?(items, &(Xml.value(&1, ["Retencion", line_field]) != nil)), do: required!(row, total_field)
     end)
-    if row.fields["TipoMoneda"] || Enum.any?(items, &Xml.child(&1, "OtraMonedaDetalle")) do
-      Enum.each(~w(TipoMoneda TipoCambio MontoTotalOtraMoneda), &required!(row, &1))
+    check_currency!(row, tree, items)
+    :ok
+  end
+
+  # PDF printed pp. 27–33 and 43: OtraMoneda is conditional on foreign currency.
+  # Missing currency means local DOP; DOP itself is not a Table-II XML code.
+  defp check_currency!(row, tree, items) do
+    header = tree |> Xml.child("Encabezado") |> Xml.child("OtraMoneda")
+    details = Enum.filter(items, &Xml.child(&1, "OtraMonedaDetalle"))
+    if header || details != [] do
+      currency = row.fields["TipoMoneda"]
+      if is_nil(currency) or currency == "DOP" do
+        Error.fail!(:rules, "Foreign-currency fields require a Table-II TipoMoneda (for example USD or EUR); local DOP must omit OtraMoneda fields",
+          row: row.number, field: "TipoMoneda")
+      end
+      required!(row, "TipoCambio")
       if Decimal.compare(decimal!(row.fields["TipoCambio"]), 0) != :gt do
         Error.fail!(:rules, "Exchange rate must be positive", row: row.number, field: "TipoCambio")
       end
+      # Printed p. 33 makes this conditional on an actual header amount.
+      if header && Enum.any?(Xml.elements(header), &String.starts_with?(elem(&1, 0), ["Monto", "Total"])) do
+        required!(row, "MontoTotalOtraMoneda")
+      end
+      Enum.each(details, fn item ->
+        foreign = Xml.child(item, "OtraMonedaDetalle")
+        Enum.each(~w(PrecioOtraMoneda MontoItemOtraMoneda), fn field ->
+          if is_nil(Xml.value(foreign, [field])) do
+            Error.fail!(:rules, "Foreign-currency item requires #{field} on line #{Xml.value(item, ["NumeroLinea"])}",
+              row: row.number, field: field)
+          end
+        end)
+      end)
     end
     :ok
   end
