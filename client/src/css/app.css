@@ -4967,3 +4967,32 @@ html.dark body,
     font-size: max(16px, 1rem) !important;
   }
 }
+
+/* DGII certification onboarding */
+.dgii-certification { padding: 28px; overflow: auto; }
+.dgii-certification h1 { font-size: 1.75rem; margin: 8px 0; }
+.dgii-certification p { line-height: 1.6; margin: 12px 0; }
+.dgii-wizard { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; margin-top: 24px; }
+.dgii-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.dgii-steps li { display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
+.dgii-steps [aria-current] { background: var(--accent); color: var(--accent-foreground); }
+.dgii-steps [aria-disabled] { color: var(--muted-foreground); }
+.dgii-step { max-width: 800px; padding: 24px; border: 1px solid var(--border); border-radius: 12px; align-self: start; }
+.dgii-flow { display: flex; flex-wrap: wrap; gap: 12px 28px; padding-left: 20px; margin: 24px 0; }
+.dgii-step form { display: grid; gap: 16px; }
+.dgii-step input[type=file] { max-width: 100%; }
+.dgii-step .btn { justify-self: start; }
+.dgii-step button:disabled { opacity: .5; cursor: not-allowed; }
+.dgii-upload { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.dgii-notice { margin-top: 24px; padding: 16px; border: 1px solid var(--border); border-radius: 8px; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .dgii-certification { padding: 16px; }
+  .dgii-wizard { grid-template-columns: minmax(0, 1fr); }
+  .dgii-steps { display: flex; overflow-x: auto; padding-bottom: 8px; }
+  .dgii-steps li { min-width: 145px; }
+  .dgii-step { padding: 16px; }
+}
+
+.dgii-steps button { text-align: left; color: inherit; font: inherit; font-weight: 600; background: transparent; border: 0; padding: 0; cursor: pointer; }
+.dgii-steps button:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+#identity-form label { display: block; margin-bottom: 8px; }

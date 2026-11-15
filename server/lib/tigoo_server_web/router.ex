@@ -97,6 +97,7 @@ defmodule TigooServerWeb.Router do
     live "/pos/reconciliation", CashReconciliationLive, :index
     live "/pos/customers", CustomerLive, :index
     live "/pos/invoices", InvoiceReportLive, :index
+    live "/pos/dgii-certification", DgiiCertificationLive, :index
     live "/pos/ecf-tests", EcfTestLive, :index
     live "/pos/ecf-tests/:id/xml", EcfTestXmlLive, :index
     get "/pos/ecf-tests/:id/dgii", EcfTestXmlController, :verify

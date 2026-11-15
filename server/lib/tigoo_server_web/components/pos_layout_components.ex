@@ -138,6 +138,14 @@ defmodule TigooServerWeb.PosLayoutComponents do
             <span data-i18n="layout.nav.pos">POS</span>
             <span class="sidebar-cart-count" hidden={@cart_count <= 0}>{@cart_count}</span>
           </a>
+          <a :if={nav_allowed?(@scope, :dgii_certification)} class="mobile-nav-link"
+            href={nav_href(:dgii_certification, @active_page, @store_id)}
+            aria-current={current_page(@active_page, :dgii_certification)} aria-label="Certificación DGII">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 3h14v18H5zM8 7h8M8 12l2 2 5-5M8 18h8" />
+            </svg>
+            <span>Certificación DGII</span>
+          </a>
           <a :if={nav_allowed?(@scope, :ecf_tests)} class="mobile-nav-link"
             href={nav_href(:ecf_tests, @active_page, @store_id)}
             aria-current={current_page(@active_page, :ecf_tests)}>
@@ -532,6 +540,13 @@ defmodule TigooServerWeb.PosLayoutComponents do
             <path d="M3 3h18v18H3z" /><path d="M7 7h10v10H7z" />
           </svg>
           <span class="sidebar-cart-count" hidden={@cart_count <= 0}>{@cart_count}</span>
+        </a>
+        <a :if={nav_allowed?(@scope, :dgii_certification)} class="sidebar-link"
+          href={nav_href(:dgii_certification, @active_page, @store_id)}
+          aria-current={current_page(@active_page, :dgii_certification)} aria-label="Certificación DGII">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 3h14v18H5zM8 7h8M8 12l2 2 5-5M8 18h8" />
+          </svg>
         </a>
         <a :if={nav_allowed?(@scope, :ecf_tests)} class="sidebar-link"
           href={nav_href(:ecf_tests, @active_page, @store_id)}
@@ -987,6 +1002,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
       %{
         dashboard: {"dashboard.dashboard", "Dashboard"},
         pos: {"layout.nav.pos", "POS"},
+        dgii_certification: {"layout.nav.dgiiCertification", "Certificación DGII"},
         ecf_tests: {"layout.nav.ecfHistory", "eCF history"},
         invoices: {"layout.nav.invoices", "Invoice report"},
         reconciliation: {"reconciliation.title", "Cash reconciliation"},
@@ -1010,6 +1026,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp nav_href(active_page, active_page, _store_id), do: "#"
   defp nav_href(:dashboard, _active_page, store_id), do: store_href(~p"/pos/dashboard", store_id)
   defp nav_href(:pos, _active_page, store_id), do: store_href(~p"/pos", store_id)
+  defp nav_href(:dgii_certification, _active_page, store_id), do: store_href(~p"/pos/dgii-certification", store_id)
   defp nav_href(:ecf_tests, _active_page, store_id), do: store_href(~p"/pos/ecf-tests", store_id)
   defp nav_href(:invoices, _active_page, store_id), do: store_href(~p"/pos/invoices", store_id)
   defp nav_href(:reconciliation, _active_page, store_id), do: store_href(~p"/pos/reconciliation", store_id)
@@ -1051,6 +1068,7 @@ defmodule TigooServerWeb.PosLayoutComponents do
   defp nav_permission(:orders), do: "pos.orders"
   defp nav_permission(:installed_addons), do: "pos.addons"
   defp nav_permission(:company_settings), do: "company.settings"
+  defp nav_permission(:dgii_certification), do: "company.settings"
   defp nav_permission(:sequences), do: "company.settings"
   defp nav_permission(:users), do: "user.view"
   defp nav_permission(:addons), do: "pos.addons.install"

@@ -34,3 +34,31 @@ the signed output and temporary signing files, which the signer cleans up.
 In DGII's portal, choose the resulting `.signed.xml` using **Elegir archivo**,
 then **ENVIAR ARCHIVO**. Do not format or modify the file after signing it.
 The script does not upload anything automatically or alter the source XML.
+
+## POS wizard
+
+Open **Certificación DGII** in the POS sidebar (`/pos/dgii-certification`).
+Access requires the existing `company.settings` permission. Step 1 accepts one
+Postulacion XML up to 5 MB, signs it with the authenticated tenant's single
+`.p12` and `credentials.txt` under `fe_receivers_directory/<tenant>/`, and offers
+the signed bytes as a download. It reuses `Fe.Credentials` and `Sign.sign/3`,
+without invoking the shell script or accepting a tenant from the upload form.
+
+The signed XML download is available only for the current page session; no
+signed document or certification progress is persisted. Signing identity files
+uploaded in step 0 are persisted in the tenant directory. Upload the downloaded file to DGII manually.
+Steps 2–15 are placeholders pending implementation.
+
+### Step 0: signing identity
+
+Upload the tenant's `.p12` and `credentials.txt` in **Certificado digital**.
+The server creates `fe_receivers_directory/<authenticated tenant>/` as needed.
+The certificate is limited to 5 MB and credentials to 64 KB. The credentials
+filename must be `credentials.txt`, with exactly one `Password:` or `Password=`
+field. The existing signer checks the certificate/password pair using a local
+sample document before saving; nothing is submitted to DGII.
+
+Uploaded identity files are stored with mode 0600. A new pair replaces the
+existing pair; the existing certificate filename is retained so the signer
+still finds exactly one `.p12`. A directory with multiple `.p12` files must be
+resolved before uploading. Saving continues to Postulación.
