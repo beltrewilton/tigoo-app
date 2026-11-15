@@ -21,9 +21,9 @@ defmodule TigooServerWeb.DgiiCertificationLive do
          step: 0, identity_ready: match?({:ok, _}, Credentials.for_tenant(scope.tenant)), identity_error: nil)
        # PKCS#12 extensions are not registered in the default MIME database.
        # Keep the browser filter below; Credentials validates the file on save.
-       |> allow_upload(:certificate, accept: :any, max_entries: 1, max_file_size: 5_000_000)
-       |> allow_upload(:credentials, accept: ~w(.txt), max_entries: 1, max_file_size: 64_000)
-       |> allow_upload(:xml, accept: ~w(.xml), max_entries: 1, max_file_size: 5_000_000)}
+       |> allow_upload(:certificate, auto_upload: true, accept: :any, max_entries: 1, max_file_size: 5_000_000)
+       |> allow_upload(:credentials, auto_upload: true, accept: ~w(.txt), max_entries: 1, max_file_size: 64_000)
+       |> allow_upload(:xml, auto_upload: true, accept: ~w(.xml), max_entries: 1, max_file_size: 5_000_000)}
     else
       _ -> {:ok, redirect(socket, to: ~p"/pos")}
     end
