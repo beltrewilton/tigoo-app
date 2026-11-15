@@ -26,11 +26,20 @@ that document's manifest record. The generator must **not** inject
 invoice. This replaces the earlier explicit DOP XML default, which was invalid
 against the bundled XSDs.
 
-If the workbook supplies foreign-currency fields without a currency code, the
-generator reports an actionable error rather than guessing a conversion,
-dropping supplied amounts, or publishing an invalid DOP currency tag. An
-explicit foreign code and its supplied values are preserved. XSD validation
-checks the code against the schema's enumeration.
+Header `OtraMoneda` and item `OtraMonedaDetalle` are validated independently.
+Populating the item table does not by itself require header `TipoMoneda`,
+`TipoCambio`, or `MontoTotalOtraMoneda`. A populated header table still requires
+a valid foreign currency and exchange rate; a populated item table requires its
+unit price and amount. Supplied item values are retained without inferring a
+currency, converting amounts, or manufacturing header totals.
+
+The supplied `132695399-15112026143336.xlsx` illustrates this distinction:
+row 21 (type 45) contains alternative-currency prices and amounts on four item
+lines, with no header currency or exchange rate. Rows 24 and 25 contain USD
+header data and exchange rates. The backend applies the same structural rules
+to all rows and workbooks, without branching on row number, RNC, or filename.
+The earlier diagnosis based on the checked-in sample workbook did not describe
+this supplied workbook.
 
 ## Existing validation layers reviewed
 
