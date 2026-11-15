@@ -74,8 +74,8 @@ signer preserves the source value; never edit the already signed download.
 ## Step 2: submit signed certification cases
 
 **Casos de prueba** lists existing generated ECF batches whose authorized issuer
-RNC matches the authenticated tenant's single active company. It does not read
-XLSX files, generate documents, or re-sign invoices. Configure the batch root
+RNC matches the authenticated tenant's single active company. Upload an XLSX
+to generate a new signed batch, or select a previously generated batch. Configure the batch root
 with `FE_CERTIFICATION_BATCH_DIRECTORY` (default `fe/data-test/generated`).
 
 The UI calls the same `Client.new/1` and `Submission.run/3` flow as
@@ -92,3 +92,24 @@ uncertain reception. Their full ECF XMLs still require manual portal upload.
 The UI displays saved DGII responses and errors so those cases can be reviewed.
 No environment selector or journal reset is exposed. Opening the page never
 posts documents; the user starts submission with the CerteCF send button.
+
+### Generate cases from an uploaded XLSX
+
+Step 2 starts with **Generar casos desde XLSX**. Select one `.xlsx` file up to
+20 MB; upload begins immediately. **Generar y firmar casos** runs the same
+`Generation.generate/1` API used by `sh/generate_fe_certification.sh`, using the
+authenticated tenant's active-company RNC and step-0 signing identity. The first
+worksheet must be `ECF`; workbook and source-preservation validation stay in the
+existing generator. Generation runs asynchronously and reports validated cases.
+
+Each run publishes a unique batch under the configured certification directory
+without overwriting earlier batches. Successful source workbooks are retained
+under `.sources/<tenant>/` with mode 0600 for manifest provenance. Failed
+uploads are removed. The generator publishes the batch only after all checks
+pass. Newly generated `dgii_data_tests` manifests and legacy manifests without
+a purpose are both supported by the submission UI.
+
+On success, the new batch is automatically selected in the submission section.
+Generation makes no DGII requests; **Enviar / continuar casos en CerteCF** is
+a separate action. Arithmetic observations are reported without changing the
+workbook's supplied values, matching the CLI's default behavior.

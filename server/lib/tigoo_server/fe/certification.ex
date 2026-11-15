@@ -2,7 +2,7 @@ defmodule TigooServer.Fe.Certification do
   @moduledoc "Tenant-scoped adapter for the existing certification submission CLI flow."
   import Ecto.Query
   alias TigooServer.{Accounts.Company, Accounts.Scope, Repo, Tenants}
-  alias TigooServer.Fe.{Client, Credentials, Submission}
+  alias TigooServer.Fe.{Client, Credentials, Generation, Submission}
 
   def batches(scope) do
     with {:ok, issuer} <- issuer(scope),
@@ -23,6 +23,48 @@ defmodule TigooServer.Fe.Certification do
   rescue
     _ -> {:error, "No se pudieron cargar los casos de certificación de esta empresa."}
   end
+
+  def generate(scope, workbook, on_document) when is_binary(workbook) and byte_size(workbook) in 1..20_000_000 do
+    with {:ok, issuer} <- issuer(scope),
+         {:ok, identity} <- Credentials.for_tenant(scope.tenant) do
+      id = scope.tenant <> "-" <> Integer.to_string(System.system_time(:millisecond)) <>
+        "-" <> Base.url_encode64(:crypto.strong_rand_bytes(9), padding: false)
+      source_directory = Path.join([root(), ".sources", scope.tenant])
+      source = Path.join(source_directory, id <> ".xlsx")
+      output = Path.join(root(), id)
+      try do
+        File.mkdir_p!(source_directory)
+        File.write!(source, workbook, [:exclusive])
+        File.chmod!(source, 0o600)
+        project = Path.expand("../../../..", __DIR__)
+        trust = Application.get_env(:tigoo_server, :fe_authentication, [])
+          |> Keyword.take([:trusted_certificates, :intermediate_certificates, :crls])
+          |> Keyword.put_new(:trusted_certificates, [Path.join(project, "fe/digifirma-ca-raiz.crt")])
+          |> Keyword.put_new(:intermediate_certificates, [Path.join(project, "fe/digifirma-ca-subordinada-1.crt")])
+        opts = [workbook: source, output: output, issuer_rnc: issuer,
+          p12_path: identity.p12_path, password: identity.password,
+          strict_arithmetic: false, on_document: on_document] ++ trust
+
+        case Generation.generate(opts) do
+          {:ok, manifest} ->
+            observations = Enum.reduce(manifest.documents, 0,
+              &(length(&1.source_arithmetic_observations) + &2))
+            {:ok, %{id: id, counts: manifest.counts, observations: observations}}
+          {:error, error} -> {:error, Exception.message(error)}
+        end
+      after
+        # Keep source provenance for published batches; discard unsuccessful uploads.
+        unless File.regular?(Path.join(output, "manifest.json")), do: File.rm(source)
+      end
+    else
+      {:error, message} when is_binary(message) -> {:error, message}
+      _ -> {:error, "Configura el certificado y las credenciales de esta empresa en el paso 0."}
+    end
+  rescue
+    _ -> {:error, "No se pudo generar el lote. Revisa el archivo XLSX y los permisos de almacenamiento."}
+  end
+
+  def generate(_, _, _), do: {:error, "Selecciona un archivo XLSX de máximo 20 MB."}
 
   def submit(scope, id, on_result) do
     with {:ok, issuer} <- issuer(scope),
@@ -66,7 +108,7 @@ defmodule TigooServer.Fe.Certification do
          {:ok, bytes} <- File.read(path),
          {:ok, manifest} when is_map(manifest) <- Jason.decode(bytes),
          true <- manifest["authorized_issuer_rnc"] == issuer and manifest["worksheet"] == "ECF" and
-           Map.get(manifest, "document_type", "ECF") == "ECF" and is_nil(manifest["purpose"]),
+           Map.get(manifest, "document_type", "ECF") == "ECF" and manifest["purpose"] in [nil, "dgii_data_tests"],
          documents when is_list(documents) and documents != [] <- manifest["documents"] do
       {report, journal_error} = read_report(id, issuer, bytes)
       entries = Map.get(report, "entries", %{})

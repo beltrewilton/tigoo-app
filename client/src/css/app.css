@@ -5005,3 +5005,6 @@ html.dark body,
 .dgii-step progress { width: 100%; accent-color: var(--primary); }
 #certification-batch-form { margin-bottom: 16px; }
 #certification-batch { width: 100%; min-width: 0; padding: 10px; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 8px; }
+
+.dgii-submission-heading { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+#certification-workbook-form { margin-top: 16px; }
