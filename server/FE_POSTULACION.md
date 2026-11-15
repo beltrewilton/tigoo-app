@@ -62,3 +62,11 @@ Uploaded identity files are stored with mode 0600. A new pair replaces the
 existing pair; the existing certificate filename is retained so the signer
 still finds exactly one `.p12`. A directory with multiple `.p12` files must be
 resolved before uploading. Saving continues to Postulación.
+
+### VersionSoftware rejected by DGII
+
+DGII declares `VersionSoftware` as `xs:double`. A semantic version such as
+`1.0.0` is invalid; use the corresponding numeric software version (for example
+`1.0`) in the original unsigned application XML, then upload and sign it again.
+Step 1 rejects invalid values before signing and shows this correction. The
+signer preserves the source value; never edit the already signed download.

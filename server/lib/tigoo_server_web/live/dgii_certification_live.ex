@@ -102,6 +102,8 @@ defmodule TigooServerWeb.DgiiCertificationLive do
           {:ok, signed} -> {:noreply, assign(socket, signed: signed, error: nil)}
           {:error, :signing_identity_unavailable} ->
             {:noreply, assign(socket, signed: nil, error: "No se encontró un certificado .p12 único y credenciales válidas para esta empresa.")}
+          {:error, :invalid_software_version} ->
+            {:noreply, assign(socket, signed: nil, error: "VersionSoftware debe ser un número, por ejemplo 1.0. Valores como 1.0.0 no son válidos para DGII. Corrige el XML original y vuelve a cargarlo para firmarlo.")}
           {:error, :invalid_postulacion} ->
             {:noreply, assign(socket, signed: nil, error: "Selecciona un XML válido de DGII con raíz Postulacion (máximo 5 MB).")}
           _ -> {:noreply, assign(socket, signed: nil, error: "No se pudo firmar el XML. Revisa el certificado y la configuración del firmador.")}
