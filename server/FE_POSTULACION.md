@@ -121,10 +121,19 @@ manifest; it does not produce a `TipoMoneda=DOP` foreign-currency XML tag.
 
 ### Download low-value full ECFs
 
-Step 2 lists individual XML downloads under **Descargar ECF menores a
-RD$250,000** for each eligible type-32 case in the selected batch. These are
-the full signed ECF documents for manual DGII portal upload, rather than their
-RFCE summaries. Each link shows the corresponding saved RFCE status.
+Step 2 lists individual XML downloads under **Descargar documentos de consumo menores a
+RD$250,000** for each eligible type-32 case in the selected batch. Each case
+has separate **Descargar resumen RFCE** and **Descargar ECF íntegro** links,
+available immediately after successful generation. Each case shows the saved
+RFCE status.
 Downloads require an authenticated user with company settings access, a batch
 matching the tenant's RNC, and a file checksum matching the manifest. The
 original signed bytes and filenames are preserved.
+
+Reference: `fe/Descripcion Tecnica Servicios DGII.pdf`, p. 15, section
+“Recepción de resumen factura de consumo electrónica (RFCE)”. This distinguishes
+the signed summary received by the RFCE service from the full extended ECF
+that the taxpayer must retain. The exact combined term “Resumen de Factura de
+Consumo Íntegro” was not found in the repository guides. The UI therefore
+labels the two artifact types separately. RFCE downloads use the manifest's
+`rfce_file` and `rfce_sha256`; full ECF downloads use `ecf_file` and `ecf_sha256`.

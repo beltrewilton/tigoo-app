@@ -3,10 +3,10 @@ defmodule TigooServerWeb.DgiiCertificationController do
   alias TigooServer.Authentication
   alias TigooServer.Fe.Certification
 
-  def download(conn, %{"batch" => batch, "encf" => encf}) do
+  def download(conn, %{"batch" => batch, "encf" => encf} = params) do
     with token when is_binary(token) <- get_session(conn, "user_token"),
          {:ok, scope} <- Authentication.authenticate(token),
-         {:ok, artifact} <- Certification.portal_document(scope, batch, encf) do
+         {:ok, artifact} <- Certification.portal_document(scope, batch, encf, Map.get(params, "kind", "ecf")) do
       conn
       |> put_resp_header("cache-control", "no-store")
       |> send_download({:binary, artifact.xml}, filename: artifact.filename, content_type: "application/xml")

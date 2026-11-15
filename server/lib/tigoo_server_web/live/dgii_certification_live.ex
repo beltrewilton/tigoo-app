@@ -382,12 +382,17 @@ defmodule TigooServerWeb.DgiiCertificationLive do
               <p>Los casos aceptados se omiten. Los pendientes con Track ID se consultan sin volver a enviarlos. Los casos rechazados o sin recepción confirmada requieren revisión.</p>
               <p :if={@batch.portal_count > 0}>Este lote incluye {@batch.portal_count} casos de consumo menor a RD$250,000: se envían sus resúmenes RFCE; los ECF completos se cargan manualmente en el portal, igual que en el proceso existente.</p>
               <section :if={@batch.portal_count > 0} aria-labelledby="portal-downloads-title" class="dgii-notice">
-                <h3 id="portal-downloads-title">Descargar ECF menores a RD$250,000</h3>
-                <p>XML completos y firmados para cargar en el portal de DGII después de la aceptación de sus resúmenes RFCE. No modifiques los archivos descargados.</p>
+                <h3 id="portal-downloads-title">Descargar documentos de consumo menores a RD$250,000</h3>
+                <p>Cada caso incluye un resumen RFCE y su ECF íntegro correspondiente. Ambos XML están firmados y disponibles después de generar el lote. No modifiques los archivos descargados.</p>
                 <ul>
                   <li :for={row <- @batch.rows} :if={row.portal_file}>
+                    <strong>{@batch.issuer}{row.encf}.xml</strong>
+                    <a :if={row.rfce_file} href={~p"/pos/dgii-certification/#{@batch.id}/portal-xml/#{row.encf}?kind=rfce"}>
+                      Descargar resumen RFCE
+                    </a>
+                    <span aria-hidden="true"> · </span>
                     <a href={~p"/pos/dgii-certification/#{@batch.id}/portal-xml/#{row.encf}"}>
-                      Descargar {@batch.issuer}{row.encf}.xml
+                      Descargar ECF íntegro
                     </a>
                     <span> · RD$ {row.amount} · RFCE: {case_label(row.state)}</span>
                   </li>

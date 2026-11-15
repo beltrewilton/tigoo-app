@@ -90,18 +90,21 @@ defmodule TigooServer.Fe.Certification do
     _ -> {:error, "El envío se interrumpió. Revisa el registro de resultados antes de continuar."}
   end
 
-  @doc "Returns an unchanged, checksum-verified full ECF for manual portal upload."
-  def portal_document(scope, id, encf) do
-    with {:ok, issuer} <- issuer(scope),
+  @doc "Returns an unchanged, checksum-verified low-value ECF or RFCE."
+  def portal_document(scope, id, encf, kind \\ "ecf") do
+    with true <- kind in ["ecf", "rfce"],
+         {:ok, issuer} <- issuer(scope),
          {:ok, batch} <- read_batch(id, issuer),
          row when not is_nil(row) <- Enum.find(batch.rows, &(&1.encf == encf and not is_nil(&1.portal_file))),
          directory <- Path.expand(Path.join(root(), id)),
-         path <- Path.expand(row.portal_file, directory),
+         relative when is_binary(relative) <- if(kind == "rfce", do: row.rfce_file, else: row.portal_file),
+         checksum <- if(kind == "rfce", do: row.rfce_sha256, else: row.portal_sha256),
+         path <- Path.expand(relative, directory),
          true <- String.starts_with?(path, directory <> "/"),
          true <- Path.basename(path) == issuer <> encf <> ".xml",
          {:ok, %{size: size}} when size <= 5_000_000 <- File.stat(path),
          {:ok, xml} <- File.read(path),
-         true <- sha256(xml) == row.portal_sha256 do
+         true <- sha256(xml) == checksum do
       {:ok, %{xml: xml, filename: Path.basename(path)}}
     else
       _ -> {:error, :document_unavailable}
@@ -138,7 +141,7 @@ defmodule TigooServer.Fe.Certification do
           channel: if(doc["small_consumption"], do: "RFCE", else: "ECF"),
           portal_file: if(doc["small_consumption"] and doc["type"] == "32" and
             Decimal.compare(Decimal.new(doc["amount_dop"]), Decimal.new("250000")) == :lt, do: doc["ecf_file"]),
-          portal_sha256: doc["ecf_sha256"],
+          portal_sha256: doc["ecf_sha256"], rfce_file: doc["rfce_file"], rfce_sha256: doc["rfce_sha256"],
           state: Map.get(entry, "state", "not_sent"), track_id: entry["track_id"],
           response: entry["result"] || entry["error"] || entry["query_error"] || entry["upload_response"]}
       end)
