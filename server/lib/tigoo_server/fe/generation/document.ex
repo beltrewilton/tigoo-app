@@ -33,6 +33,9 @@ defmodule TigooServer.Fe.Generation.Document do
         mapping = %{header: header, cell: row.cells[header].coordinate, path: path, value: value}
         {Map.put(assignments, path, value), [mapping | mappings]}
     end)
+    # Missing workbook currency defaults to DOP; keep imported cell mappings intact.
+    assignments = Map.put_new(assignments,
+      [{"ECF", nil}, {"Encabezado", nil}, {"OtraMoneda", nil}, {"TipoMoneda", nil}], "DOP")
     assignments = Map.put(assignments, [{"ECF", nil}, {"FechaHoraFirma", nil}], timestamp)
     document = Schema.build!(schema, assignments)
     %{tree: document, xml: Xml.encode(document), mappings: Enum.reverse(mappings), timestamp: timestamp}

@@ -47,6 +47,8 @@ defmodule TigooServer.Fe.Generation.Rules do
       small_consumption?: small, reference: f["NCFModificado"]}
   end
 
+  defp required!(row, "TipoMoneda"), do: row.fields["TipoMoneda"] || "DOP"
+
   defp required!(row, field) do
     row.fields[field] || Error.fail!(:rules, "Required value is missing", row: row.number, field: field)
   end
