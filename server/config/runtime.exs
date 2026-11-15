@@ -4,6 +4,10 @@ import Config
 config :tigoo_server, :pos_ecf_test_artifact_directory,
   System.get_env("POS_ECF_TEST_ARTIFACT_DIRECTORY", Path.expand("../../data/pos-ecf-test", __DIR__))
 
+# Existing signed certification batches, including their resumable CLI journals.
+config :tigoo_server, :fe_certification_batch_directory,
+  System.get_env("FE_CERTIFICATION_BATCH_DIRECTORY", Path.expand("../../fe/data-test/generated", __DIR__))
+
 # Each hostname tenant has its signing identity in p12_companies/{tenant}.
 config :tigoo_server, :fe_receivers_directory,
   Path.expand("../../p12_companies", __DIR__)

@@ -47,7 +47,7 @@ without invoking the shell script or accepting a tenant from the upload form.
 The signed XML download is available only for the current page session; no
 signed document or certification progress is persisted. Signing identity files
 uploaded in step 0 are persisted in the tenant directory. Upload the downloaded file to DGII manually.
-Steps 2–15 are placeholders pending implementation.
+Step 2 submits existing signed certification cases. Steps 3–15 are placeholders pending implementation.
 
 ### Step 0: signing identity
 
@@ -70,3 +70,25 @@ DGII declares `VersionSoftware` as `xs:double`. A semantic version such as
 `1.0`) in the original unsigned application XML, then upload and sign it again.
 Step 1 rejects invalid values before signing and shows this correction. The
 signer preserves the source value; never edit the already signed download.
+
+## Step 2: submit signed certification cases
+
+**Casos de prueba** lists existing generated ECF batches whose authorized issuer
+RNC matches the authenticated tenant's single active company. It does not read
+XLSX files, generate documents, or re-sign invoices. Configure the batch root
+with `FE_CERTIFICATION_BATCH_DIRECTORY` (default `fe/data-test/generated`).
+
+The UI calls the same `Client.new/1` and `Submission.run/3` flow as
+`sh/submit_fe_certification.sh`, with `environment: "certecf"` fixed on the server,
+`expected_document_type: "ECF"`, 20 poll attempts, and a 1-second poll interval.
+It uses the current tenant's step-0 credentials and the existing batch journal
+`submission-certecf.json`; accepted cases are skipped and pending Track IDs
+are queried without reposting. Submission runs asynchronously and updates the
+case table as results arrive. Reloading the page reads the saved journal.
+
+The existing sender validates the batch before HTTP, sends in dependency order,
+routes low-value consumption cases through RFCE, and stops on rejection or an
+uncertain reception. Their full ECF XMLs still require manual portal upload.
+The UI displays saved DGII responses and errors so those cases can be reviewed.
+No environment selector or journal reset is exposed. Opening the page never
+posts documents; the user starts submission with the CerteCF send button.

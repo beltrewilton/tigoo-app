@@ -4996,3 +4996,12 @@ html.dark body,
 .dgii-steps button { text-align: left; color: inherit; font: inherit; font-weight: 600; background: transparent; border: 0; padding: 0; cursor: pointer; }
 .dgii-steps button:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
 #identity-form label { display: block; margin-bottom: 8px; }
+
+.dgii-cases-table { overflow-x: auto; margin-top: 24px; }
+.dgii-cases-table table { width: 100%; border-collapse: collapse; text-align: left; }
+.dgii-cases-table caption { text-align: left; font-weight: 600; padding-bottom: 12px; }
+.dgii-cases-table th, .dgii-cases-table td { padding: 12px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.dgii-cases-table pre { max-width: 340px; max-height: 240px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; }
+.dgii-step progress { width: 100%; accent-color: var(--primary); }
+#certification-batch-form { margin-bottom: 16px; }
+#certification-batch { width: 100%; min-width: 0; padding: 10px; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 8px; }

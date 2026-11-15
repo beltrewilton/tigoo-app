@@ -3,7 +3,7 @@ defmodule TigooServerWeb.DgiiCertificationLive do
   import TigooServerWeb.PosLayoutComponents
   alias TigooServer.{Authentication, TenantContext}
   alias TigooServer.Accounts.Scope
-  alias TigooServer.Fe.{Credentials, Postulacion}
+  alias TigooServer.Fe.{Certification, Credentials, Postulacion}
   alias TigooServer.Retaily.InventoryContext
 
   def mount(params, session, socket) do
@@ -18,7 +18,9 @@ defmodule TigooServerWeb.DgiiCertificationLive do
       {:ok, socket
        |> assign(page_title: "Certificación DGII", scope: scope, stores: stores,
          store_id: store && store.id, token: token, signed: nil, error: nil,
-         step: 0, identity_ready: match?({:ok, _}, Credentials.for_tenant(scope.tenant)), identity_error: nil)
+         step: 0, identity_ready: match?({:ok, _}, Credentials.for_tenant(scope.tenant)), identity_error: nil,
+         batches: [], batch: nil, batch_id: "", batch_error: nil, submitting: false, submission_status: nil)
+       |> load_batches()
        # PKCS#12 extensions are not registered in the default MIME database.
        # Keep the browser filter below; Credentials validates the file on save.
        |> allow_upload(:certificate, auto_upload: true, accept: :any, max_entries: 1, max_file_size: 5_000_000)
@@ -36,8 +38,45 @@ defmodule TigooServerWeb.DgiiCertificationLive do
     end
   end
 
-  def handle_event("select_step", %{"step" => step}, socket) when step in ["0", "1"],
+  def handle_event("select_step", %{"step" => step}, socket) when step in ["0", "1", "2"],
     do: {:noreply, assign(socket, :step, String.to_integer(step))}
+
+  def handle_event("select_batch", %{"batch_id" => id}, socket) do
+    if socket.assigns.submitting do
+      {:noreply, socket}
+    else
+      batch = Enum.find(socket.assigns.batches, &(&1.id == id))
+      {:noreply, assign(socket, batch_id: if(batch, do: id, else: ""), batch: batch, submission_status: nil)}
+    end
+  end
+
+  def handle_event("refresh_batches", _, socket),
+    do: {:noreply, load_batches(socket)}
+
+  def handle_event("submit_cases", _, %{assigns: %{submitting: true}} = socket),
+    do: {:noreply, socket}
+
+  def handle_event("submit_cases", _, socket) do
+    with {:ok, scope} <- Authentication.authenticate(socket.assigns.token),
+         true <- scope.tenant == socket.assigns.scope.tenant and Scope.allowed?(scope, "company.settings") do
+      id = socket.assigns.batch_id
+      socket = load_batches(socket)
+      if not is_nil(socket.assigns.batch) and socket.assigns.batch.id == id and is_nil(socket.assigns.batch.journal_error) do
+        parent = self()
+        {:noreply, socket
+         |> assign(submitting: true, submission_status: "Enviando casos a DGII Certificación (CerteCF)…")
+         |> start_async(:submit_cases, fn ->
+           Certification.submit(scope, id, fn _encf, _state, _body ->
+             send(parent, {:certification_progress, id})
+           end)
+         end)}
+      else
+        {:noreply, assign(socket, :submission_status, "Selecciona un lote válido de esta empresa antes de enviar.")}
+      end
+    else
+      _ -> {:noreply, redirect(socket, to: ~p"/pos")}
+    end
+  end
 
   def handle_event("validate_identity", _, socket),
     do: {:noreply, assign(socket, :identity_error, nil)}
@@ -116,6 +155,40 @@ defmodule TigooServerWeb.DgiiCertificationLive do
     end
   end
 
+  def handle_info({:certification_progress, id}, socket) do
+    if socket.assigns.batch_id == id,
+      do: {:noreply, load_batches(socket)}, else: {:noreply, socket}
+  end
+
+  def handle_async(:submit_cases, {:ok, :ok}, socket) do
+    {:noreply, socket |> assign(submitting: false,
+      submission_status: "Todos los casos del lote están aceptados en DGII Certificación.") |> load_batches()}
+  end
+
+  def handle_async(:submit_cases, {:ok, {:error, message}}, socket) do
+    {:noreply, socket |> assign(submitting: false, submission_status: message) |> load_batches()}
+  end
+
+  def handle_async(:submit_cases, {:exit, _}, socket) do
+    {:noreply, socket |> assign(submitting: false,
+      submission_status: "El envío se interrumpió. Revisa el registro guardado antes de continuar.") |> load_batches()}
+  end
+
+  defp load_batches(socket) do
+    case Certification.batches(socket.assigns.scope) do
+      {:ok, batches} ->
+        batch = Enum.find(batches, &(&1.id == socket.assigns.batch_id)) || List.first(batches)
+        assign(socket, batches: batches, batch: batch, batch_id: if(batch, do: batch.id, else: ""), batch_error: nil)
+      {:error, message} -> assign(socket, batches: [], batch: nil, batch_id: "", batch_error: message)
+    end
+  end
+
+  defp case_label(state) do
+    Map.get(%{"not_sent" => "Sin enviar", "sending" => "Enviando / confirmar recepción",
+      "pending" => "Pendiente", "accepted" => "Aceptado", "accepted_conditional" => "Aceptado condicional",
+      "rejected" => "Rechazado", "unknown" => "Recepción sin confirmar"}, state, state)
+  end
+
   defp upload_ready?(upload) do
     length(upload.entries) == 1 and upload_errors(upload) == [] and
       Enum.all?(upload.entries, &(&1.done? and upload_errors(upload, &1) == []))
@@ -141,7 +214,11 @@ defmodule TigooServerWeb.DgiiCertificationLive do
               <li aria-current={if @step == 1, do: "step"}>
                 <button type="button" phx-click="select_step" phx-value-step="1">1. Postulación</button><span>Disponible</span>
               </li>
-              <li :for={step <- 2..15} aria-disabled="true"><span>Paso {step}</span><small>Pendiente de habilitar</small></li>
+              <li aria-current={if @step == 2, do: "step"}>
+                <button type="button" phx-click="select_step" phx-value-step="2">2. Casos de prueba</button>
+                <span>Certificación · CerteCF</span>
+              </li>
+              <li :for={step <- 3..15} aria-disabled="true"><span>Paso {step}</span><small>Pendiente de habilitar</small></li>
             </ol>
           </nav>
           <section :if={@step == 0} class="dgii-step" aria-labelledby="identity-title">
@@ -199,6 +276,53 @@ defmodule TigooServerWeb.DgiiCertificationLive do
               <p>En el portal de DGII, carga este archivo en «Envío de archivo de postulación firmado». No modifiques el XML después de firmarlo.</p>
               <p>La firma no confirma la aprobación de DGII. El archivo estará disponible mientras permanezcas en esta página.</p>
             </div>
+            <button class="btn" type="button" phx-click="select_step" phx-value-step="2">Continuar a casos de prueba</button>
+          </section>
+          <section :if={@step == 2} class="dgii-step" aria-labelledby="cases-title" aria-busy={@submitting}>
+            <p class="eyebrow">PASO 2 DE 15 · CERTECF</p>
+            <h2 id="cases-title">Enviar casos de prueba</h2>
+            <p>Envía los XML firmados del lote generado para esta empresa a <strong>DGII Certificación (CerteCF)</strong>.</p>
+            <form id="certification-batch-form" phx-change="select_batch">
+              <label for="certification-batch">Lote de casos firmados</label>
+              <select id="certification-batch" name="batch_id" disabled={@submitting or @batches == []}>
+                <option :if={@batches == []} value="">No hay lotes disponibles</option>
+                <option :for={batch <- @batches} value={batch.id} selected={batch.id == @batch_id}>
+                  {batch.id} · RNC {batch.issuer} · {batch.count} casos
+                </option>
+              </select>
+            </form>
+            <button class="btn" type="button" phx-click="refresh_batches" disabled={@submitting}>Actualizar resultados</button>
+            <p :if={@batch_error} class="dgii-notice" role="alert">{@batch_error}</p>
+            <p :if={!@batch and !@batch_error} class="dgii-notice">No hay lotes ECF generados para el RNC de esta empresa en la carpeta de certificación.</p>
+            <div :if={@batch}>
+              <p><strong>{@batch.accepted} de {@batch.count}</strong> casos aceptados · RNC {@batch.issuer}</p>
+              <progress value={@batch.accepted} max={@batch.count} aria-label="Casos aceptados"></progress>
+              <p>Los casos aceptados se omiten. Los pendientes con Track ID se consultan sin volver a enviarlos. Los casos rechazados o sin recepción confirmada requieren revisión.</p>
+              <p :if={@batch.portal_count > 0}>Este lote incluye {@batch.portal_count} casos de consumo menor a RD$250,000: se envían sus resúmenes RFCE; los ECF completos se cargan manualmente en el portal, igual que en el proceso existente.</p>
+              <p :if={@batch.journal_error} class="dgii-notice" role="alert">{@batch.journal_error}</p>
+              <button class="btn" type="button" phx-click="submit_cases"
+                disabled={@submitting or !@identity_ready or not is_nil(@batch.journal_error) or @batch.accepted == @batch.count}>
+                {if @submitting, do: "Enviando…", else: "Enviar / continuar casos en CerteCF"}
+              </button>
+              <p :if={!@identity_ready}>Configura el certificado de esta empresa en el paso 0.</p>
+              <p :if={@batch.last_error} class="dgii-notice" role="alert">Último resultado del envío: {@batch.last_error}</p>
+              <div class="dgii-cases-table">
+                <table>
+                  <caption>Resultados de los casos de prueba</caption>
+                  <thead><tr><th scope="col">eNCF</th><th scope="col">Canal</th><th scope="col">Monto RD$</th><th scope="col">Estado</th><th scope="col">Detalle DGII</th></tr></thead>
+                  <tbody>
+                    <tr :for={row <- @batch.rows}>
+                      <td>{row.encf}</td><td>{row.channel}</td><td>{row.amount}</td><td>{case_label(row.state)}</td>
+                      <td>
+                        <span :if={row.track_id}>Track ID: {row.track_id}</span>
+                        <details :if={row.response}><summary>Ver respuesta</summary><pre>{Jason.encode!(row.response, pretty: true)}</pre></details>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p :if={@submission_status} class="dgii-notice" role="status" aria-live="polite">{@submission_status}</p>
           </section>
         </div>
       </section>
