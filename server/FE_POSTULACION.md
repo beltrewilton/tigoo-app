@@ -118,3 +118,13 @@ The generation rules and currency interpretation are documented in
 [FE_GENERATION_GUIDE.md](FE_GENERATION_GUIDE.md), with printed-page references
 to the local DGII format guide. Missing currency means local DOP in the
 manifest; it does not produce a `TipoMoneda=DOP` foreign-currency XML tag.
+
+### Download low-value full ECFs
+
+Step 2 lists individual XML downloads under **Descargar ECF menores a
+RD$250,000** for each eligible type-32 case in the selected batch. These are
+the full signed ECF documents for manual DGII portal upload, rather than their
+RFCE summaries. Each link shows the corresponding saved RFCE status.
+Downloads require an authenticated user with company settings access, a batch
+matching the tenant's RNC, and a file checksum matching the manifest. The
+original signed bytes and filenames are preserved.

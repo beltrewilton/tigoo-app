@@ -381,6 +381,18 @@ defmodule TigooServerWeb.DgiiCertificationLive do
               <progress value={@batch.accepted} max={@batch.count} aria-label="Casos aceptados"></progress>
               <p>Los casos aceptados se omiten. Los pendientes con Track ID se consultan sin volver a enviarlos. Los casos rechazados o sin recepción confirmada requieren revisión.</p>
               <p :if={@batch.portal_count > 0}>Este lote incluye {@batch.portal_count} casos de consumo menor a RD$250,000: se envían sus resúmenes RFCE; los ECF completos se cargan manualmente en el portal, igual que en el proceso existente.</p>
+              <section :if={@batch.portal_count > 0} aria-labelledby="portal-downloads-title" class="dgii-notice">
+                <h3 id="portal-downloads-title">Descargar ECF menores a RD$250,000</h3>
+                <p>XML completos y firmados para cargar en el portal de DGII después de la aceptación de sus resúmenes RFCE. No modifiques los archivos descargados.</p>
+                <ul>
+                  <li :for={row <- @batch.rows} :if={row.portal_file}>
+                    <a href={~p"/pos/dgii-certification/#{@batch.id}/portal-xml/#{row.encf}"}>
+                      Descargar {@batch.issuer}{row.encf}.xml
+                    </a>
+                    <span> · RD$ {row.amount} · RFCE: {case_label(row.state)}</span>
+                  </li>
+                </ul>
+              </section>
               <p :if={@batch.journal_error} class="dgii-notice" role="alert">{@batch.journal_error}</p>
               <button class="btn" type="button" phx-click="submit_cases"
                 disabled={@submitting or @generating or !@identity_ready or not is_nil(@batch.journal_error) or @batch.accepted == @batch.count}>
